@@ -9,12 +9,23 @@
 
 <ion-content>
 
-<!-- 
+<div class="ion-margin">
+  <h3>{{ 'GSPage.trans' | translate }}</h3>
 
+  <select id="lang" #langselect (change)="translate.use(langselect.value)">
+    <option value = "en" >English{{lang}}</option>
+    <option value = "es">Español{{lang}}</option>
+    <option value = "de">Deutsche{{lang}}</option>
+    <option value = "fr">Français{{lang}}</option>
+  </select>
 
-  *********************Add Simulation Instructions Here********************
+  <h1>
+    {{ 'GSPage.TITLE' | translate }}
+  </h1>
 
+  <p>
+    {{'GSPage.TEXT' | translate }}
+  </p>
 
--->
-
+</div>
 </ion-content>
