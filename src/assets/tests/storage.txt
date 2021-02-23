@@ -1,0 +1,22 @@
+  async createPDF()
+  {
+    /*
+    // OLD VERSION USING PDFMAKEWRAPPER, WORKS ON BROWSER, NOT MOBILE
+
+    const pdf = new PdfMakeWrapper();
+    
+    var sentence = document.getElementById('sentence1');
+    pdf.add( await new Img('/assets/icon/LOGO.png').alignment('center').build() );
+    pdf.add('\n')
+    pdf.add(sentence.innerHTML);
+    pdf.create().open(); // replace open with download for download
+    return pdf 
+    */
+
+    
+  }
+
+  async downloadPDF()
+  {
+
+  }

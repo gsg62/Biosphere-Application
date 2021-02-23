@@ -10,4 +10,53 @@
     Go back to scenario options  
 </ion-button>
 
+
+<div *ngFor="let latitude of latitudes"> 
+  {{latitude}}
+</div>
+
+<div *ngFor="let longitude of longitudes"> 
+  {{longitude}}
+</div>
+
+<div *ngFor="let value of values"> 
+  {{value}}
+</div>
+
+<ion-card-content>
+  <canvas #barChart></canvas>
+</ion-card-content>
+
+<br>
+
+<ion-button (click)="envokeBarChart()" color="primary">
+  Create Graph
+</ion-button>
+
+<ion-button #createPDFButton *ngIf="showCreate" (click)="createPDF()" color="secondary">
+  Create PDF
+</ion-button>
+
+<ion-button #downloadButton *ngIf="showDownload" (click)="downloadPDF()" color="tertiary">
+  Download PDF
+</ion-button>
+
+<!--
+<table class = "data-table" border="5" text-center>
+  <tr>
+    <td *ngFor = "let header of headerRow">
+      <b>
+        {{ header }}
+      </b>
+
+    </td>
+  </tr>
+
+  <tr *ngFor = "let row of csvData; let i = index">
+    <td *ngFor = "let data of row; let j = index; trackBy: trackByFn" class = "data-col">
+      <ion-input type="text" [(ngModel)]="csvData[i][j]"></ion-input>
+    </td>
+  </tr>
+</table>-->
+
 </ion-content>
