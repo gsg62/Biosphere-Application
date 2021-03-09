@@ -16,10 +16,10 @@ export class UserOptionsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.inputService.getTestData().subscribe(
-      (data) => {
-        console.log('data', data);
-      });
+    // this.inputService.getTestData().subscribe(
+    //   (data) => {
+    //     console.log('data', data);
+    //   });
   }
 
   private async setUser(userType: string) {
