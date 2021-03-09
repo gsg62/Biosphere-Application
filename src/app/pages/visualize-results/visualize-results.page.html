@@ -10,24 +10,33 @@
     Go back to scenario options  
 </ion-button>
 
-<!--Possible Buttons for Heatmap
 <div id="floating-panel">
-  <button onclick="toggleHeatmap()">Toggle Heatmap</button>
-  <button onclick="changeGradient()">Change gradient</button>
-  <button onclick="changeRadius()">Change radius</button>
-  <button onclick="changeOpacity()">Change opacity</button>
+  <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">Allelic Diversity</ion-button>
+  <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">Breed/Variety Diversity</ion-button>
+  <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">Co-Ancestry</ion-button>
+  <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">Genetic Differentiation</ion-button>
 </div>
--->
 
 <br>
-<ion-button (click)="initMap()" color="primary">
+
+<!--
+OLD BUTTON TO SHOW MAP
+<ion-button expand="block" (click)="initMap()" color="primary">
   Show Map
 </ion-button>
+-->
+<div #map id='map'></div>
 
-<ion-button (click)="envokeBarChart()" color="primary">
-  Create Graph
+<div *ngFor="let latitude of latitudes"> 
+  {{latitude}}
+</div>
+
+<!--
+OLD BUTTON TO SHOW GRAPHS
+<ion-button expand="block" (click)="envokeCharts()" color="primary">
+  Generate Graphs
 </ion-button>
-
+-->
 <ion-button #createPDFButton *ngIf="showCreate" (click)="createPDF()" color="secondary">
   Create PDF
 </ion-button>
@@ -35,31 +44,11 @@
 <ion-button #downloadButton *ngIf="showDownload" (click)="downloadPDF()" color="tertiary">
   Download PDF
 </ion-button>
-
-<div #map id='map'></div>
-
-<div *ngFor="let latitude of latitudes"> 
-  {{latitude}}
-</div>
-
-<div *ngFor="let longitude of longitudes"> 
-  {{longitude}}
-</div>
-
-<br>
-
-<div *ngFor="let AValues of AValues"> 
-  {{AValues}}
-</div>
-
-<br>
-
-<div *ngFor="let BValues of BValues"> 
-  {{BValues}}
-</div>
-
 <ion-card-content>
+  <h1>Bar Graph</h1>
   <canvas #barChart></canvas>
+  <br>
+  <h1>Line Graph</h1>
   <canvas #lineChart></canvas>
 </ion-card-content>
 

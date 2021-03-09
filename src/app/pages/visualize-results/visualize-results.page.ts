@@ -11,6 +11,7 @@ import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Filesystem, FilesystemDirectory } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
+import { variable } from '@angular/compiler/src/output/output_ast';
 //import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 declare var google: any;
@@ -28,6 +29,10 @@ export class VisualizeResultsPage implements OnInit {
   @ViewChild('createPDFButton') createPDFButton: ElementRef;
   @ViewChild('downloadButton') downloadButton: ElementRef;
   @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
+  @ViewChild('data1') data1Button: ElementRef;
+  @ViewChild('data2') data2Button: ElementRef;
+  @ViewChild('data3') data3Button: ElementRef;
+  @ViewChild('data4') data4Button: ElementRef;
 
   bodyKeys = [];
   bodyData = [];
@@ -61,6 +66,8 @@ export class VisualizeResultsPage implements OnInit {
   colorArray: any;
   showCreate: boolean;
   showDownload: boolean;
+  chartsCreated: boolean;
+
   scenarioData: any;
 
   height = 0;
@@ -88,6 +95,7 @@ export class VisualizeResultsPage implements OnInit {
   {
     this.showCreate = false;
     this.showDownload = false;
+    this.chartsCreated = false;
     this.getData(http);
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -100,11 +108,63 @@ export class VisualizeResultsPage implements OnInit {
   {
   }
 
-  initMap()
+  toggleData1()
+  {
+    if(this.chartsCreated)
+    {
+      this.bars.destroy();
+      this.line.destroy();
+    }
+    this.map = new google.maps.Map(this.mapRef.nativeElement);
+    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[3]]);
+    this.envokeCharts(this.rawKeys[3]);
+  }
+
+  toggleData2()
+  {
+    if(this.chartsCreated)
+    {
+      this.bars.destroy();
+      this.line.destroy();
+    }
+    this.map = new google.maps.Map(this.mapRef.nativeElement);
+    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[4]]);
+    this.envokeCharts(this.rawKeys[4]);
+  }
+
+  toggleData3()
+  {
+    if(this.chartsCreated)
+    {
+      this.bars.destroy();
+      this.line.destroy();
+    }
+    this.map = new google.maps.Map(this.mapRef.nativeElement);
+    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[5]]);
+    this.envokeCharts(this.rawKeys[5]);
+  }
+
+  toggleData4()
+  {
+    if(this.chartsCreated)
+    {
+      this.bars.destroy();
+      this.line.destroy();
+    }
+    this.map = new google.maps.Map(this.mapRef.nativeElement);
+    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[6]]);
+    this.envokeCharts(this.rawKeys[6]);
+  }
+  
+
+  initMap(data)
   {
     var heatMapLats = [];
     var heatMapLongs = [];
-    var heatMapValues = [];
+    var heatMapValues = data;
+    this.negativeHeatMapInput = [];
+    this.heatMapInput = [];
+    
     
     // push the latitudes to the list
     for (let i in this.heatMapData[this.timeSeries[1]][this.rawKeys[0]])
@@ -118,31 +178,12 @@ export class VisualizeResultsPage implements OnInit {
       heatMapLongs.push(this.heatMapData[this.timeSeries[1]][this.rawKeys[1]][i]);
     }
 
-    // push the EBV values to the list
-    for (let i in this.heatMapData[this.timeSeries[1]][this.rawKeys[3]])
-    {
-      heatMapValues.push(this.heatMapData[this.timeSeries[1]][this.rawKeys[3]][i]);
-    }
-
     // calculate the averages of latitudes and latitudes to center the map around it
-    var latitudeAverage = 0, longitudeAverage = 0;
+    var latitudeMedian = 0, longitudeMedian = 0;
 
-    // totaling the latitudes
-    for(let i = 0; i < heatMapLats.length; i++)
-    {
-      latitudeAverage += heatMapLats[i];
-    }
-
-    // totaling the longitudes
-    for(let i = 0; i < heatMapLongs.length; i++)
-    {
-      longitudeAverage += heatMapLongs[i];
-    }
-
-    // dividing each total by their length to get the average
-    latitudeAverage = latitudeAverage / this.latitudeValues.length;
-    longitudeAverage = longitudeAverage / this.longitudeValues.length;
-
+    // getting median, is more accurate than average
+    latitudeMedian = heatMapLats[Math.round((heatMapLats.length-1)/2)];
+    longitudeMedian = heatMapLongs[Math.round((heatMapLongs.length-1)/2)];
 
     // push each piece of heatmap data to their respective lists (negative or positive)
     for(let i = 0; i < heatMapLats.length; i++)
@@ -161,13 +202,13 @@ export class VisualizeResultsPage implements OnInit {
     }
 
     // create the center of the map based on the average calculated data
-    const location = new google.maps.LatLng(latitudeAverage, longitudeAverage);
+    const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
 
     // configuration options for the map
     const options = 
     {
       center: location,
-      zoom: 7,
+      zoom: 3,
       disableDefaultUI: true
     }
     
@@ -186,18 +227,15 @@ export class VisualizeResultsPage implements OnInit {
       data: this.negativeHeatMapInput
     });
     
-
     // options for the normal heatmap
     heatmap.setOptions
     ({
-      radius: 10
     });
 
     // options for the cool/negative heatmap
     negativeHeatMap.setOptions
     ({
-      gradient: this.coolGradient,
-      radius: 10
+      gradient: this.coolGradient
     });
 
     // initializing the two heatmaps
@@ -210,7 +248,7 @@ export class VisualizeResultsPage implements OnInit {
 
   getData(http: HttpClient) {
     // grab the data from the json file and creates a JSON object
-    this.http.get('../../assets/data/BigOutput-Random.json').toPromise().then(data => 
+    this.http.get('../../assets/data/Closest-Real-Output.json').toPromise().then(data => 
       {
         for( let key in data)
         {
@@ -251,21 +289,23 @@ export class VisualizeResultsPage implements OnInit {
 
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
 
-envokeBarChart()
+envokeCharts(variableName)
 {
   var graphData = [];
-  console.log(this.bodyKeys);
-  for (let i in this.calculatedDataKeys)
+
+  // push actual data to the 
+  //console.log(this.calculatedDataKeys);
+  for (let i in this.calculatedData[variableName])
   {
-    graphData.push(this.calculatedData[this.calculatedDataKeys[i]]);
+    graphData.push(this.calculatedData[variableName][i]);
   }
 
-  this.createBarChart(graphData, this.calculatedDataKeys);
+  this.createCharts(variableName, graphData, this.calculatedDataKeys);
   
   this.showCreate = true;
 }
 
-createBarChart(graphData, barChartLabels) 
+createCharts(variableName, graphData, graphLabels) 
 {
   /////////////////BAR CHART//////////////////////////
   this.bars = new Chart(this.barChart.nativeElement, 
@@ -273,12 +313,12 @@ createBarChart(graphData, barChartLabels)
     type: 'bar',
     data: 
     {
-      labels: barChartLabels,
+      labels: graphLabels,
       datasets: 
       [
         {
-        label: this.bodyData[1][this.bodyKeys[0]][3],
-        data: this.EBV1Values,
+        label: variableName,
+        data: graphData,
         backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
         borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
         borderWidth: 1
@@ -301,7 +341,7 @@ createBarChart(graphData, barChartLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[1][this.bodyKeys[0]][0] + ", " + this.bodyData[1][this.bodyKeys[0]][1]
+            labelString: this.bodyData[1][this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -309,7 +349,7 @@ createBarChart(graphData, barChartLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: "X Units of X Measurement"
+            labelString: "EBV Units"
           },
           ticks: 
           {
@@ -345,28 +385,47 @@ createBarChart(graphData, barChartLabels)
     type: 'line',
     data: 
     {
-      labels: barChartLabels,
+      labels: graphLabels,
       datasets: 
       [
         {
-        label: this.bodyData[1][this.bodyKeys[0]][3],
-        data: this.EBV1Values,
+        label: variableName,
+        data: graphData,
         backgroundColor: 'rgba(0, 0, 0, 0)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
+        borderColor: 'rgb(255, 255, 0)',
         borderWidth: 1
         }
       ]
     },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
+    options: 
+    {
+      scales: 
+      {
+        xAxes:
+        [{
+          scaleLabel: 
+          {
+            display: true,
+            labelString: this.bodyData[1][this.bodyKeys[0]][2]
+          }
+        }],
+        yAxes: 
+        [{
+          scaleLabel: 
+          {
+            display: true,
+            labelString: "EBV Units"
+          },
+          ticks: 
+          {
             beginAtZero: true
           }
         }]
       }
     }
   });
+
+  this.chartsCreated = true;
 }
 
 
@@ -388,13 +447,14 @@ createBarChart(graphData, barChartLabels)
   }
   */
   // creates a pdf object (docDefinition) with all of the items to put in the PDF
-  createPDF() {
-    const image = this.bars.toBase64Image();
-    console.log(image);
-    const docDefinition =
+  createPDF()
+  {
+    const barGraph = this.bars.toBase64Image();
+    const lineGraph = this.line.toBase64Image();
+    const docDefinition = 
     {
       // image logoData is 64Base string
-      content: ['Bar Graph of', this.EBV1Values[0] ,/* "and ", this.BValues[0] , */{image: image, width: 500}]
+      content: ['Bar Graph', {image: barGraph, width: 500}, 'Line Graph', {image: lineGraph, width: 500}]
     }
 
     this.pdfObj = pdfMake.createPdf(docDefinition);
