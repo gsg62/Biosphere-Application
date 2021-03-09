@@ -5,6 +5,8 @@ import { Platform } from '@ionic/angular';
 
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { ActivatedRoute, Router } from '@angular/router';
+
 //import { Label } from 'ng2-charts';
 
 // For Data Exportation
@@ -39,7 +41,7 @@ export class VisualizeResultsPage implements OnInit {
 
   latitudeValues = [];
   longitudeValues = [];
-  timeValues
+  timeValues = [];
   EBV1Values = [];
   coordinateArray = [];
   heatMapData = [];
@@ -91,7 +93,8 @@ export class VisualizeResultsPage implements OnInit {
 
   map: any;
 
-  constructor(private navCtrl: NavController, private http: HttpClient, private plt: Platform, private fileOpener: FileOpener) 
+  constructor(private navCtrl: NavController, private http: HttpClient, private plt: Platform, private fileOpener: FileOpener, private route: ActivatedRoute, private router: Router  
+) 
   {
     this.showCreate = false;
     this.showDownload = false;
@@ -353,26 +356,7 @@ createCharts(variableName, graphData, graphLabels)
           },
           ticks: 
           {
-            xAxes:
-              [{
-                scaleLabel:
-                {
-                  display: true,
-                  labelString: this.latitudes[0] + ", " + this.longitudes[0]
-                }
-              }],
-            yAxes:
-              [{
-                scaleLabel:
-                {
-                  display: true,
-                  labelString: barChartData[0]
-                },
-                ticks:
-                {
-                  beginAtZero: true
-                }
-              }],
+            beginAtZero: true
           }
         }],
       }
