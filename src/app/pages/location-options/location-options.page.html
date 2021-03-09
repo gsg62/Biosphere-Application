@@ -3,24 +3,24 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Location:</ion-title>
+    <ion-title>{{ 'locationpage.header1' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-button size="medium" fill="outline" (click)="selectLocation()">
-    Select location on a map
+    {{ 'locationpage.button1' | translate }}
   </ion-button>
 
   <ion-button size="medium" fill="outline" (click)="manualLocation()">
-    Manually Input Coordinates
+    {{ 'locationpage.button2' | translate }}
   </ion-button>
   <ion-button size="medium" fill="outline" (click)="useDeviceLocation()">
     <ion-icon name="navigate"></ion-icon>
-    Use current location
+    {{ 'locationpage.button3' | translate }}
   </ion-button>
   <br>
   <br>
-<div *ngIf="showProgress" id="loading">Loading...</div>
+<div *ngIf="showProgress" id="loading">{{ 'locationpage.loading' | translate }}</div>
   <ion-progress-bar type="indeterminate" *ngIf="showProgress">Loading...</ion-progress-bar>
 </ion-content>

@@ -4,5 +4,20 @@
         "trans": "Veuillez sélectionner votre préférence de langue:",
         "TITLE": "Comment fonctionne l'application",
         "TEXT": "..."
+    },
+
+    "aboutpage":
+    {
+        "aboutHeader1": "About",
+        "aboutParagraph1": "JE SUIS"
+    },
+
+    "locationpage":
+    {
+        "header1": "Localisation:",
+        "button1": "Selectionnez une localisation sur la carte",
+        "button2": "Entrez des coordonnées",
+        "button3": "Utilisez votre localisation actuelle",
+        "loading": "Chargement..."
     }
 }
