@@ -1,4 +1,28 @@
 #map
 {
     height:750px;
+    width:80%;
+    margin: auto;
+    padding: 10px;
+    border: 3px;
+}
+
+#databutton
+{
+    width: 20%;
+}
+
+ion-button 
+{
+    width: 100%;
+}
+
+#floating-panel 
+{
+    position: center;
+    padding: 5px;
+    border: 1px;
+    text-align: center;
+    font-family: "Roboto", "sans-serif";
+    line-height: 30px;
 }
