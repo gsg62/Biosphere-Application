@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
 //import { StatsBarChart } from '../../assets/data/data';
 import { Platform } from '@ionic/angular';
-import { ActivatedRoute, Router } from '@angular/router';
+
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { ActivatedRoute, Router } from '@angular/router';
+
 //import { Label } from 'ng2-charts';
 
 // For Data Exportation
@@ -17,14 +19,13 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 declare var google: any;
 
 @Component
-({
-  selector: 'app-visualize-results',
-  templateUrl: './visualize-results.page.html',
-  styleUrls: ['./visualize-results.page.scss'],
-})
+  ({
+    selector: 'app-visualize-results',
+    templateUrl: './visualize-results.page.html',
+    styleUrls: ['./visualize-results.page.scss'],
+  })
 
-export class VisualizeResultsPage implements OnInit 
-{
+export class VisualizeResultsPage implements OnInit {
   @ViewChild('barChart') barChart;
   @ViewChild('lineChart') lineChart;
   @ViewChild('createPDFButton') createPDFButton: ElementRef;
@@ -40,7 +41,7 @@ export class VisualizeResultsPage implements OnInit
 
   latitudeValues = [];
   longitudeValues = [];
-  timeValues
+  timeValues = [];
   EBV1Values = [];
   coordinateArray = [];
   heatMapData = [];
@@ -69,6 +70,8 @@ export class VisualizeResultsPage implements OnInit
   showDownload: boolean;
   chartsCreated: boolean;
 
+  scenarioData: any;
+
   height = 0;
 
   pdfObj = null;
@@ -89,27 +92,19 @@ export class VisualizeResultsPage implements OnInit
   ];
 
   map: any;
-  scenarioData: any;
 
-  constructor(
-    private navCtrl: NavController, 
-    private http: HttpClient, 
-    private plt: Platform, 
-    private fileOpener: FileOpener,
-    private router: Router,
-    private route: ActivatedRoute) {
-
-    this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
-        console.log("scenarioData from visualize results: ", this.scenarioData);
-      }
-    });
-
+  constructor(private navCtrl: NavController, private http: HttpClient, private plt: Platform, private fileOpener: FileOpener, private route: ActivatedRoute, private router: Router  
+) 
+  {
     this.showCreate = false;
     this.showDownload = false;
     this.chartsCreated = false;
     this.getData(http);
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
+      }
+    });
   }
 
   ngOnInit()
@@ -117,8 +112,9 @@ export class VisualizeResultsPage implements OnInit
   }
 
   logScenario() {
-    console.log()
+    console.log("scenarioData from visualize results: ", this.scenarioData);
   }
+  
   toggleData1()
   {
     if(this.chartsCreated)
@@ -257,8 +253,7 @@ export class VisualizeResultsPage implements OnInit
 
   ///////////////DATA IMPORTATION SECTION//////////////////////////////////////////////////////////
 
-  getData(http: HttpClient)
-  {
+  getData(http: HttpClient) {
     // grab the data from the json file and creates a JSON object
     this.http.get('../../assets/data/Closest-Real-Output.json').toPromise().then(data => 
       {
@@ -455,31 +450,26 @@ createCharts(variableName, graphData, graphLabels)
     this.showDownload = true;
   }
 
-  downloadPDF()
-  {
+  downloadPDF() {
     // if device is mobile (android or iOS)
     // this code was from some dude online, doesn't really work yet
-    if(this.plt.is('cordova'))
-    {
-      this.pdfObj.getBase64(async (data) => 
-      {
-        try
-        {
+    if (this.plt.is('cordova')) {
+      this.pdfObj.getBase64(async (data) => {
+        try {
           let path = `pdf/myletter_${Date.now()}.pdf`;
 
           const result = await Filesystem.writeFile
-          ({
-            path,
-            data: data,
-            directory: FilesystemDirectory.Documents,
-            recursive: true
-          });
+            ({
+              path,
+              data: data,
+              directory: FilesystemDirectory.Documents,
+              recursive: true
+            });
 
           this.fileOpener.open(`${result.uri}`, 'application/pdf');
         }
 
-        catch(e) 
-        {
+        catch (e) {
           console.error('Unable to write file', e)
         }
 
@@ -487,18 +477,16 @@ createCharts(variableName, graphData, graphLabels)
     }
 
     // normal web client, can just invoke download()
-    else
-    {
+    else {
       this.pdfObj.download();
     }
   }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////
 
   // Navigate back to options
-  backToOptions()
-  {
+  backToOptions() {
     this.navCtrl.navigateForward('/scenario-options');
   }
 }
