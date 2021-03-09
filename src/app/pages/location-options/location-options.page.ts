@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {Router} from '@angular/router';
-import {NavigationExtras} from '@angular/router';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavigationExtras } from '@angular/router';
 
 declare var google: any;
 
@@ -12,12 +11,24 @@ declare var google: any;
   styleUrls: ['./location-options.page.scss'],
 })
 export class LocationOptionsPage implements OnInit {
+
   lat: any = 0;
   lng: any = 0;
   locationSetting: any = " ";
   curlocation: any;
   showProgress: boolean;
-  constructor( private navCtrl: NavController, private geolocation: Geolocation, private router: Router) {
+  scenarioData: any;
+
+  constructor(
+    private geolocation: Geolocation,
+    private router: Router,
+    private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
+        console.log("scenrioData from location-options: ", this.scenarioData);
+      }
+    });
 
   }
 
@@ -26,56 +37,59 @@ export class LocationOptionsPage implements OnInit {
 
   openMap() {
     this.geolocation.getCurrentPosition().then(
-        (location) => {
-          this.lat = location.coords.latitude;
+      (location) => {
+        this.lat = location.coords.latitude;
 
-          this.lng = location.coords.longitude;
+        this.lng = location.coords.longitude;
 
-          this.curlocation =
-              {
-                lat: this.lat,
-                lng: this.lng
-              };
+        this.curlocation =
+        {
+          lat: this.lat,
+          lng: this.lng
+        };
 
-          console.log(this.curlocation.lat);
-          console.log(this.curlocation.lng);
-          console.log(this.locationSetting);
-          const navigationExtras: NavigationExtras =
-              {
-                queryParams:
-                    {
-                      lat: this.lat,
-                      lng: this.lng,
-                        locationSetting: this.locationSetting
-                    }
-              }
-          console.log(navigationExtras);
-          this.showProgress = false;
-          this.router.navigate(['/map'], navigationExtras);
+        console.log(this.curlocation.lat);
+        console.log(this.curlocation.lng);
+        console.log(this.locationSetting);
+        const navigationExtras: NavigationExtras =
+        {
+          queryParams:
+          {
+            lat: this.lat,
+            lng: this.lng,
+            locationSetting: this.locationSetting,
+            scenarioData: this.scenarioData            
+          },
+          state: { 
+            scenarioData: this.scenarioData
+          }
+        }
+        console.log(navigationExtras);
+        this.showProgress = false;
+        this.router.navigate(['/map'], navigationExtras);
 
-        }, er =>
-        {alert('Error: Please turn on Location Access and try again.'); }).catch((error) => alert('error'));
+      }, er => { alert('Error: Please turn on Location Access and try again.'); }).catch((error) => alert('error'));
   }
 
   useDeviceLocation() {
-      // show progress bar after user clicks button
-      this.showProgress = true;
+    // show progress bar after user clicks button
+    this.showProgress = true;
     // user selected current location setting on the location options pag
-      this.locationSetting = "currentLoc";
-      this.openMap();
+    this.locationSetting = "currentLoc";
+    this.openMap();
   }
   selectLocation() {
-      // show progress bar after user clicks button
-      this.showProgress = true;
-      // user decided to select the location on the location options page
-      this.locationSetting = "selectLoc";
-      this.openMap();
+    // show progress bar after user clicks button
+    this.showProgress = true;
+    // user decided to select the location on the location options page
+    this.locationSetting = "selectLoc";
+    this.openMap();
   }
   manualLocation() {
-      // don't show progress bar after user clicks button because it switches really fast
-      this.showProgress = false;
-        // user decided to input their own location coordinates on the location options page
-      this.router.navigate(['/manual-coords']);
-    }
+    // don't show progress bar after user clicks button because it switches really fast
+    this.showProgress = false;
+    // user decided to input their own location coordinates on the location options page
+    this.router.navigate(['/manual-coords']);
+  }
 
 }

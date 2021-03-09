@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class InputScenarioService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
   ) { }
 
   /**
@@ -27,9 +27,11 @@ export class InputScenarioService {
   
   biosphereSB2ApiEndpoint = 'https://jbt8pms68j.execute-api.us-west-2.amazonaws.com/default/team-biosphere-sandbox-2-lambda';
 
+  prodEndpoint = 'https://o58lshx3rf.execute-api.us-west-2.amazonaws.com/ionic';
+  
   // test function to show how a REST GET http request can be made to a specified api endpoint
   getTestData(): Observable<any> {
-    let data = this.http.get(this.biosphereSB1ApiEndpoint); // not fully configured
+    let data = this.http.get(this.prodEndpoint); // not fully configured
     console.log('raw data from service: ', data);
     return data;
   }
