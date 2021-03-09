@@ -8,11 +8,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-button size="medium" fill="outline" (click)="openMap()">
-    Map
+  <ion-button size="medium" fill="outline" (click)="selectLocation()">
+    Select location on a map
+  </ion-button>
+
+  <ion-button size="medium" fill="outline" (click)="manualLocation()">
+    Manually Input Coordinates
   </ion-button>
   <ion-button size="medium" fill="outline" (click)="useDeviceLocation()">
     <ion-icon name="navigate"></ion-icon>
     Use current location
   </ion-button>
+  <br>
+  <br>
+<div *ngIf="showProgress" id="loading">Loading...</div>
+  <ion-progress-bar type="indeterminate" *ngIf="showProgress">Loading...</ion-progress-bar>
 </ion-content>

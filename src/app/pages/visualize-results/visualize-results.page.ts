@@ -17,14 +17,13 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 declare var google: any;
 
 @Component
-({
-  selector: 'app-visualize-results',
-  templateUrl: './visualize-results.page.html',
-  styleUrls: ['./visualize-results.page.scss'],
-})
+  ({
+    selector: 'app-visualize-results',
+    templateUrl: './visualize-results.page.html',
+    styleUrls: ['./visualize-results.page.scss'],
+  })
 
-export class VisualizeResultsPage implements OnInit 
-{
+export class VisualizeResultsPage implements OnInit {
   @ViewChild('barChart') barChart;
   @ViewChild('lineChart') lineChart;
   @ViewChild('createPDFButton') createPDFButton: ElementRef;
@@ -69,6 +68,8 @@ export class VisualizeResultsPage implements OnInit
   showDownload: boolean;
   chartsCreated: boolean;
 
+  scenarioData: any;
+
   height = 0;
 
   pdfObj = null;
@@ -96,6 +97,11 @@ export class VisualizeResultsPage implements OnInit
     this.showDownload = false;
     this.chartsCreated = false;
     this.getData(http);
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
+      }
+    });
   }
 
   ngOnInit()
@@ -240,8 +246,7 @@ export class VisualizeResultsPage implements OnInit
 
   ///////////////DATA IMPORTATION SECTION//////////////////////////////////////////////////////////
 
-  getData(http: HttpClient)
-  {
+  getData(http: HttpClient) {
     // grab the data from the json file and creates a JSON object
     this.http.get('../../assets/data/Closest-Real-Output.json').toPromise().then(data => 
       {
@@ -348,7 +353,26 @@ createCharts(variableName, graphData, graphLabels)
           },
           ticks: 
           {
-            beginAtZero: true
+            xAxes:
+              [{
+                scaleLabel:
+                {
+                  display: true,
+                  labelString: this.latitudes[0] + ", " + this.longitudes[0]
+                }
+              }],
+            yAxes:
+              [{
+                scaleLabel:
+                {
+                  display: true,
+                  labelString: barChartData[0]
+                },
+                ticks:
+                {
+                  beginAtZero: true
+                }
+              }],
           }
         }],
       }
@@ -438,31 +462,26 @@ createCharts(variableName, graphData, graphLabels)
     this.showDownload = true;
   }
 
-  downloadPDF()
-  {
+  downloadPDF() {
     // if device is mobile (android or iOS)
     // this code was from some dude online, doesn't really work yet
-    if(this.plt.is('cordova'))
-    {
-      this.pdfObj.getBase64(async (data) => 
-      {
-        try
-        {
+    if (this.plt.is('cordova')) {
+      this.pdfObj.getBase64(async (data) => {
+        try {
           let path = `pdf/myletter_${Date.now()}.pdf`;
 
           const result = await Filesystem.writeFile
-          ({
-            path,
-            data: data,
-            directory: FilesystemDirectory.Documents,
-            recursive: true
-          });
+            ({
+              path,
+              data: data,
+              directory: FilesystemDirectory.Documents,
+              recursive: true
+            });
 
           this.fileOpener.open(`${result.uri}`, 'application/pdf');
         }
 
-        catch(e) 
-        {
+        catch (e) {
           console.error('Unable to write file', e)
         }
 
@@ -470,18 +489,16 @@ createCharts(variableName, graphData, graphLabels)
     }
 
     // normal web client, can just invoke download()
-    else
-    {
+    else {
       this.pdfObj.download();
     }
   }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////
 
   // Navigate back to options
-  backToOptions()
-  {
+  backToOptions() {
     this.navCtrl.navigateForward('/scenario-options');
   }
 }

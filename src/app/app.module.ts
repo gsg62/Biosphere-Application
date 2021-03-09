@@ -11,14 +11,13 @@ import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FileOpener } from '@ionic-native/file-opener/ngx'
 import { ChartsModule } from 'ng2-charts';
-import { ModalComponent } from '../app/modals/test-modal/test-modal.component';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [
     AppComponent, 
-    ModalComponent
   ],
-  entryComponents: [ModalComponent],
+  // entryComponents: [ModalComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -32,7 +31,8 @@ import { ModalComponent } from '../app/modals/test-modal/test-modal.component';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     FileOpener,
-    ModalComponent
+    Geolocation
+    // ModalComponent
   ],
   bootstrap: [AppComponent]
 })

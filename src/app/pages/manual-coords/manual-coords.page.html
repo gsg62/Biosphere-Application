@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+      </ion-buttons>
+    <ion-title>Manually Input Coordinates and Radius</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+<ion-row>
+  <ion-col>
+    <ion-item class="item">
+      <ion-label position="stacked">Enter Latitude: </ion-label>
+      <ion-input type="number" value=""></ion-input>
+    </ion-item>
+  </ion-col>
+</ion-row>
+
+    <ion-row>
+      <ion-col>
+    <ion-item>
+      <ion-label position="stacked">Enter Longitude: </ion-label>
+      <ion-input type="number" value=""></ion-input>
+    </ion-item>
+      </ion-col>
+      </ion-row>
+
+    <ion-row >
+    <ion-item id="label">
+      <ion-label position="stacked" >Enter Radius of Circle: </ion-label>
+      <ion-input type="number" value="" id="radius"></ion-input>
+    </ion-item>
+
+    <ion-item id="kilometers" lines="none">
+      <div>kilometers</div>
+
+    </ion-item>
+
+      </ion-row>
+
+    <ion-button size="large" fill="outline" (click)="submitCoords()">
+      Submit Coordinates
+    </ion-button>
+  </ion-grid>
+</ion-content>

@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'visualize-results',
     loadChildren: () => import('./pages/visualize-results/visualize-results.module').then( m => m.VisualizeResultsPageModule)
+  },
+  {
+    path: 'manual-coords',
+    loadChildren: () => import('./pages/manual-coords/manual-coords.module').then(m => m.ManualCoordsPageModule)
   }
 ];
 

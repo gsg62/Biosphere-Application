@@ -1,7 +1,8 @@
 {
   "name": "biosphere",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

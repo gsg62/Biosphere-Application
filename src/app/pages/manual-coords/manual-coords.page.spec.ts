@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TestModalComponent } from './test-modal.component';
+import { ManualCoordsPage } from './manual-coords.page';
 
-describe('TestModalComponent', () => {
-  let component: TestModalComponent;
-  let fixture: ComponentFixture<TestModalComponent>;
+describe('ManualCoordsPage', () => {
+  let component: ManualCoordsPage;
+  let fixture: ComponentFixture<ManualCoordsPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TestModalComponent ],
+      declarations: [ ManualCoordsPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestModalComponent);
+    fixture = TestBed.createComponent(ManualCoordsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

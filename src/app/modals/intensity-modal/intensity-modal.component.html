@@ -2,33 +2,32 @@
   <ion-toolbar>
     <ion-title>Select Intensity:</ion-title>
     <ion-buttons fill="outline" slot="end">
-      <ion-button (click)="dismiss()">
+      <!-- <ion-button id="cancelBtn" (click)="dismissModal()">
         Cancel
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-grid>
   <ion-row class="ion-align-items-center">
     <ion-col size="12" class="ion-text-center">
-      <ion-button size="medium" fill="outline" (click)="runSimulation()">
-        Low
+      <ion-button size="medium" fill="outline" (click)="runSimulation(0)">
+        {{label1}}
       </ion-button>
     </ion-col>
   </ion-row>
   <ion-row class="ion-align-items-center">
     <ion-col size="12" class="ion-text-center">
-      <ion-button size="medium" fill="outline" (click)="runSimulation()">
-        Medium
+      <ion-button size="medium" fill="outline" (click)="runSimulation(1)">
+        {{label2}}
       </ion-button>
     </ion-col>
   </ion-row>
   <ion-row class="ion-align-items-center">
     <ion-col size="12" class="ion-text-center">
-      <ion-button size="medium" fill="outline" (click)="runSimulation()">
-        High
+      <ion-button size="medium" fill="outline" (click)="runSimulation(2)">
+        {{label3}}
       </ion-button>
     </ion-col>
   </ion-row>
-
 </ion-grid>
