@@ -5,17 +5,26 @@ import { Platform } from '@ionic/angular';
 
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+<<<<<<< Updated upstream
 import { ActivatedRoute, Router } from '@angular/router';
 
+=======
+>>>>>>> Stashed changes
 //import { Label } from 'ng2-charts';
 
 // For Data Exportation
 import { Filesystem, FilesystemDirectory } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
+<<<<<<< Updated upstream
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+=======
+//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+import {} from 'google.maps';
+>>>>>>> Stashed changes
 
 declare var google: any;
 
@@ -32,6 +41,7 @@ export class VisualizeResultsPage implements OnInit {
   @ViewChild('createPDFButton') createPDFButton: ElementRef;
   @ViewChild('downloadButton') downloadButton: ElementRef;
   @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
+<<<<<<< Updated upstream
   @ViewChild('data1') data1Button: ElementRef;
   @ViewChild('data2') data2Button: ElementRef;
   @ViewChild('data3') data3Button: ElementRef;
@@ -62,6 +72,14 @@ export class VisualizeResultsPage implements OnInit {
   ];
 
   negativeHeatMapInput = [];
+=======
+
+  latitudes = [];
+  longitudes = [];
+  AValues = [];
+  BValues = [];
+  coordinateArray = [];
+>>>>>>> Stashed changes
   
   bars: any;
   line: any;
@@ -69,11 +87,15 @@ export class VisualizeResultsPage implements OnInit {
   colorArray: any;
   showCreate: boolean;
   showDownload: boolean;
+<<<<<<< Updated upstream
   chartsCreated: boolean;
 
   scenarioData: any;
 
   height = 0;
+=======
+  map: any;
+>>>>>>> Stashed changes
 
   pdfObj = null;
   banner = null;
@@ -112,6 +134,7 @@ export class VisualizeResultsPage implements OnInit {
   {
   }
 
+<<<<<<< Updated upstream
   toggleData1()
   {
     if(this.chartsCreated)
@@ -134,6 +157,23 @@ export class VisualizeResultsPage implements OnInit {
     this.map = new google.maps.Map(this.mapRef.nativeElement);
     this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[4]]);
     this.envokeCharts(this.rawKeys[4]);
+=======
+  ionViewDidEnter()
+  {
+    this.showMap();
+  }
+
+  showMap()
+  {
+    const location = new google.maps.LatLng(-17.824858, 31.053028);
+    const options = 
+    {
+      center: location,
+      zoom: 15,
+      disableDefaultUI: true
+    }
+    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
+>>>>>>> Stashed changes
   }
 
   toggleData3()
@@ -262,8 +302,27 @@ export class VisualizeResultsPage implements OnInit {
             // check if key = latitude, if true then push current data to latitude list
             if(key == "Body")
             {
+<<<<<<< Updated upstream
               this.bodyData.push(key);
               this.bodyData.push(data[key]);
+=======
+              this.longitudes.push(key); // key = string
+              this.longitudes.push(data[key]); // data[key] = object
+            }
+            
+            // check if key = A, if true then push current data to longitude list
+            if(key == "essential_biodiversity_column_A")
+            {
+              this.AValues.push(key); // key = string
+              this.AValues.push(data[key]); // data[key] = object
+            }
+
+            // check if key = A, if true then push current data to longitude list
+            if(key == "essential_biodiversity_column_B")
+            {
+              this.BValues.push(key); // key = string
+              this.BValues.push(data[key]); // data[key] = object
+>>>>>>> Stashed changes
             }
 
           } // end of if hasOwnProperty
@@ -291,6 +350,7 @@ export class VisualizeResultsPage implements OnInit {
       });
   }
 
+<<<<<<< Updated upstream
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
 
 envokeCharts(variableName)
@@ -302,6 +362,12 @@ envokeCharts(variableName)
   for (let i in this.calculatedData[variableName])
   {
     graphData.push(this.calculatedData[variableName][i]);
+=======
+  envokeBarChart()
+  {
+    this.createBarChart(this.AValues, this.coordinateArray);
+    this.showCreate = true;
+>>>>>>> Stashed changes
   }
 
   this.createCharts(variableName, graphData, this.calculatedDataKeys);
@@ -321,19 +387,32 @@ createCharts(variableName, graphData, graphLabels)
       datasets: 
       [
         {
+<<<<<<< Updated upstream
         label: variableName,
         data: graphData,
         backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
         borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
         borderWidth: 1
         }/*,
+=======
+        label: this.AValues[0],
+        data: this.AValues[1],
+        backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
+        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
+        borderWidth: 1
+        },
+>>>>>>> Stashed changes
         {
           label: this.BValues[0],
           data: this.BValues[1],
           backgroundColor: 'rgb(52, 195, 235)', // array should have same number of elements as number of dataset
           borderColor: 'rgb(52, 195, 235)',// array should have same number of elements as number of dataset
           borderWidth: 1
+<<<<<<< Updated upstream
         }*/
+=======
+        }
+>>>>>>> Stashed changes
       ]
     },
     options: 
@@ -353,7 +432,11 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
+<<<<<<< Updated upstream
             labelString: "EBV Units"
+=======
+            labelString: "X Units of X Measurement"
+>>>>>>> Stashed changes
           },
           ticks: 
           {
@@ -439,7 +522,11 @@ createCharts(variableName, graphData, graphLabels)
     const docDefinition = 
     {
       // image logoData is 64Base string
+<<<<<<< Updated upstream
       content: ['Bar Graph', {image: barGraph, width: 500}, 'Line Graph', {image: lineGraph, width: 500}]
+=======
+      content: ['Bar Graph of', this.AValues[0] , "and ", this.BValues[0] , {image: image, width: 500}]
+>>>>>>> Stashed changes
     }
 
     this.pdfObj = pdfMake.createPdf(docDefinition);
