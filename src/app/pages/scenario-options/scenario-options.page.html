@@ -3,22 +3,22 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>    
-    <ion-title>Scenario Options</ion-title>
+    <ion-title>{{ 'scenariopage.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding display="block">
   <br>
-  <ion-label color="dark">Choose an scenario:</ion-label>
+  <ion-label color="dark">{{ 'scenariopage.label1' | translate }}</ion-label>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('CLIMATE')">Climate</ion-button>
+  <ion-button size="medium" fill="outline" (click)="setScenario('CLIMATE')">{{ 'scenariopage.button1' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('LANDUSE')">LANDUSE</ion-button>
+  <ion-button size="medium" fill="outline" (click)="setScenario('LANDUSE')">{{ 'scenariopage.button2' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('DEFORESTATION')">DEFORESTATION</ion-button>
+  <ion-button size="medium" fill="outline" (click)="setScenario('DEFORESTATION')">{{ 'scenariopage.button3' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('TROPIC')">TROPIC</ion-button>
+  <ion-button size="medium" fill="outline" (click)="setScenario('TROPIC')">{{ 'scenariopage.button4' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('EXTINCTIONS')">EXTINCTIONS</ion-button>
+  <ion-button size="medium" fill="outline" (click)="setScenario('EXTINCTIONS')">{{ 'scenariopage.button5' | translate }}</ion-button>
   <br>
 </ion-content>

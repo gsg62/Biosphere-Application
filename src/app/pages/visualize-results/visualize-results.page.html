@@ -7,48 +7,36 @@
 <ion-content>
   <ion-button size="medium" fill="outline" (click)="backToOptions()">
     <ion-icon name="arrow-back"></ion-icon>
-    Go back to scenario options  
+    {{ 'visualpage.headbutton1' | translate }}  
 </ion-button>
 
 <div id="floating-panel">
-  <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">Allelic Diversity</ion-button>
-  <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">Breed/Variety Diversity</ion-button>
-  <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">Co-Ancestry</ion-button>
-  <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">Genetic Differentiation</ion-button>
+  <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">{{ 'visualpage.button1' | translate }}</ion-button>
+  <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">{{ 'visualpage.button2' | translate }}</ion-button>
+  <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">{{ 'visualpage.button3' | translate }}</ion-button>
+  <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">{{ 'visualpage.button4' | translate }}</ion-button>
 </div>
 
 <br>
 
-<!--
-OLD BUTTON TO SHOW MAP
-<ion-button expand="block" (click)="initMap()" color="primary">
-  Show Map
-</ion-button>
--->
 <div #map id='map'></div>
 
 <div *ngFor="let latitude of latitudes"> 
   {{latitude}}
 </div>
 
-<!--
-OLD BUTTON TO SHOW GRAPHS
-<ion-button expand="block" (click)="envokeCharts()" color="primary">
-  Generate Graphs
-</ion-button>
--->
 <ion-button #createPDFButton *ngIf="showCreate" (click)="createPDF()" color="secondary">
-  Create PDF
+  {{ 'visualpage.createbutton' | translate }}
 </ion-button>
 
 <ion-button #downloadButton *ngIf="showDownload" (click)="downloadPDF()" color="tertiary">
-  Download PDF
+  {{ 'visualpage.downbutton' | translate }}
 </ion-button>
 <ion-card-content>
-  <h1>Bar Graph</h1>
+  <h1>{{ 'visualpage.graph1' | translate }}</h1>
   <canvas #barChart></canvas>
   <br>
-  <h1>Line Graph</h1>
+  <h1>{{ 'visualpage.graph2' | translate }}</h1>
   <canvas #lineChart></canvas>
 </ion-card-content>
 

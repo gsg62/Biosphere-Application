@@ -6,6 +6,7 @@ import { ScenarioOptionsPageRoutingModule } from './scenario-options-routing.mod
 import { ScenarioOptionsPage } from './scenario-options.page';
 
 import { MaterialModule } from "../../material-module";
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { MaterialModule } from "../../material-module";
     FormsModule,
     IonicModule,
     ScenarioOptionsPageRoutingModule,
-    MaterialModule
+    MaterialModule,
+    TranslateModule
   ],
   declarations: [ScenarioOptionsPage]
 })

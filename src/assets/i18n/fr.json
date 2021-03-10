@@ -4,5 +4,53 @@
         "trans": "Veuillez sélectionner votre préférence de langue:",
         "TITLE": "Comment fonctionne l'application",
         "TEXT": "..."
+    },
+
+    "aboutpage":
+    {
+        "aboutHeader1": "About",
+        "aboutParagraph1": "JE SUIS",
+        "two": ""
+    },
+
+    "userpage":
+    {
+        "IAM": "Je suis…",
+        "button1": "Utilisateur.trice général.e",
+        "button2": "Législateur.trice",
+        "button3": "Chercheur.euse"
+    },
+    
+    "locationpage":
+    {
+        "header1": "Localisation:",
+        "button1": "Selectionnez une localisation sur la carte",
+        "button2": "Entrez des coordonnées",
+        "button3": "Utilisez votre localisation actuelle",
+        "loading": "Chargement..."
+    },
+
+    "scenariopage":
+    {
+        "title": "Options de Scenarios",
+        "label1": "Choisissez un scenario:",
+        "button1": "Climat",
+        "button2": "Utilisation du sol",
+        "button3": "Déforestation",
+        "button4": "Niveau trophique",
+        "button5": "Extinctions"
+    },
+
+    "visualpage":
+    {
+        "headbutton1": "Retour au choix des scenarios",
+        "button1": "Diversité allélique",
+        "button2": "Diversité des espèces",
+        "button3": "Parenté commune",
+        "button4": "Differentiation génétique des populations",
+        "createbutton": "Créer un PDF",
+        "downbutton": "Télécharger un PDF",
+        "graph1": "Diagramme à barres",
+        "graph2": "Courbe de relation"
     }
 }

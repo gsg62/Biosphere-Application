@@ -21,16 +21,13 @@
     </h1>
     <img id="logo" src='/assets/icon/LOGO.png'/>
 
-    <p id="sentence1">
-      Hello, we are team Biosphere! We are a Capstone group created in the Fall 2020 Semester
+    <h1 id=aboutHeader1>
+      {{ 'aboutpage.aboutHeader1' | translate }}
+    </h1>
+
+    <p id="aboutParagraph1">
+      {{ 'aboutpage.aboutParagraph1' | translate }}
     </p>
 
   </div>
-  <ion-button (click)="createPDF()" color="primary">
-    Create PDF
-  </ion-button>
-
-  <ion-button (click)="downloadPDF()" color="secondary">
-    Download PDF
-  </ion-button>
 </ion-content>
