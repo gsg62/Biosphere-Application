@@ -3,18 +3,18 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>I am a...</ion-title>
+    <ion-title>{{ 'userpage.IAM' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <ion-button size="large" fill="outline" (click)="setUser('general')">
-    General User
+    {{ 'userpage.button1' | translate }}
   </ion-button>
   <ion-button size="large" fill="outline" (click)="setUser('policy')">
-    Policy Maker
+    {{ 'userpage.button2' | translate }}
   </ion-button>
   <ion-button size="large" fill="outline" (click)="setUser('scientist')">
-    Scientist
+    {{ 'userpage.button3' | translate }}
   </ion-button>
 </ion-content>

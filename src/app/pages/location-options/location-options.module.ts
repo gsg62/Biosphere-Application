@@ -8,12 +8,15 @@ import { LocationOptionsPageRoutingModule } from './location-options-routing.mod
 
 import { LocationOptionsPage } from './location-options.page';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LocationOptionsPageRoutingModule
+    LocationOptionsPageRoutingModule,
+    TranslateModule
   ],
   declarations: [LocationOptionsPage]
 })

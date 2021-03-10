@@ -5,8 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AboutPageRoutingModule } from './about-routing.module';
-
 import { AboutPage } from './about.page';
+
+import { TranslateModule } from '@ngx-translate/core';
 
 // pdfMakers
 //import { PdfMakeWrapper } from 'pdfmake-wrapper';
@@ -24,7 +25,8 @@ import { AboutPage } from './about.page';
     FormsModule,
     IonicModule,
     AboutPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   declarations: [AboutPage]
 })

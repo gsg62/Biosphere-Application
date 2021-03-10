@@ -4,5 +4,54 @@
         "trans": "Please select your language preference:",
         "TITLE": "How the application works",
         "TEXT": "..."
+    },
+
+    "aboutpage":
+    {
+        "aboutHeader1": "About",
+        "aboutParagraph1": "“App_Name” is intended to provide a diversity of end users (scientists, policy makers and anyone else) with cutting edge scientific insights about key ecosystems state parameters. “App_Name” provides Essential Biodiversity Variables (EBV, see for more information: https://geobon.org/ebvs/what-are-ebvs/) as simulated by the Madingley model according to different scenarios. Madingley is a global mechanistic model of ecosystems and biodiversity. It simulates fauna populations according to their driving traits, such as metabolic rate. To learn more about madingley, see: https://madingley.github.io/",
+        "two": ""
+    },
+
+    "userpage":
+    {
+        "IAM": "I am a...",
+        "button1": "General User",
+        "button2": "Policy Maker",
+        "button3": "Scientist/Researcher"
+    },
+
+
+    "locationpage":
+    {
+        "header1": "Location:",
+        "button1": "Select location on a map",
+        "button2": "Manually Input Coordinates",
+        "button3": "Use Current Location",
+        "loading": "Loading..."
+    },
+
+    "scenariopage":
+    {
+        "title": "Scenario Options",
+        "label1": "Choose a scenario:",
+        "button1": "Climate",
+        "button2": "Land Use",
+        "button3": "Deforestation",
+        "button4": "Trophic",
+        "button5": "Extinctions"
+    },
+
+    "visualpage":
+    {
+        "headbutton1": "Go back to Scenario Options",
+        "button1": "Allelic Diversity",
+        "button2": "Species Diversity",
+        "button3": "Co-Ancestry",
+        "button4": "Population Genetic Differentiation",
+        "createbutton": "Create PDF",
+        "downbutton": "Download PDF",
+        "graph1": "Bar Graph",
+        "graph2": "Line Plot"
     }
 }

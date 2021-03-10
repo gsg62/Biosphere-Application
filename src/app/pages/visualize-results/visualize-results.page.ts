@@ -14,7 +14,8 @@ import { Filesystem, FilesystemDirectory } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { variable } from '@angular/compiler/src/output/output_ast';
-//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 declare var google: any;
 
@@ -111,10 +112,6 @@ export class VisualizeResultsPage implements OnInit {
   {
   }
 
-  logScenario() {
-    console.log("scenarioData from visualize results: ", this.scenarioData);
-  }
-  
   toggleData1()
   {
     if(this.chartsCreated)
@@ -380,7 +377,7 @@ createCharts(variableName, graphData, graphLabels)
         label: variableName,
         data: graphData,
         backgroundColor: 'rgba(0, 0, 0, 0)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(255, 255, 0)',
+        borderColor: 'rgb(255, 0, 0)',
         borderWidth: 1
         }
       ]

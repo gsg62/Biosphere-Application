@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { VisualizeResultsPageRoutingModule } from './visualize-results-routing.module';
 import { ChartsModule } from 'ng2-charts';
 import { VisualizeResultsPage } from "./visualize-results.page";
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule
 ({
@@ -17,7 +18,8 @@ import { VisualizeResultsPage } from "./visualize-results.page";
     IonicModule,
     VisualizeResultsPageRoutingModule,
     ChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    TranslateModule
   ],
   declarations: [VisualizeResultsPage]
 })
