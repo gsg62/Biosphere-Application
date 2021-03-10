@@ -5,16 +5,11 @@
 </ion-header>
 
 <ion-content>
-<<<<<<< Updated upstream
-=======
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-G3v1pi990j6adMholYmV1ZQPr8E1Ug" async defer></script>
->>>>>>> Stashed changes
   <ion-button size="medium" fill="outline" (click)="backToOptions()">
     <ion-icon name="arrow-back"></ion-icon>
     {{ 'visualpage.headbutton1' | translate }}  
 </ion-button>
 
-<<<<<<< Updated upstream
 <ion-button size="medium" fill="outline" (click)="logScenario()">
   log scenario  
 </ion-button>
@@ -24,28 +19,6 @@
   <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">{{ 'visualpage.button2' | translate }}</ion-button>
   <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">{{ 'visualpage.button3' | translate }}</ion-button>
   <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">{{ 'visualpage.button4' | translate }}</ion-button>
-=======
-<div #map id='map' style="width:100%;height:400px"></div>
-
-<div *ngFor="let latitude of latitudes"> 
-  {{latitude}}
-</div>
-
-<div *ngFor="let longitude of longitudes"> 
-  {{longitude}}
-</div>
-
-<br>
-
-<div *ngFor="let AValues of AValues"> 
-  {{AValues}}
-</div>
-
-<br>
-
-<div *ngFor="let BValues of BValues"> 
-  {{BValues}}
->>>>>>> Stashed changes
 </div>
 
 <br>
