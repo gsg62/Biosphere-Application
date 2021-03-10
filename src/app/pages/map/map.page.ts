@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ViewChild, ElementRef } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+// import { NavParams } from '@ionic/angular';
 
 declare var google: any;
 
@@ -16,17 +17,25 @@ export class MapPage implements OnInit {
   longitude: any;
   map: any;
   data: any;
+  userType: any;
+  areaOfInterest: any;
 
-  @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
+  @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
-  constructor( private navCtrl: NavController, private route: ActivatedRoute, private router: Router) {
-
+  constructor(
+    // private navCtrl: NavController,
+    private route: ActivatedRoute,
+    private router: Router,
+    // public navParams: NavParams
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.userType = this.router.getCurrentNavigation().extras.state.scenarioData.userType;
+    });
   }
 
   ngOnInit() {
   }
-  ionViewDidEnter()
-  {
+  ionViewDidEnter() {
     this.setLocation();
   }
   submitLocation(controlDiv, map) {
@@ -51,52 +60,69 @@ export class MapPage implements OnInit {
     controlText.style.paddingRight = '5px';
     controlText.innerHTML = 'Submit Location';
     controlUI.appendChild(controlText);
+
     // Setup the click event listeners: user submits location.
     controlUI.addEventListener('click', () => {
-      this.router.navigate(['/scenario-options']);
+      console.log("lat: ", this.areaOfInterest.getCenter().lat());
+      console.log("long: ", this.areaOfInterest.getCenter().lng());
+      console.log("radius: ", this.areaOfInterest.radius);
+      let navigationExtras: NavigationExtras = {
+        state: {
+          scenarioData: {
+            userType: this.userType,
+            center: {
+              lat: this.areaOfInterest.getCenter().lat(),
+              lng: this.areaOfInterest.getCenter().lng(),
+            },
+            radius: this.areaOfInterest.radius
+          }
+        }
+      };
+      this.router.navigate(['scenario-options'], navigationExtras);
+
+      // this.router.navigate(['/scenario-options']);
     });
+
   }
 
   setLocation() {
     this.route.queryParams.subscribe(params => {
 
-      if (params && params.location)
-      {
+      if (params && params.location) {
         this.data = JSON.parse(params.location);
       }
       // CHANGE LONG and LAT HERE
       // Get current location
       const location = new google.maps.LatLng(params.lat, params.lng);
       const locationSetting = params.locationSetting;
-      let areaOfInterest;
+      // let areaOfInterest;
       let options =
-          {
-            center: location,
+      {
+        center: location,
 
-            // CHANGE DEFAULT ZOOM HERE
-            zoom: 6,
+        // CHANGE DEFAULT ZOOM HERE
+        zoom: 6,
 
-            mapTypeId: 'terrain',
+        mapTypeId: 'terrain',
 
-            // Default will not allow the user to move around the map
-            // This is implemented mainly for the current location part
-            gestureHandling: 'none',
+        // Default will not allow the user to move around the map
+        // This is implemented mainly for the current location part
+        gestureHandling: 'none',
 
-            // Disable certain parts of the UI so user can't switch to street mode,
-            // select the map type, or enter fullscreen mode
-            zoomControl: true,
-            mapTypeControl: false,
-            scaleControl: true,
-            streetViewControl: false,
-            rotateControl: false,
-            fullscreenControl: false
-          };
+        // Disable certain parts of the UI so user can't switch to street mode,
+        // select the map type, or enter fullscreen mode
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: true,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false
+      };
 
       // enters if the user wants to use their current location
       // the only differences from select location are the map is NOT movable and the circle will NOT be draggable
-      if ( locationSetting === 'currentLoc')
-      {
-        areaOfInterest = new google.maps.Circle({
+      if (locationSetting === 'currentLoc') {
+        this.areaOfInterest = new google.maps.Circle({
           center: location,
           // default radius, but the user can adjust in the app
           radius: 100000,
@@ -109,9 +135,8 @@ export class MapPage implements OnInit {
 
       // enters if the current wants to select their location on the map
       // the only differences from current location are the map IS movable and the circle WILL be draggable
-      else if ( locationSetting === 'selectLoc')
-      {
-        areaOfInterest = new google.maps.Circle({
+      else if (locationSetting === 'selectLoc') {
+        this.areaOfInterest = new google.maps.Circle({
           center: location,
           // default radius, but the user can adjust in the app
           radius: 100000,
@@ -126,7 +151,7 @@ export class MapPage implements OnInit {
 
       this.map = new google.maps.Map(this.mapRef.nativeElement, options);
 
-      areaOfInterest.setMap(this.map);
+      this.areaOfInterest.setMap(this.map);
 
       const centerControlDiv = document.createElement('div');
       this.submitLocation(centerControlDiv, this.map);

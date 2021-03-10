@@ -16,6 +16,7 @@ export class IntensityModalComponent implements OnInit {
   label1: string;
   label2: string;
   label3: string;
+  scenarioData: any;
 
   constructor(
     private modalCtrl: ModalController,
@@ -26,23 +27,33 @@ export class IntensityModalComponent implements OnInit {
     this.label1 = navParams.get('scenarioOptions')[0];
     this.label2 = navParams.get('scenarioOptions')[1];
     this.label3 = navParams.get('scenarioOptions')[2];
+    this.scenarioData = navParams.get('scenarioData');
   }
 
   ngOnInit() { }
 
   private async runSimulation(intensity: number) {
 
+    console.log("scenarioData from modal: ", this.scenarioData);
+
     // pass scenario values and navigate to visualize results page
     let navigationExtras: NavigationExtras = {
       state: {
         scenarioData: {
+          userType: this.scenarioData.userType,
+          center: {
+            lat: this.scenarioData.center.lat,
+            lng: this.scenarioData.center.lng
+          },
+          radius: this.scenarioData.radius,
+
           scenario1stVal: this.navParams.get('scenarioType'),
-          scenario2ndVal: {
-            value: this.navParams.get('scenarioOptions')[intensity]
-          }
+          scenario2ndVal: this.navParams.get('scenarioOptions')[intensity]
         }
       }
     };
+
+    console.log("data to visualize results: ", navigationExtras);
 
     // pass scenario data to visualize results page via neavigation extras
     await this.router.navigate(['visualize-results'], navigationExtras);
