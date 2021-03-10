@@ -8,9 +8,20 @@
 
     "aboutpage":
     {
-        "aboutHeader1": "About",
-        "aboutParagraph1": "JE SUIS",
-        "two": ""
+        "header1": "A propos",
+        "paragraph1.1": "Biosphere est une application fournissant à ses divers utilisateurs (chercheurs, législateurs et autres) des informations scientifiques de haut niveau relatives a des paramètres clés des états des ecosystèmes. Biosphere renseigne les “Essential Biodiversity Variables” (EBV, “Variables Essentielles de la Biodiversité”, Pour en savoir plus, voir:",
+        "paragraph1.2": "Tels que simulés par le modèle Madingley selon différents scénarios. Madingley est un modèle mécanistique global simulant les écosystèmes et la biodiversité. Il simule le spopulations de faune selon leurs traits représentatifs majeurs, tel que le métabolisme de base. Pour en savoir plus sur Madingley, voir: ",
+        "paragraph2": "Les scénarios simulés par Madingley présentés dans Biosphere sont: ",
+        "header2": "Climat:",
+        "paragraph3": "Ces scénarios simulés suivent le cadre des SSPs (Shared Socio-Economic Pathways), créés pour contribuer aux rapports du GIEC. Ils représentent les changements d’affectation des terres en fonction des activités humaines et des politiques les régulants. Pour en savoir plus, voir:",
+        "header3": "Utilisation des sols:",
+        "paragraph4": "Ces scénarios simulés suivent le cadre des SSPs (Shared Socio-Economic Pathways), créés pour contribuer aux rapports du GIEC. Ils représentent les changements d’affectation des terres en fonction des activités humaines et des politiques les régulants. Pour en savoir plus, voir:",
+        "header4": "Déforestation:",
+        "paragraph5": "Ces scénarios simulent soit des forêts dans leur état “historique” soit des forêts soumises à l’exploitation forestière.",
+        "header5": "Niveaux trophiques:",
+        "paragraph6": "Ces scénarios simulent de potentiels plans de gestion de la faune. Soit par l’extraction des prédateurs supérieurs, favorisant le niveau des proies; soit par l’extraction des grands herbivores, favorisant la production d’herbes (et ainsi, potentielle;ent, l’intensité et la fréquence des feux); soit une “re-naturalisation” impliquant une maximisation de la biomasse et de la diversité faunistique.",
+        "header6": "Extinctions:",
+        "paragraph7": "Ces scénarios simulent les extinctions de masses des espèces ayant eu lie au Pleistocène, à l’Holocène et à l’Anthropocène."
     },
 
     "userpage":
