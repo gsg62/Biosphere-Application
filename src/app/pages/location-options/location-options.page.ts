@@ -36,39 +36,63 @@ export class LocationOptionsPage implements OnInit {
   }
 
   openMap() {
-    this.geolocation.getCurrentPosition().then(
-      (location) => {
-        this.lat = location.coords.latitude;
+      if (this.locationSetting === "currentLoc") {
+          this.geolocation.getCurrentPosition().then(
+              (location) => {
+                  this.lat = location.coords.latitude;
 
-        this.lng = location.coords.longitude;
+                  this.lng = location.coords.longitude;
 
-        this.curlocation =
-        {
-          lat: this.lat,
-          lng: this.lng
-        };
+                  this.curlocation =
+                      {
+                          lat: this.lat,
+                          lng: this.lng
+                      };
 
-        console.log(this.curlocation.lat);
-        console.log(this.curlocation.lng);
-        console.log(this.locationSetting);
-        const navigationExtras: NavigationExtras =
-        {
-          queryParams:
-          {
-            lat: this.lat,
-            lng: this.lng,
-            locationSetting: this.locationSetting,
-            scenarioData: this.scenarioData            
-          },
-          state: { 
-            scenarioData: this.scenarioData
-          }
-        }
-        console.log(navigationExtras);
-        this.showProgress = false;
-        this.router.navigate(['/map'], navigationExtras);
+                  console.log(this.curlocation.lat);
+                  console.log(this.curlocation.lng);
+                  console.log(this.locationSetting);
+                  const navigationExtras: NavigationExtras =
+                      {
+                          queryParams:
+                              {
+                                  lat: this.lat,
+                                  lng: this.lng,
+                                  locationSetting: this.locationSetting,
+                                  scenarioData: this.scenarioData
+                              },
+                          state: {
+                              scenarioData: this.scenarioData
+                          }
+                      }
+                  console.log(navigationExtras);
+                  this.router.navigate(['/map'], navigationExtras);
+                  this.showProgress = false;
 
-      }, er => { alert('Error: Please turn on Location Access and try again.'); }).catch((error) => alert('error'));
+              }, er => {
+                  alert('Please turn on Location Access and try again. \n\n' +
+                      'If you do NOT want to access your current location, please use the select location on map button.');
+                  this.showProgress = false;
+              }).catch((error) => alert('error'));
+      }
+      else if (this.locationSetting === "selectLoc") {
+          const navigationExtras: NavigationExtras =
+              {
+                  queryParams:
+                      {
+                          // DEFAULT location is Flagstaff, AZ for the select location page
+                          lat: 35.198284,
+                          lng: -111.651299,
+                          locationSetting: this.locationSetting,
+                          scenarioData: this.scenarioData
+                      },
+                  state: {
+                      scenarioData: this.scenarioData
+                  }
+              }
+          console.log(navigationExtras);
+          this.router.navigate(['/map'], navigationExtras);
+      }
   }
 
   useDeviceLocation() {
@@ -79,8 +103,6 @@ export class LocationOptionsPage implements OnInit {
     this.openMap();
   }
   selectLocation() {
-    // show progress bar after user clicks button
-    this.showProgress = true;
     // user decided to select the location on the location options page
     this.locationSetting = "selectLoc";
     this.openMap();
