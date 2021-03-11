@@ -14,7 +14,6 @@
   log scenario  
 </ion-button>
  
-Possible Buttons for Heatmap
 <div id="floating-panel">
   <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">{{ 'visualpage.button1' | translate }}</ion-button>
   <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">{{ 'visualpage.button2' | translate }}</ion-button>
@@ -24,17 +23,7 @@ Possible Buttons for Heatmap
 
 <br>
 
-
-OLD BUTTON TO SHOW MAP
-<ion-button expand="block" (click)="initMap()" color="primary">
-  Show Map
-</ion-button>
-
 <div #map id='map'></div>
-
-<div *ngFor="let latitude of latitudes"> 
-  {{latitude}}
-</div>
 
 <ion-button #createPDFButton *ngIf="showCreate" (click)="createPDF()" color="secondary">
   {{ 'visualpage.createbutton' | translate }}
