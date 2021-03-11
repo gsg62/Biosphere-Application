@@ -21,18 +21,21 @@ export class InputScenarioService {
    * 
    **/ 
 
-  personalDevApiAddy = 'https://tcox9byx8h.execute-api.us-east-2.amazonaws.com/default/test-python-lambda';
+  personalDevApiEndPoint = 'https://tcox9byx8h.execute-api.us-east-2.amazonaws.com/default/test-python-lambda';
   
   biosphereSB1ApiEndpoint = 'https://jbt8pms68j.execute-api.us-west-2.amazonaws.com/default/team-biosphere-sandbox-1-lambda';
   
   biosphereSB2ApiEndpoint = 'https://jbt8pms68j.execute-api.us-west-2.amazonaws.com/default/team-biosphere-sandbox-2-lambda';
 
   prodEndpoint = 'https://o58lshx3rf.execute-api.us-west-2.amazonaws.com/ionic';
+
+  testEndpoint = 'https://yapxntov4i.execute-api.us-west-2.amazonaws.com/Dev';
   
   // test function to show how a REST GET http request can be made to a specified api endpoint
-  getTestData(): Observable<any> {
-    let data = this.http.get(this.prodEndpoint); // not fully configured
-    console.log('raw data from service: ', data);
-    return data;
+  getMadingleyData(scenarioData: any): Observable<any> {
+
+    // let data = this.http.get(this.testEndpoint); // not fully configured
+    let postData = this.http.post(this.testEndpoint, scenarioData);
+    return postData;
   }
 }

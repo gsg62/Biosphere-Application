@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
 //import { StatsBarChart } from '../../assets/data/data';
 import { Platform } from '@ionic/angular';
-
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { InputScenarioService } from "../../input-scenario.service";
 //import { Label } from 'ng2-charts';
 
 // For Data Exportation
@@ -15,7 +15,9 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
 
 declare var google: any;
 
@@ -72,6 +74,7 @@ export class VisualizeResultsPage implements OnInit {
   chartsCreated: boolean;
 
   scenarioData: any;
+  madingleyData = [];
 
   height = 0;
 
@@ -94,22 +97,106 @@ export class VisualizeResultsPage implements OnInit {
 
   map: any;
 
-  constructor(private navCtrl: NavController, private http: HttpClient, private plt: Platform, private fileOpener: FileOpener, private route: ActivatedRoute, private router: Router  
-) 
-  {
+  constructor(
+    private navCtrl: NavController, 
+    private http: HttpClient, 
+    private plt: Platform, 
+    private fileOpener: FileOpener, 
+    private route: ActivatedRoute, 
+    private router: Router,
+    private inputService: InputScenarioService
+  ){
     this.showCreate = false;
     this.showDownload = false;
     this.chartsCreated = false;
     this.getData(http);
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
-        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
+        this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;        
       }
     });
   }
 
   ngOnInit()
   {
+    // console.log("scenarioData from ngOnit: ", this.scenarioData);
+    this.getMadingleyData();
+  }
+
+  // makes call to api to get madingley data
+  private getMadingleyData()
+  {
+    let requestArray = [];
+    const requestData = this.generateRequest(0, this.scenarioData.radius);
+
+    // checks if necessary to split up request
+    if(this.scenarioData.radius >= 800000)
+    {
+      requestArray = this.makeOnionRings(requestData);
+    }
+
+    // assume radius smaller than 800,000 and make API call
+    else 
+    {
+      requestArray.push(requestData);
+    }    
+    console.log("requestArray: ", requestArray);
+    
+    // make requests and save data
+    requestArray.forEach(element => {
+      this.inputService.getMadingleyData(element).subscribe(
+        (data) => {
+          this.madingleyData.push(data);
+        }
+      );
+    });
+
+    // all returned data from api stored here
+    console.log("madingleyDataArray: ", this.madingleyData);
+  }
+
+  // splits requests into onion rings
+  private makeOnionRings(originalRequest: any)
+  {
+    console.log("scenarioData from parseR: ", originalRequest);
+    let requestArray = [];
+    let currentMax = 0;
+    let requestCopy = {};
+    const increment = 800000;
+
+    // loop until newMax
+    while (currentMax <= originalRequest.max_distance)
+    {
+      // check to not exceed max distance
+      if ((currentMax + increment) <= originalRequest.max_distance)
+      {
+        requestCopy = this.generateRequest(currentMax, currentMax + increment);
+        requestArray.push(requestCopy);  
+        currentMax += increment;
+      }
+      // assume larger and subtract max_distance from max for min and keep max the same
+      else {
+        requestCopy = this.generateRequest(currentMax, originalRequest.max_distance)
+        requestArray.push(requestCopy);
+        currentMax += increment;
+      }
+    }
+    return requestArray;
+  }
+
+  // helper function used to generate a request for specified min and max
+  private generateRequest( min:number, max: number)
+  {
+    let request = {
+      lat: this.scenarioData.center.lat,
+      lng: this.scenarioData.center.lng,
+      min_distance: min,      
+      max_distance: max,
+      scenario: this.scenarioData.scenario1stVal,
+      scenario_option: this.scenarioData.scenario2ndVal,
+      user_type: this.scenarioData.userType    
+    }
+    return request;
   }
 
   toggleData1()

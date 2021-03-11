@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-// import { UserOptionsPageModule } from "../app/pages/user-options.module.ts";
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +12,11 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 export class AppComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
+    {
+      title: 'Getting Started',
+      url: 'getting-started',
+      icon: 'mail'
+    },
     {
       title: 'Contact Us',
       url: 'contact-us',
@@ -34,8 +38,8 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    // public userOptions: User
-  ) {
+    private navCtrl: NavController,
+    ) {
     this.initializeApp();
   }
 
@@ -47,6 +51,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    
   }
 }
