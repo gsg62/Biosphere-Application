@@ -36,7 +36,7 @@ export class ScenarioOptionsPage {
           component: IntensityModalComponent,
           componentProps: {
             scenarioType: 'CLIMATE',
-            scenarioOptions: ['Low', 'Medium', 'High'],
+            scenarioOptions: ['Low', 'Med', 'High'],
             scenarioData: this.scenarioData
           }
         });
@@ -46,7 +46,7 @@ export class ScenarioOptionsPage {
           component: IntensityModalComponent,
           componentProps: {
             scenarioType: 'LANDUSE',
-            scenarioOptions: ['Low', 'Medium', 'High'],
+            scenarioOptions: ['Low', 'Med', 'High'],
             scenarioData: this.scenarioData
           }
         });
@@ -56,7 +56,7 @@ export class ScenarioOptionsPage {
           component: IntensityModalComponent,
           componentProps: {
             scenarioType: 'DEFORESTATION',
-            scenarioOptions: ['Selective', 'Logging', 'Normal'], 
+            scenarioOptions: ['Selective Logging', 'Normal', null], 
             scenarioData: this.scenarioData
           }
         });
@@ -65,7 +65,7 @@ export class ScenarioOptionsPage {
         modal = await this.modalCtrl.create({
           component: IntensityModalComponent,
           componentProps: {
-            scenarioType: 'TROPIC',
+            scenarioType: 'TROPHIC',
             scenarioOptions: ['Remove most predators', 'Remove most herbivores', 'Rewilding'],
             scenarioData: this.scenarioData
           }
