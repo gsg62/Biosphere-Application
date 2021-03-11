@@ -3,7 +3,14 @@
     {
         "trans": "Veuillez sélectionner votre préférence de langue:",
         "TITLE": "Comment fonctionne l'application",
-        "TEXT": "..."
+        "header": "Commencer",
+        "paragraph0": "Biosphere est une application utilisée pour afficher les données générées par le modèle Madingley sur différentes zones de terrain. Il permet plusieurs options pour sélectionner un emplacement, ainsi que les types de variables affichés.",
+        "header1": "Sélection d'un emplacement",
+        "paragraph1": "L'utilisateur peut sélectionner un emplacement sur la carte à l'aide d'une forme de cercle interactif qui peut être déplacée dans le monde entier. La zone de ce cercle est ensuite utilisée pour afficher les données de cette région spécifique. Les variables affichées dépendent du type d'utilisateur, ainsi que des variables spécifiquement choisies.",
+        "header2": "Visualisation des données: Carte de la chaleur",
+        "paragraph2": "Après avoir sélectionné un emplacement et une variable spécifique à afficher, l'utilisateur est capable de voir cette variable sur une carte de chaleur Google interactive. Cette carte peut également être zoomée sur la préférence des utilisateurs.",
+        "header3": "Visualisation des données: graphiques",
+        "paragraph3": "Plusieurs graphiques sont également générés dans le processus de visualisation des données et sont affichés sous la feuille de chaleur de la page de résultats finale. Ces graphiques sont capables d'être exportés vers un fichier PDF et de télécharger sur l'appareil de l'utilisateur."
     },
 
     "aboutpage":
@@ -58,10 +65,19 @@
         "button1": "Diversité allélique",
         "button2": "Diversité des espèces",
         "button3": "Parenté commune",
-        "button4": "Differentiation génétique des populations",
+        "button4": "Differentiation génétique",
         "createbutton": "Créer un PDF",
         "downbutton": "Télécharger un PDF",
         "graph1": "Diagramme à barres",
         "graph2": "Courbe de relation"
+    },
+
+    "contactpage":
+    {
+        "paragraph1": "Biosphere a été développée à la Northern Arizona University par:",
+        "developer": "Développeurs:",
+        "sponsor": "Chargé de projet:",
+        "supervisor": "Superviseur:",
+        "paragraph2": "Financé par"
     }
 }

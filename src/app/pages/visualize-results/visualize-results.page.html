@@ -25,10 +25,6 @@
 
 <div #map id='map'></div>
 
-<div *ngFor="let latitude of latitudes"> 
-  {{latitude}}
-</div>
-
 <ion-button #createPDFButton *ngIf="showCreate" (click)="createPDF()" color="secondary">
   {{ 'visualpage.createbutton' | translate }}
 </ion-button>

@@ -23,7 +23,6 @@ export class MapPage implements OnInit {
   @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
   constructor(
-    // private navCtrl: NavController,
     private route: ActivatedRoute,
     private router: Router,
     // public navParams: NavParams

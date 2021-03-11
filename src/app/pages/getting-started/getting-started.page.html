@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Getting Started</ion-title>
+    <ion-title>{{ 'GSPage.header' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,14 +19,59 @@
     <option value = "fr">Français{{lang}}</option>
     <option value = "pt">Português{{lang}}</option>
   </select>
-
   <h1>
     {{ 'GSPage.TITLE' | translate }}
   </h1>
-
   <p>
-    {{'GSPage.TEXT' | translate }}
+    {{'GSPage.paragraph0' | translate }}
   </p>
+
+  <br>
+
+  <div id="block1" style="padding-bottom: 2%; display: flex;">
+    <div id="left1" style="position: relative;float: left; width: 50%">
+      <h2>
+        {{ 'GSPage.header1' | translate }}
+      </h2>
+      <p style="width: 90%;">
+        {{ 'GSPage.paragraph1' | translate }}
+      </p>
+    </div>
+
+    <div id="right1" style="position: relative; float: right; width: 50%; padding-right: 5%;">
+      <img id="example1" src='/assets/icon/examplemap.png' style="width: 90%; height: 90%;"/>
+    </div>
+  </div>
+
+  <div id="block2" style="padding-bottom: 2%; display: flex;">
+    <div id="left2" style="position: relative; float: left; width: 50%">
+      <img id="example2" src='/assets/icon/heatmap.png' style="width: 90%; height: 90%;"/>
+    </div>
+  
+    <div id="right2" style="position: relative; float: right; width: 50%; padding-right: 5%;">
+      <h2>
+        {{ 'GSPage.header2' | translate }}
+      </h2>
+      <p style="width: 90%;">
+        {{ 'GSPage.paragraph2' | translate }}
+      </p>
+    </div>
+  </div>
+
+  <div id="block3" style="padding-bottom: 2%; display: flex;">
+    <div id="left3" style="position: relative; float: left; width: 50%">
+      <h2>
+        {{ 'GSPage.header3' | translate }}
+      </h2>
+      <p style="width: 90%;">
+        {{ 'GSPage.paragraph3' | translate }}
+      </p>
+    </div>
+  
+    <div id="right3" style="position: relative; float: right; width: 50%; padding-right: 5%;">
+      <img id="example3" src='/assets/icon/bargraph.png' style="width: 90%; height: 90%;"/>
+    </div>
+  </div>
 
 </div>
 </ion-content>
