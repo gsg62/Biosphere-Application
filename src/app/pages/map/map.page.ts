@@ -124,7 +124,7 @@ export class MapPage implements OnInit {
         this.areaOfInterest = new google.maps.Circle({
           center: location,
           // default radius, but the user can adjust in the app
-          radius: 100000,
+          radius: 300000,
           editable: true,
           // current location does NOT allow for user to move circle
           draggable: false,
