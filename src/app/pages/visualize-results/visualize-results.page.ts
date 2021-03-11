@@ -72,6 +72,8 @@ export class VisualizeResultsPage implements OnInit {
   showCreate: boolean;
   showDownload: boolean;
   chartsCreated: boolean;
+  statusCode: number;
+  nextJSON: any;
 
   scenarioData: any;
   madingleyData = [];
@@ -339,42 +341,86 @@ export class VisualizeResultsPage implements OnInit {
 
   getData(http: HttpClient) {
     // grab the data from the json file and creates a JSON object
-    this.http.get('../../assets/data/Closest-Real-Output.json').toPromise().then(data => 
+    this.http.get('../../assets/data/head_request.json').toPromise().then(data => 
       {
         for( let key in data)
         {
           // checks if data has a key
           if (data.hasOwnProperty(key))
           {
-            // check if key = latitude, if true then push current data to latitude list
-            if(key == "Body")
+            // check if the key is statusCode
+            if(key == "statusCode")
             {
-              this.bodyData.push(key);
-              this.bodyData.push(data[key]);
+              this.statusCode = data[key];
             }
 
+            // check if the key is body, then get the body string data
+            if(key == "body")
+            {
+              var stringData = data[key]
+
+              stringData.replace('/', '');
+
+              // storing the object as a local variable just for clarity
+              var localBody = JSON.parse(stringData);
+
+              for( let localKey in localBody)
+              {
+                if(localKey == "Next")
+                {
+                  this.nextJSON = localBody[localKey];
+                  console.log("BOBBY", this.nextJSON);
+                }
+              }
+              // pushing the object to the global arrays
+              this.bodyData.push(key);
+              this.bodyData.push(localBody);
+            }
           } // end of if hasOwnProperty
         } // end of for loop
 
-        this.bodyKeys = Object.keys(this.bodyData[1]); 
-        this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-        this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-        this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
-        this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-        this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-        this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
-
-        var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-        this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-        this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-
-
-        this.timeSeries = Object.keys(this.heatMapData)
-
-        for(let i = 0; i < this.longitudeValues.length; i++)
+        // if statuscode was valid (200), save all the variables
+        if(this.statusCode == 200)
         {
-          this.coordinateArray.push(this.latitudeValues[i] + ", " + this.longitudeValues[i]);
+          this.bodyKeys = Object.keys(this.bodyData[1]); 
+          this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+          this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
+          this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+          this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+          this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
+          this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
+
+          var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+          this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+          this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+          this.timeSeries = Object.keys(this.heatMapData);
         }
+
+        /* 
+        here is where we will loop again for another get request I'm pretty sure, or maybe break out and call another request? either way,
+        the request data is all stored in this.nextJSON, so something like:
+        if(this.nextJSON != null)
+        {
+
+          // If we need to get each value to pass through, you need to use a loop to parse through the objects and get each value
+          // you can also set an array to the keys and one to the values that way, like how timeSeries and stuff are stored
+          for( key in this.nextJSON )
+          {
+            if(key == "coordinates")
+            {
+              // store the coordinates, they are formatted as a single string, no space, separated by a comma
+              // e.g. "123.526125,-49.123456"
+            }
+
+            if(key == "max_distance")
+            {
+              // store the max distance
+            }
+
+            // TODO: get all the keys total: 7 I think, probably needs to be hardcoded to save on time
+          }
+        }
+        */
       });
   }
 
