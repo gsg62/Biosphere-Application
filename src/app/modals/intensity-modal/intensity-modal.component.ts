@@ -18,7 +18,7 @@ export class IntensityModalComponent implements OnInit {
   label2: string;
   label3: string;
   scenarioData: any;
-  showThirdBtn = true;
+  deforestation = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -38,32 +38,39 @@ export class IntensityModalComponent implements OnInit {
 
   private async runSimulation(intensity: number) {
 
-    console.log("scenarioData from modal: ", this.scenarioData);
+    if (this.navParams.get('scenarioType') == 'DEFORESTATION' 
+      && intensity == 2) {
+      alert('Please select a valid intensity');
+      this.deforestation = true;
+    }
+    else {
+      console.log("scenarioData from modal: ", this.scenarioData);
 
-    // pass scenario values and navigate to visualize results page
-    let navigationExtras: NavigationExtras = {
-      state: {
-        scenarioData: {
-          userType: this.scenarioData.userType,
-          center: {
-            lat: this.scenarioData.center.lat,
-            lng: this.scenarioData.center.lng
-          },
-          radius: this.scenarioData.radius,
+      // pass scenario values and navigate to visualize results page
+      let navigationExtras: NavigationExtras = {
+        state: {
+          scenarioData: {
+            userType: this.scenarioData.userType,
+            center: {
+              lat: this.scenarioData.center.lat,
+              lng: this.scenarioData.center.lng
+            },
+            radius: this.scenarioData.radius,
 
-          scenario1stVal: this.navParams.get('scenarioType'),
-          scenario2ndVal: this.navParams.get('scenarioOptions')[intensity]
+            scenario1stVal: this.navParams.get('scenarioType'),
+            scenario2ndVal: this.navParams.get('scenarioOptions')[intensity]
+          }
         }
-      }
-    };
+      };
 
-    console.log("data to visualize results: ", navigationExtras);
+      console.log("data to visualize results: ", navigationExtras);
 
-    // pass scenario data to visualize results page via neavigation extras
-    await this.router.navigate(['visualize-results'], navigationExtras);
+      // pass scenario data to visualize results page via neavigation extras
+      await this.router.navigate(['visualize-results'], navigationExtras);
 
-    // dismiss modal after data is passed to results page
-    this.modalCtrl.dismiss();
+      // dismiss modal after data is passed to results page
+      this.modalCtrl.dismiss();
+    }
   }
 
   private dismissModal() {

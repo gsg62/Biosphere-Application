@@ -65,7 +65,7 @@ export class LocationOptionsPage implements OnInit {
                               scenarioData: this.scenarioData
                           }
                       }
-                  console.log(navigationExtras);
+                //   console.log(navigationExtras);
                   this.router.navigate(['/map'], navigationExtras);
                   this.showProgress = false;
 
@@ -90,7 +90,7 @@ export class LocationOptionsPage implements OnInit {
                       scenarioData: this.scenarioData
                   }
               }
-          console.log(navigationExtras);
+        //   console.log(navigationExtras);
           this.router.navigate(['/map'], navigationExtras);
       }
   }
@@ -110,8 +110,17 @@ export class LocationOptionsPage implements OnInit {
   manualLocation() {
     // don't show progress bar after user clicks button because it switches really fast
     this.showProgress = false;
+    const navigationExtras: NavigationExtras =
+    {
+        state: {
+            scenarioData: this.scenarioData
+        }
+    }
+
     // user decided to input their own location coordinates on the location options page
-    this.router.navigate(['/manual-coords']);
+    this.router.navigate(['/manual-coords'], navigationExtras);
+
+    // this.router.navigate(['/manual-coords']);
   }
 
 }

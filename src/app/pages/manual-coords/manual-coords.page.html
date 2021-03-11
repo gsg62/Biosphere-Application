@@ -8,45 +8,55 @@
 </ion-header>
 
 <ion-content>
+  <form [formGroup]="location" (ngSubmit)="submitCoords()" novalidate>
   <ion-grid>
-<ion-row>
-  <ion-col>
-    <ion-item class="item">
-      <ion-label position="stacked">{{ 'manualpage.label1' | translate }}</ion-label>
-      <ion-input type="number" value=""></ion-input>
-    </ion-item>
-  </ion-col>
-</ion-row>
-
     <ion-row>
-      <ion-col>
-    <ion-item>
-      <ion-label position="stacked">{{ 'manualpage.label2' | translate }}</ion-label>
-      <ion-input type="number" value=""></ion-input>
-    </ion-item>
-      </ion-col>
-      </ion-row>
-
-    <ion-row >
-    <ion-item id="label">
-      <ion-label position="stacked" >{{ 'manualpage.label3' | translate }}</ion-label>
-      <ion-input type="number" value="" id="radius"></ion-input>
-    </ion-item>
-
+    <ion-col>
+      <ion-item class="item">
+        <ion-label position="stacked">{{ 'manualpage.label1' | translate }}</ion-label>
+        <ion-input type="number" value="" formControlName="lat"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">{{ 'manualpage.label2' | translate }}</ion-label>
+        <ion-input type="number" value="" formControlName="lng"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="stacked">{{ 'manualpage.label3' | translate }}</ion-label>
+        <ion-input type="number" value="" formControlName="radius"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+    <!-- <ion-row >
+      <ion-item id="label">
+        <ion-label position="stacked" >Enter Radius of Circle (in Meters): </ion-label>
+        <ion-input type="number" value="" id="radius"></ion-input>
+      </ion-item>
     <ion-item id="kilometers" lines="none">
       <div>meters</div>
-
     </ion-item>
+    </ion-row> -->
+    <ion-row>
+        <ion-col>
+            <div>To get the best results, we recommend a radius between 300,000 and 800,000 meters</div>
+        </ion-col>
+    </ion-row>
 
-      </ion-row>
       <ion-row>
           <ion-col>
               <div>{{ 'manualpage.paragraph1' | translate }}</div>
           </ion-col>
       </ion-row>
-
-    <ion-button size="large" fill="outline" (click)="submitCoords()">
+    <ion-button size="large" fill="outline" type="submit">
       Submit Coordinates
     </ion-button>
   </ion-grid>
+</form>
 </ion-content>

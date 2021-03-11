@@ -25,7 +25,7 @@
   </ion-row>
   <ion-row class="ion-align-items-center">
     <ion-col size="12" class="ion-text-center">
-        <ion-button size="medium" fill="outline" (click)="runSimulation(2)">
+        <ion-button [disabled]="deforestation" size="medium" fill="outline" (click)="runSimulation(2)">
           {{label3}}
         </ion-button>
     </ion-col>

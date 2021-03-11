@@ -124,6 +124,7 @@ export class VisualizeResultsPage implements OnInit {
   ngOnInit()
   {
     this.getMadingleyData();
+    // console.log("MadingleyData: ", this.madingleyData);
   }
 
   private async setData() 
@@ -133,6 +134,7 @@ export class VisualizeResultsPage implements OnInit {
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
+    let allData = [];
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
