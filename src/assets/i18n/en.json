@@ -29,7 +29,6 @@
         "paragraph6": "These simulated  scenarios represent potential management plan. Either removing most top predators to favor prey level species; or removing most big herbivores to favor grass production (and thus, potentially fire intensity and frequency); or re-wilding, i.e. maximising the overall fauna biomass and diversity.",
         "header6": "Extinctions:",
         "paragraph7": "These simulated scenarios represent the mass species extinction events of the Pleistocene, Holocene and Anthropocence, respectively."
-        
     },
 
     "userpage":
@@ -39,7 +38,6 @@
         "button2": "Policy Maker",
         "button3": "Scientist/Researcher"
     },
-
 
     "locationpage":
     {
@@ -81,5 +79,20 @@
         "sponsor": "Project Leader:",
         "supervisor": "Supervisor:",
         "paragraph2": "Funded by:"
+    },
+
+    "mappage":
+    {
+        "map": "Map"
+    },
+
+    "manualpage":
+    {
+        "title": "Manually Input Coordinates and Radius",
+        "label1": "Enter Latitude:",
+        "label2": "Enter Longitude:",
+        "label3": "Enter Radius of Circle:",
+        "paragraph1": "To get the best results, we recommend a radius between 300,000 and 800,000 meters",
+        "button1": "Submit Coordinates"
     }
 }
