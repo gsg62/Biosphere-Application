@@ -8,14 +8,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-button size="medium" fill="outline" (click)="selectLocation()">
+  <ion-button size="medium" fill="outline" class="button" (click)="selectLocation()">
     {{ 'locationpage.button1' | translate }}
   </ion-button>
 
-  <ion-button size="medium" fill="outline" (click)="manualLocation()">
+  <ion-button size="medium" fill="outline" class="button" (click)="manualLocation()">
     {{ 'locationpage.button2' | translate }}
   </ion-button>
-  <ion-button size="medium" fill="outline" (click)="useDeviceLocation()">
+  <ion-button size="medium" fill="outline" class="button" (click)="useDeviceLocation()">
     <ion-icon name="navigate"></ion-icon>
     {{ 'locationpage.button3' | translate }}
   </ion-button>
