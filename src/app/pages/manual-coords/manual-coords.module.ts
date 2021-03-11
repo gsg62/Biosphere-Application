@@ -8,12 +8,15 @@ import { ManualCoordsPageRoutingModule } from './manual-coords-routing.module';
 
 import { ManualCoordsPage } from './manual-coords.page';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ManualCoordsPageRoutingModule
+    ManualCoordsPageRoutingModule,
+    TranslateModule
   ],
   declarations: [ManualCoordsPage]
 })

@@ -113,7 +113,7 @@ export class VisualizeResultsPage implements OnInit {
     this.showCreate = false;
     this.showDownload = false;
     this.chartsCreated = false;
-    this.getData(http);
+    //this.getData(http);
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;        
@@ -126,8 +126,8 @@ export class VisualizeResultsPage implements OnInit {
     this.getMadingleyData();
   }
 
-  private async logScenario() {
-    console.log("madingleyData: ", this.madingleyData);
+  private async setData() 
+  {
   }
 
   // makes call to api to get madingley data
@@ -154,7 +154,7 @@ export class VisualizeResultsPage implements OnInit {
     {
       requestArray.push(requestData);
     }    
-    console.log("requestArray: ", requestArray);
+    //console.log("requestArray: ", requestArray);
     
     // make requests and save data
     requestArray.forEach(element => {
@@ -162,7 +162,7 @@ export class VisualizeResultsPage implements OnInit {
         (res) => {
           this.madingleyData.push(JSON.parse(res.body));
           loading.dismiss();
-          console.log("response(s): ", JSON.parse(res.body));
+          //console.log("response(s): ", JSON.parse(res.body));
         }
       );
     });
@@ -171,7 +171,7 @@ export class VisualizeResultsPage implements OnInit {
   // splits requests into onion rings
   private makeOnionRings(originalRequest: any)
   {
-    console.log("scenarioData from parseR: ", originalRequest);
+    //console.log("scenarioData from parseR: ", originalRequest);
     let requestArray = [];
     let currentMax = 0;
     let requestCopy = {};
@@ -214,6 +214,22 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData1()
   {
+    this.bodyData = [];
+    this.bodyData.push("body");
+    this.bodyData.push(this.madingleyData[0]);
+    this.bodyKeys = Object.keys(this.bodyData[1]); 
+    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
+    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
+    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
+
+    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+    this.timeSeries = Object.keys(this.heatMapData);
+
     if(this.chartsCreated)
     {
       this.bars.destroy();
@@ -226,6 +242,22 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData2()
   {
+    this.bodyData = [];
+    this.bodyData.push("body");
+    this.bodyData.push(this.madingleyData[0]);
+    this.bodyKeys = Object.keys(this.bodyData[1]); 
+    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
+    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
+    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
+
+    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+    this.timeSeries = Object.keys(this.heatMapData);
+
     if(this.chartsCreated)
     {
       this.bars.destroy();
@@ -238,6 +270,22 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData3()
   {
+    this.bodyData = [];
+    this.bodyData.push("body");
+    this.bodyData.push(this.madingleyData[0]);
+    this.bodyKeys = Object.keys(this.bodyData[1]); 
+    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
+    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
+    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
+
+    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+    this.timeSeries = Object.keys(this.heatMapData);
+
     if(this.chartsCreated)
     {
       this.bars.destroy();
@@ -250,6 +298,22 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData4()
   {
+    this.bodyData = [];
+    this.bodyData.push("body");
+    this.bodyData.push(this.madingleyData[0]);
+    this.bodyKeys = Object.keys(this.bodyData[1]); 
+    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
+    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
+    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
+
+    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+    this.timeSeries = Object.keys(this.heatMapData);
+    
     if(this.chartsCreated)
     {
       this.bars.destroy();
@@ -380,7 +444,6 @@ export class VisualizeResultsPage implements OnInit {
                 if(localKey == "Next")
                 {
                   this.nextJSON = localBody[localKey];
-                  console.log("BOBBY", this.nextJSON);
                 }
               }
               // pushing the object to the global arrays
@@ -407,31 +470,6 @@ export class VisualizeResultsPage implements OnInit {
           this.timeSeries = Object.keys(this.heatMapData);
         }
 
-        /* 
-        here is where we will loop again for another get request I'm pretty sure, or maybe break out and call another request? either way,
-        the request data is all stored in this.nextJSON, so something like:
-        if(this.nextJSON != null)
-        {
-
-          // If we need to get each value to pass through, you need to use a loop to parse through the objects and get each value
-          // you can also set an array to the keys and one to the values that way, like how timeSeries and stuff are stored
-          for( key in this.nextJSON )
-          {
-            if(key == "coordinates")
-            {
-              // store the coordinates, they are formatted as a single string, no space, separated by a comma
-              // e.g. "123.526125,-49.123456"
-            }
-
-            if(key == "max_distance")
-            {
-              // store the max distance
-            }
-
-            // TODO: get all the keys total: 7 I think, probably needs to be hardcoded to save on time
-          }
-        }
-        */
       });
   }
 

@@ -3,7 +3,7 @@
       <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
       </ion-buttons>
-    <ion-title>Manually Input Coordinates and Radius</ion-title>
+    <ion-title>{{ 'manualpage.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,7 +12,7 @@
 <ion-row>
   <ion-col>
     <ion-item class="item">
-      <ion-label position="stacked">Enter Latitude: </ion-label>
+      <ion-label position="stacked">{{ 'manualpage.label1' | translate }}</ion-label>
       <ion-input type="number" value=""></ion-input>
     </ion-item>
   </ion-col>
@@ -21,7 +21,7 @@
     <ion-row>
       <ion-col>
     <ion-item>
-      <ion-label position="stacked">Enter Longitude: </ion-label>
+      <ion-label position="stacked">{{ 'manualpage.label2' | translate }}</ion-label>
       <ion-input type="number" value=""></ion-input>
     </ion-item>
       </ion-col>
@@ -29,7 +29,7 @@
 
     <ion-row >
     <ion-item id="label">
-      <ion-label position="stacked" >Enter Radius of Circle: </ion-label>
+      <ion-label position="stacked" >{{ 'manualpage.label3' | translate }}</ion-label>
       <ion-input type="number" value="" id="radius"></ion-input>
     </ion-item>
 
@@ -41,7 +41,7 @@
       </ion-row>
       <ion-row>
           <ion-col>
-              <div>To get the best results, we recommend a radius between 300,000 and 800,000 meters</div>
+              <div>{{ 'manualpage.paragraph1' | translate }}</div>
           </ion-col>
       </ion-row>
 
