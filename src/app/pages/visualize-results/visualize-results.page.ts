@@ -136,7 +136,7 @@ export class VisualizeResultsPage implements OnInit {
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
-      message: 'Please wait...',
+      message: 'Loading Madingley Data...',
     });
     await loading.present();
 
@@ -160,9 +160,9 @@ export class VisualizeResultsPage implements OnInit {
     requestArray.forEach(element => {
       this.inputService.getMadingleyData(element).subscribe(
         (res) => {
-          this.madingleyData.push(res);
+          this.madingleyData.push(JSON.parse(res.body));
           loading.dismiss();
-          console.log("madingleyData: ", JSON.parse(res.body));
+          console.log("response(s): ", JSON.parse(res.body));
         }
       );
     });
