@@ -5,6 +5,7 @@ import { Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 import { InputScenarioService } from "../../input-scenario.service";
 //import { Label } from 'ng2-charts';
@@ -50,7 +51,6 @@ export class VisualizeResultsPage implements OnInit {
   heatMapData = [];
   timeSeries = [];
   rawKeys = [];
-
   calculatedData = [];
   calculatedDataKeys = [];
 
@@ -64,7 +64,8 @@ export class VisualizeResultsPage implements OnInit {
   ];
 
   negativeHeatMapInput = [];
-  
+
+  loadingIndicator:any;
   bars: any;
   line: any;
   new64Chart: any;
@@ -106,7 +107,8 @@ export class VisualizeResultsPage implements OnInit {
     private fileOpener: FileOpener, 
     private route: ActivatedRoute, 
     private router: Router,
-    private inputService: InputScenarioService
+    private inputService: InputScenarioService,
+    public loadingController: LoadingController
   ){
     this.showCreate = false;
     this.showDownload = false;
@@ -121,13 +123,23 @@ export class VisualizeResultsPage implements OnInit {
 
   ngOnInit()
   {
-    // console.log("scenarioData from ngOnit: ", this.scenarioData);
     this.getMadingleyData();
   }
 
+  private async logScenario() {
+    console.log("madingleyData: ", this.madingleyData);
+  }
+
   // makes call to api to get madingley data
-  private getMadingleyData()
+  private async getMadingleyData()
   {
+    // start loading indicator
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Loading Madingley Data...',
+    });
+    await loading.present();
+
     let requestArray = [];
     const requestData = this.generateRequest(0, this.scenarioData.radius);
 
@@ -147,14 +159,13 @@ export class VisualizeResultsPage implements OnInit {
     // make requests and save data
     requestArray.forEach(element => {
       this.inputService.getMadingleyData(element).subscribe(
-        (data) => {
-          this.madingleyData.push(data);
+        (res) => {
+          this.madingleyData.push(JSON.parse(res.body));
+          loading.dismiss();
+          console.log("response(s): ", JSON.parse(res.body));
         }
       );
     });
-
-    // all returned data from api stored here
-    console.log("madingleyDataArray: ", this.madingleyData);
   }
 
   // splits requests into onion rings

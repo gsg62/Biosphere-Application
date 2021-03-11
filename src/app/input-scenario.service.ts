@@ -29,7 +29,7 @@ export class InputScenarioService {
 
   prodEndpoint = 'https://o58lshx3rf.execute-api.us-west-2.amazonaws.com/ionic';
 
-  testEndpoint = 'https://yapxntov4i.execute-api.us-west-2.amazonaws.com/Dev';
+  testEndpoint = 'https://yapxntov4i.execute-api.us-west-2.amazonaws.com/Dev/team-biosphere-production-lambda';
   
   // test function to show how a REST GET http request can be made to a specified api endpoint
   getMadingleyData(scenarioData: any): Observable<any> {

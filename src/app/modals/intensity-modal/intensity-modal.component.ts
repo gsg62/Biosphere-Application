@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Router, NavigationExtras } from '@angular/router';
 import { NavParams } from '@ionic/angular';
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'app-intensity-modal',
@@ -17,17 +18,20 @@ export class IntensityModalComponent implements OnInit {
   label2: string;
   label3: string;
   scenarioData: any;
+  showThirdBtn = true;
 
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
-    public navParams: NavParams
+    public navParams: NavParams,
+
   ) {
     // set button labels
     this.label1 = navParams.get('scenarioOptions')[0];
     this.label2 = navParams.get('scenarioOptions')[1];
     this.label3 = navParams.get('scenarioOptions')[2];
     this.scenarioData = navParams.get('scenarioData');
+    // if(this.scenarioData.scenario)
   }
 
   ngOnInit() { }
