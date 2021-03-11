@@ -18,6 +18,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
+
 declare var google: any;
 
 @Component
