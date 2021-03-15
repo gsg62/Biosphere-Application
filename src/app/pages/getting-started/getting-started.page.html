@@ -13,6 +13,7 @@
   <h3>{{ 'GSPage.trans' | translate }}</h3>
 
   <select id="lang" #langselect (change)="translate.use(langselect.value)">
+    <option value = ""></option>
     <option value = "en" >English{{lang}}</option>
     <option value = "es">Español{{lang}}</option>
     <option value = "de">Deutsche{{lang}}</option>

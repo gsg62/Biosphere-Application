@@ -15,10 +15,31 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
+import { Injector, APP_INITIALIZER } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { LOCATION_INITIALIZED } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient)
 {
   return new TranslateHttpLoader(http)
+}
+
+export function appInitializerFactory(translate: TranslateService, injector: Injector) {
+  return () => new Promise<any>((resolve: any) => {
+    const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+    const browserLang = translate.getBrowserLang();
+    locationInitialized.then(() => {
+      const langToSet = browserLang.match(/en|fr|de|pt|es/) ? browserLang : 'en';
+      translate.setDefaultLang(browserLang.match(/en|fr|de|pt|es/) ? browserLang : 'en');
+      translate.use(langToSet).subscribe(() => {
+        console.info(`Successfully initialized '${langToSet}' language.'`);
+      }, err => {
+        console.error(`Problem with '${langToSet}' language initialization.'`);
+      }, () => {
+        resolve(null);
+      });
+    });
+  });
 }
 
 @NgModule({
@@ -47,14 +68,21 @@ export function HttpLoaderFactory(http: HttpClient)
       }
     )
   ],
-  providers: [
+  providers: 
+  [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     FileOpener,
-    Geolocation
+    Geolocation,
+    { provide: APP_INITIALIZER, 
+      useFactory: appInitializerFactory,
+      deps: [TranslateService, Injector],
+      multi: true
+    }
     // ModalComponent
   ],
+  
   bootstrap: [AppComponent]
 })
 export class AppModule {}

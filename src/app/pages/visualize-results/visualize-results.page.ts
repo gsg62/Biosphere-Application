@@ -87,15 +87,20 @@ export class VisualizeResultsPage implements OnInit {
   logoData = null;
   coolGradient = 
   [
-    "rgba(0, 255, 255, 0)",
+    "rgba(255, 255, 255, 0)",
+    "rgba(0, 255, 125, 1)",
     "rgba(0, 255, 255, 1)",
-    "rgba(0, 191, 255, 1)",
-    "rgba(0, 127, 255, 1)",
-    "rgba(0, 63, 255, 1)",
-    "rgba(0, 0, 255, 1)",
-    "rgba(0, 0, 223, 1)",
-    "rgba(0, 0, 191, 1)",
-    "rgba(0, 0, 159, 1)"
+    "rgba(0, 125, 255, 1)",
+    "rgba(0, 0, 255, 1)"
+  ];
+
+  warmGradient = 
+  [
+    "rgba(255, 255, 255, 0)",
+    "rgba(125, 255, 0, 1)",
+    "rgba(255, 255, 0, 1)",
+    "rgba(255, 125, 0, 1)",
+    "rgba(255, 0, 0, 1)"
   ];
 
   map: any;
@@ -124,6 +129,7 @@ export class VisualizeResultsPage implements OnInit {
   ngOnInit()
   {
     this.getMadingleyData();
+    // console.log("MadingleyData: ", this.madingleyData);
   }
 
   private async setData() 
@@ -133,6 +139,7 @@ export class VisualizeResultsPage implements OnInit {
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
+    let allData = [];
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
@@ -162,7 +169,7 @@ export class VisualizeResultsPage implements OnInit {
         (res) => {
           this.madingleyData.push(JSON.parse(res.body));
           loading.dismiss();
-          //console.log("response(s): ", JSON.parse(res.body));
+          console.log("response(s): ", JSON.parse(res.body));
         }
       );
     });
@@ -214,145 +221,83 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData1()
   {
-    this.bodyData = [];
-    this.bodyData.push("body");
-    this.bodyData.push(this.madingleyData[0]);
-    this.bodyKeys = Object.keys(this.bodyData[1]); 
-    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
-    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
-
-    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-    this.timeSeries = Object.keys(this.heatMapData);
-
-    if(this.chartsCreated)
-    {
-      this.bars.destroy();
-      this.line.destroy();
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement);
-    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[3]]);
-    this.envokeCharts(this.rawKeys[3]);
+    this.getValues(3);
   }
 
   toggleData2()
   {
-    this.bodyData = [];
-    this.bodyData.push("body");
-    this.bodyData.push(this.madingleyData[0]);
-    this.bodyKeys = Object.keys(this.bodyData[1]); 
-    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
-    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
-
-    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-    this.timeSeries = Object.keys(this.heatMapData);
-
-    if(this.chartsCreated)
-    {
-      this.bars.destroy();
-      this.line.destroy();
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement);
-    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[4]]);
-    this.envokeCharts(this.rawKeys[4]);
+    this.getValues(4);
   }
 
   toggleData3()
   {
-    this.bodyData = [];
-    this.bodyData.push("body");
-    this.bodyData.push(this.madingleyData[0]);
-    this.bodyKeys = Object.keys(this.bodyData[1]); 
-    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
-    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
-
-    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-    this.timeSeries = Object.keys(this.heatMapData);
-
-    if(this.chartsCreated)
-    {
-      this.bars.destroy();
-      this.line.destroy();
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement);
-    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[5]]);
-    this.envokeCharts(this.rawKeys[5]);
+    this.getValues(5);
   }
 
   toggleData4()
   {
+    this.getValues(6);
+  }
+
+  getValues(buttonNumber)
+  {
     this.bodyData = [];
     this.bodyData.push("body");
-    this.bodyData.push(this.madingleyData[0]);
+    this.latitudeValues = [];
+    this.longitudeValues = [];
+    this.heatMapData = [];
+    this.bodyData[1] = this.madingleyData[0];
     this.bodyKeys = Object.keys(this.bodyData[1]); 
     this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-    this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-    this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
+    for(let i = 0; i < this.madingleyData.length; i++)
+    {
+      this.bodyData[1] = this.madingleyData[i];
+      for(let j = 0; j < this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]].length; j++)
+      {
+        this.latitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]][j]);
+        this.longitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]][j]);
+        this.heatMapData.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[buttonNumber]][j]);
+      }
+    }
+
     this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-    this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-    this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
 
     var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
     this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
     this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
     this.timeSeries = Object.keys(this.heatMapData);
-    
+
     if(this.chartsCreated)
     {
       this.bars.destroy();
       this.line.destroy();
     }
+
     this.map = new google.maps.Map(this.mapRef.nativeElement);
-    this.initMap(this.heatMapData[this.timeSeries[1]][this.rawKeys[6]]);
-    this.envokeCharts(this.rawKeys[6]);
+    this.initMap(this.heatMapData);
+    console.log(this.bodyData)
+    console.log(this.calculatedData)
+    this.envokeCharts(this.rawKeys[buttonNumber]);
   }
   
 
   initMap(data)
   {
-    var heatMapLats = [];
-    var heatMapLongs = [];
+    var heatMapLats = this.latitudeValues;
+    var heatMapLongs = this.longitudeValues;
     var heatMapValues = data;
     this.negativeHeatMapInput = [];
     this.heatMapInput = [];
     
-    
-    // push the latitudes to the list
-    for (let i in this.heatMapData[this.timeSeries[1]][this.rawKeys[0]])
-    {
-      heatMapLats.push(this.heatMapData[this.timeSeries[1]][this.rawKeys[0]][i]);
-    }
 
-    // push the longitudes to the list
-    for (let i in this.heatMapData[this.timeSeries[1]][this.rawKeys[1]])
-    {
-      heatMapLongs.push(this.heatMapData[this.timeSeries[1]][this.rawKeys[1]][i]);
-    }
-
-    // calculate the averages of latitudes and latitudes to center the map around it
+    // calculate the medians of latitudes and latitudes to center the map around it
     var latitudeMedian = 0, longitudeMedian = 0;
 
     // getting median, is more accurate than average
     latitudeMedian = heatMapLats[Math.round((heatMapLats.length-1)/2)];
     longitudeMedian = heatMapLongs[Math.round((heatMapLongs.length-1)/2)];
-
+    var totalneg = 0;
+    var totalpos = 0;
     // push each piece of heatmap data to their respective lists (negative or positive)
     for(let i = 0; i < heatMapLats.length; i++)
     {
@@ -360,14 +305,18 @@ export class VisualizeResultsPage implements OnInit {
       if( heatMapValues[i] < 0)
       {
         this.negativeHeatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]*-1});
+        totalneg -= heatMapValues[i];
       }
 
       // the positive list is values under 0 and are colored red/yellow/green
       if( heatMapValues[i] >= 0)
       {
         this.heatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]});
+        totalpos += heatMapValues[i];
       }
     }
+    console.log("POSITIVE", totalpos);
+    console.log("NEGATIVE", totalneg);
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -398,6 +347,7 @@ export class VisualizeResultsPage implements OnInit {
     // options for the normal heatmap
     heatmap.setOptions
     ({
+      gradient: this.warmGradient
     });
 
     // options for the cool/negative heatmap
@@ -407,70 +357,17 @@ export class VisualizeResultsPage implements OnInit {
     });
 
     // initializing the two heatmaps
-    heatmap.setMap(this.map);
     negativeHeatMap.setMap(this.map);
-  }
+    heatmap.setMap(this.map);
 
-
-  ///////////////DATA IMPORTATION SECTION//////////////////////////////////////////////////////////
-
-  getData(http: HttpClient) {
-    // grab the data from the json file and creates a JSON object
-    this.http.get('../../assets/data/head_request.json').toPromise().then(data => 
-      {
-        for( let key in data)
-        {
-          // checks if data has a key
-          if (data.hasOwnProperty(key))
-          {
-            // check if the key is statusCode
-            if(key == "statusCode")
-            {
-              this.statusCode = data[key];
-            }
-
-            // check if the key is body, then get the body string data
-            if(key == "body")
-            {
-              var stringData = data[key]
-
-              stringData.replace('/', '');
-
-              // storing the object as a local variable just for clarity
-              var localBody = JSON.parse(stringData);
-
-              for( let localKey in localBody)
-              {
-                if(localKey == "Next")
-                {
-                  this.nextJSON = localBody[localKey];
-                }
-              }
-              // pushing the object to the global arrays
-              this.bodyData.push(key);
-              this.bodyData.push(localBody);
-            }
-          } // end of if hasOwnProperty
-        } // end of for loop
-
-        // if statuscode was valid (200), save all the variables
-        if(this.statusCode == 200)
-        {
-          this.bodyKeys = Object.keys(this.bodyData[1]); 
-          this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-          this.latitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]];
-          this.longitudeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]];
-          this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-          this.EBV1Values = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[3]];
-          this.heatMapData = this.bodyData[1][this.bodyKeys[3]];
-
-          var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-          this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-          this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-          this.timeSeries = Object.keys(this.heatMapData);
-        }
-
-      });
+    /*
+    const infowindow = new google.maps.InfoWindow({
+      content: "Change the zoom level",
+    });
+    this.map.addListener("zoom_changed", () => {
+      infowindow.setContent("Zoom: " + this.map.getZoom()!);
+    });
+    */
   }
 
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
