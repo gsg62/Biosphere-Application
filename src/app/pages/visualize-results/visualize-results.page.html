@@ -10,13 +10,14 @@
     {{ 'visualpage.headbutton1' | translate }}  
 </ion-button>
 
- <!-- <ion-loading></ion-loading> -->
 <div id="floating-panel">
   <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">{{ 'visualpage.button1' | translate }}</ion-button>
   <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">{{ 'visualpage.button2' | translate }}</ion-button>
   <br>
   <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">{{ 'visualpage.button3' | translate }}</ion-button>
   <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">{{ 'visualpage.button4' | translate }}</ion-button>
+  <br>
+  <ion-note *ngIf="resultsFetched">*Automatically shows Allelic Diversity until another EBV is selected</ion-note>
 </div>
 
 <br>

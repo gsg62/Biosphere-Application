@@ -105,6 +105,8 @@ export class VisualizeResultsPage implements OnInit {
 
   map: any;
 
+  resultsFetched = false;
+
   constructor(
     private navCtrl: NavController, 
     private http: HttpClient, 
@@ -136,10 +138,15 @@ export class VisualizeResultsPage implements OnInit {
   {
   }
 
+  private logScenario() {
+    console.log("madingleyData from API: ", this.madingleyData);
+  }
+
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
     let allData = [];
+
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
@@ -161,18 +168,29 @@ export class VisualizeResultsPage implements OnInit {
     {
       requestArray.push(requestData);
     }    
-    //console.log("requestArray: ", requestArray);
-    
+
     // make requests and save data
+    const makeRequests = new Promise<string>((resolve, reject) => {
     requestArray.forEach(element => {
       this.inputService.getMadingleyData(element).subscribe(
         (res) => {
           this.madingleyData.push(JSON.parse(res.body));
-          loading.dismiss();
-          console.log("response(s): ", JSON.parse(res.body));
+          resolve(res);
+        }, 
+        (err) => {
+          console.log("error: ", err);
+          reject(err);
         }
       );
     });
+    });
+    makeRequests.then(value => {
+      loading.dismiss();
+      this.toggleData1();      
+      this.resultsFetched = true;
+      console.log("data from API: ", this.madingleyData);
+
+    })
   }
 
   // splits requests into onion rings
