@@ -2,76 +2,24 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
 //import { StatsBarChart } from '../../assets/data/data';
 import { Platform } from '@ionic/angular';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import { HttpClient } from '@angular/common/http';
 import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 
 import { InputScenarioService } from "../../input-scenario.service";
-=======
-
-import { HttpClient } from '@angular/common/http';
-import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
->>>>>>> Stashed changes
-=======
-
-import { HttpClient } from '@angular/common/http';
-import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
->>>>>>> Stashed changes
-=======
-
-import { HttpClient } from '@angular/common/http';
-import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
->>>>>>> Stashed changes
-=======
-
-import { HttpClient } from '@angular/common/http';
-import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
->>>>>>> Stashed changes
 //import { Label } from 'ng2-charts';
 
 // For Data Exportation
 import { Filesystem, FilesystemDirectory } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 
-=======
-//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import {} from 'google.maps';
-
->>>>>>> Stashed changes
-=======
-//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import {} from 'google.maps';
-
->>>>>>> Stashed changes
-=======
-//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import {} from 'google.maps';
-
->>>>>>> Stashed changes
-=======
-//import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import {} from 'google.maps';
-
->>>>>>> Stashed changes
 declare var google: any;
 
 @Component
@@ -87,15 +35,10 @@ export class VisualizeResultsPage implements OnInit {
   @ViewChild('createPDFButton') createPDFButton: ElementRef;
   @ViewChild('downloadButton') downloadButton: ElementRef;
   @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   @ViewChild('data1') data1Button: ElementRef;
   @ViewChild('data2') data2Button: ElementRef;
   @ViewChild('data3') data3Button: ElementRef;
   @ViewChild('data4') data4Button: ElementRef;
-  @ViewChild('myRange') slider: ElementRef;
 
   bodyKeys = [];
   bodyData = [];
@@ -105,7 +48,7 @@ export class VisualizeResultsPage implements OnInit {
   timeValues = [];
   EBV1Values = [];
   coordinateArray = [];
-  heatMapKeys = [];
+  heatMapData = [];
   timeSeries = [];
   rawKeys = [];
   calculatedData = [];
@@ -123,63 +66,20 @@ export class VisualizeResultsPage implements OnInit {
   negativeHeatMapInput = [];
 
   loadingIndicator:any;
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-
-  latitudes = [];
-  longitudes = [];
-  AValues = [];
-  BValues = [];
-  coordinateArray = [];
-  
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
   bars: any;
   line: any;
   new64Chart: any;
   colorArray: any;
   showCreate: boolean;
   showDownload: boolean;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   chartsCreated: boolean;
-  legendMade: boolean;
   statusCode: number;
-  EBVindex: number;
-  sliderValue: any;
-
+  nextJSON: any;
 
   scenarioData: any;
   madingleyData = [];
 
   height = 0;
-=======
-  map: any;
->>>>>>> Stashed changes
-=======
-  map: any;
->>>>>>> Stashed changes
-=======
-  map: any;
->>>>>>> Stashed changes
-=======
-  map: any;
->>>>>>> Stashed changes
 
   pdfObj = null;
   banner = null;
@@ -205,8 +105,9 @@ export class VisualizeResultsPage implements OnInit {
 
   map: any;
 
-  constructor
-  (
+  resultsFetched = false;
+
+  constructor(
     private navCtrl: NavController, 
     private http: HttpClient, 
     private plt: Platform, 
@@ -219,8 +120,7 @@ export class VisualizeResultsPage implements OnInit {
     this.showCreate = false;
     this.showDownload = false;
     this.chartsCreated = false;
-    this.sliderValue = "0.0";
-    this.legendMade = false;
+    //this.getData(http);
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;        
@@ -238,75 +138,24 @@ export class VisualizeResultsPage implements OnInit {
   {
   }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+  private logScenario() {
+    console.log("madingleyData from API: ", this.madingleyData);
+  }
+
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
     let allData = [];
+
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
       message: 'Loading Madingley Data...',
     });
     await loading.present();
-=======
-=======
->>>>>>> Stashed changes
-  ionViewDidEnter()
-  {
-    this.showMap();
-  }
-<<<<<<< Updated upstream
-=======
-
-  showMap()
-  {
-    const location = new google.maps.LatLng(-17.824858, 31.053028);
-    const options = 
-    {
-      center: location,
-      zoom: 15,
-      disableDefaultUI: true
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-  }
->>>>>>> Stashed changes
-
-  showMap()
-  {
-    const location = new google.maps.LatLng(-17.824858, 31.053028);
-    const options = 
-    {
-      center: location,
-      zoom: 15,
-      disableDefaultUI: true
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-  }
->>>>>>> Stashed changes
 
     let requestArray = [];
     const requestData = this.generateRequest(0, this.scenarioData.radius);
-=======
-  ionViewDidEnter()
-  {
-    this.showMap();
-  }
-
-  showMap()
-  {
-    const location = new google.maps.LatLng(-17.824858, 31.053028);
-    const options = 
-    {
-      center: location,
-      zoom: 15,
-      disableDefaultUI: true
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-  }
->>>>>>> Stashed changes
 
     // checks if necessary to split up request
     if(this.scenarioData.radius >= 800000)
@@ -319,18 +168,29 @@ export class VisualizeResultsPage implements OnInit {
     {
       requestArray.push(requestData);
     }    
-    //console.log("requestArray: ", requestArray);
-    
+
     // make requests and save data
+    const makeRequests = new Promise<string>((resolve, reject) => {
     requestArray.forEach(element => {
       this.inputService.getMadingleyData(element).subscribe(
         (res) => {
           this.madingleyData.push(JSON.parse(res.body));
-          loading.dismiss();
-          console.log("response(s): ", JSON.parse(res.body));
+          resolve(res);
+        }, 
+        (err) => {
+          console.log("error: ", err);
+          reject(err);
         }
       );
     });
+    });
+    makeRequests.then(value => {
+      loading.dismiss();
+      this.toggleData1();      
+      this.resultsFetched = true;
+      console.log("data from API: ", this.madingleyData);
+
+    })
   }
 
   // splits requests into onion rings
@@ -348,7 +208,6 @@ export class VisualizeResultsPage implements OnInit {
       // check to not exceed max distance
       if ((currentMax + increment) <= originalRequest.max_distance)
       {
-<<<<<<< Updated upstream
         requestCopy = this.generateRequest(currentMax, currentMax + increment);
         requestArray.push(requestCopy);  
         currentMax += increment;
@@ -378,93 +237,53 @@ export class VisualizeResultsPage implements OnInit {
     return request;
   }
 
-<<<<<<< Updated upstream
   toggleData1()
   {
-    this.getValues(3, this.sliderValue);
+    this.getValues(3);
   }
 
   toggleData2()
   {
-    this.getValues(4, this.sliderValue);
+    this.getValues(4);
   }
 
   toggleData3()
   {
-    this.getValues(5, this.sliderValue);
+    this.getValues(5);
   }
 
   toggleData4()
   {
-    this.getValues(6, this.sliderValue);
+    this.getValues(6);
   }
 
-  updateValues(event)
+  getValues(buttonNumber)
   {
-    var heatIndex;
-    heatIndex = event.target.value;
-=======
-  ionViewDidEnter()
-  {
-    this.showMap();
-  }
-
-  showMap()
-  {
-    const location = new google.maps.LatLng(-17.824858, 31.053028);
-    const options = 
-    {
-      center: location,
-      zoom: 15,
-      disableDefaultUI: true
-    }
-    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-  }
->>>>>>> Stashed changes
-
-    this.sliderValue = this.heatMapKeys[heatIndex];
-    
-    let currentYear = document.getElementById('currentYear');
-    currentYear.textContent = (1900+(heatIndex*5)).toString();
-
-    this.getValues(this.EBVindex, this.sliderValue);
-  }
-
-  getValues(buttonNumber, timePeriod)
-  {
-    this.EBVindex = buttonNumber;
-
-    this.bodyData = this.madingleyData[0];
-    this.bodyKeys = Object.keys(this.bodyData);
-
+    this.bodyData = [];
+    this.bodyData.push("body");
     this.latitudeValues = [];
     this.longitudeValues = [];
-    this.heatMapKeys = [];
-
-    // this.bodyKeys[0] is = "Keys"
-    var EBVKeys = this.bodyData[this.bodyKeys[0]];
-    var latitudeString = EBVKeys[0];
-    var longitudeString = EBVKeys[1];
-    var dataString = EBVKeys[buttonNumber];
-
-    var heatData = [];
-    this.heatMapKeys = Object.keys(this.bodyData[this.bodyKeys[3]]);
-    
-    // this.bodyKeys[3] is = Heat Map
-    // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
-
-    for(let outerindex=0; outerindex < this.madingleyData.length; outerindex++)
+    this.heatMapData = [];
+    this.bodyData[1] = this.madingleyData[0];
+    this.bodyKeys = Object.keys(this.bodyData[1]); 
+    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
+    for(let i = 0; i < this.madingleyData.length; i++)
     {
-      this.bodyData = this.madingleyData[outerindex];
-
-      for(let index=0; index < this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString].length; index++)
+      this.bodyData[1] = this.madingleyData[i];
+      for(let j = 0; j < this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]].length; j++)
       {
-        this.latitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString][index]);
-        this.longitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][longitudeString][index]);
-        heatData.push(this.bodyData[this.bodyKeys[3]][timePeriod][dataString][index]);
+        this.latitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]][j]);
+        this.longitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]][j]);
+        this.heatMapData.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[buttonNumber]][j]);
       }
     }
 
+    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
+
+    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
+    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
+    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
+    this.timeSeries = Object.keys(this.heatMapData);
 
     if(this.chartsCreated)
     {
@@ -472,130 +291,22 @@ export class VisualizeResultsPage implements OnInit {
       this.line.destroy();
     }
 
-    this.initMap(heatData);
-
-    ///////////////// GRAPH SETUP /////////////
-    // bodyData -> timeSeries -> the dataString
-    this.bodyData = this.madingleyData[0];
-    var indexStrings = Object.keys(this.bodyData[this.bodyKeys[2]][dataString]);
-    var graphData = [];
-
-    // loop through each of the madingleyData items from each JSON file
-    for(let index = 0; index < this.madingleyData.length; index++)
-    {
-      // set the bodyData to this madingley index
-      this.bodyData = this.madingleyData[index];
-      for(let index2 = 0; index2 < indexStrings.length; index2++)
-      {
-        if(graphData[index2] === null || graphData[index2] === undefined) 
-=======
-        for( let key in data)
-        {
-          // checks if data has a key
-          if (data.hasOwnProperty(key))
-          {
-            // check if key = latitude, if true then push current data to latitude list
-            if(key == "latitude")
-            {
-              this.latitudes.push(key);
-              this.latitudes.push(data[key]);
-            }
-  
-            // check if key = longitude, if true then push current data to longitude list
-            if(key == "longitude")
-            {
-              this.longitudes.push(key); // key = string
-              this.longitudes.push(data[key]); // data[key] = object
-            }
-            
-            // check if key = A, if true then push current data to longitude list
-            if(key == "essential_biodiversity_column_A")
-            {
-              this.AValues.push(key); // key = string
-              this.AValues.push(data[key]); // data[key] = object
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            }
-
-            // check if key = A, if true then push current data to longitude list
-            if(key == "essential_biodiversity_column_B")
-            {
-              this.BValues.push(key); // key = string
-              this.BValues.push(data[key]); // data[key] = object
-            }
-
-=======
-            }
-
-            // check if key = A, if true then push current data to longitude list
-            if(key == "essential_biodiversity_column_B")
-            {
-              this.BValues.push(key); // key = string
-              this.BValues.push(data[key]); // data[key] = object
-            }
-
->>>>>>> Stashed changes
-=======
-            }
-
-            // check if key = A, if true then push current data to longitude list
-            if(key == "essential_biodiversity_column_B")
-            {
-              this.BValues.push(key); // key = string
-              this.BValues.push(data[key]); // data[key] = object
-            }
-
->>>>>>> Stashed changes
-=======
-            }
-
-            // check if key = A, if true then push current data to longitude list
-            if(key == "essential_biodiversity_column_B")
-            {
-              this.BValues.push(key); // key = string
-              this.BValues.push(data[key]); // data[key] = object
-            }
-
->>>>>>> Stashed changes
-          } // end of if hasOwnProperty
-        } // end of for loop
-
-        for(let i = 0; i < this.longitudes[1].length; i++)
->>>>>>> Stashed changes
-        {
-          graphData[index2] = 0; 
-        }
-
-        graphData[index2] += this.bodyData[this.bodyKeys[2]][dataString][indexStrings[index2]];
-      }
-      console.log(graphData);
-    }
-
-    // loop to now divide to average each item by the madingley data
-    for(let index = 0; index < indexStrings.length; index++)
-    {
-      graphData[index] = graphData[index]/this.madingleyData.length;
-    }
-    console.log(graphData);
-    // dataString = the EBV string name
-    // graphData = [Averaged EBV Values]
-    // indexStrings = ["0.0" to "20.0"]
-    this.createCharts(dataString, graphData, indexStrings);
+    this.map = new google.maps.Map(this.mapRef.nativeElement);
+    this.initMap(this.heatMapData);
+    console.log(this.bodyData)
+    console.log(this.calculatedData)
+    this.envokeCharts(this.rawKeys[buttonNumber]);
   }
   
 
   initMap(data)
   {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     var heatMapLats = this.latitudeValues;
     var heatMapLongs = this.longitudeValues;
     var heatMapValues = data;
     this.negativeHeatMapInput = [];
     this.heatMapInput = [];
+    
 
     // calculate the medians of latitudes and latitudes to center the map around it
     var latitudeMedian = 0, longitudeMedian = 0;
@@ -603,43 +314,27 @@ export class VisualizeResultsPage implements OnInit {
     // getting median, is more accurate than average
     latitudeMedian = heatMapLats[Math.round((heatMapLats.length-1)/2)];
     longitudeMedian = heatMapLongs[Math.round((heatMapLongs.length-1)/2)];
-    var maxNeg = 0;
-    var maxPos = 0;
-
+    var totalneg = 0;
+    var totalpos = 0;
     // push each piece of heatmap data to their respective lists (negative or positive)
-    var allpoints = [];
     for(let i = 0; i < heatMapLats.length; i++)
     {
-      allpoints.push([heatMapLats[i], heatMapLongs[i]]);
       // the negative list is values under 0 and are colored red/purple/dark blue/blue
       if( heatMapValues[i] < 0)
       {
         this.negativeHeatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]*-1});
-        if( heatMapValues[i] < maxNeg)
-        {
-          maxNeg = heatMapValues[i];
-        }
+        totalneg -= heatMapValues[i];
       }
 
       // the positive list is values under 0 and are colored red/yellow/green
       if( heatMapValues[i] >= 0)
       {
         this.heatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]});
-        if( heatMapValues[i] > maxPos)
-        {
-          maxPos = heatMapValues[i];
-        }
+        totalpos += heatMapValues[i];
       }
     }
-
-    let legend = document.getElementById('legend');
-    legend.style.display = "block";
-
-    let htmlNeg = document.getElementById('minimum');
-    htmlNeg.textContent = Math.round(maxNeg).toString();
-    
-    let htmlPos = document.getElementById('maximum');
-    htmlPos.textContent = Math.round(maxPos).toString();
+    console.log("POSITIVE", totalpos);
+    console.log("NEGATIVE", totalneg);
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -654,7 +349,7 @@ export class VisualizeResultsPage implements OnInit {
     
     // create the actual map object
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-    
+
     // normal heat map layer (red/green)
     var heatmap = new google.maps.visualization.HeatmapLayer
     ({
@@ -670,33 +365,18 @@ export class VisualizeResultsPage implements OnInit {
     // options for the normal heatmap
     heatmap.setOptions
     ({
-      gradient: this.warmGradient/*,
-      maxintensity: 100,
-      dissipating: true*/
+      gradient: this.warmGradient
     });
 
     // options for the cool/negative heatmap
     negativeHeatMap.setOptions
     ({
-      gradient: this.coolGradient/*,
-      maxintensity: 100,
-      dissipating: true*/
+      gradient: this.coolGradient
     });
 
     // initializing the two heatmaps
     negativeHeatMap.setMap(this.map);
     heatmap.setMap(this.map);
-    
-    //var poslegend = document.getElementById("poslegend") as HTMLElement;
-    //var neglegend = document.getElementById("neglegend") as HTMLElement;
-  
-    //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(poslegend);
-    //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(neglegend);
-  
-
-    //const div = document.createElement("div");
-    //div.innerHTML = '<div id="negativegrad"> t</div>';
-    //legend.appendChild(div);
 
     /*
     const infowindow = new google.maps.InfoWindow({
@@ -706,25 +386,25 @@ export class VisualizeResultsPage implements OnInit {
       infowindow.setContent("Zoom: " + this.map.getZoom()!);
     });
     */
-=======
-    this.createBarChart(this.AValues, this.coordinateArray);
-    this.showCreate = true;
->>>>>>> Stashed changes
-=======
-    this.createBarChart(this.AValues, this.coordinateArray);
-    this.showCreate = true;
->>>>>>> Stashed changes
-=======
-    this.createBarChart(this.AValues, this.coordinateArray);
-    this.showCreate = true;
->>>>>>> Stashed changes
-=======
-    this.createBarChart(this.AValues, this.coordinateArray);
-    this.showCreate = true;
->>>>>>> Stashed changes
   }
 
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
+
+envokeCharts(variableName)
+{
+  var graphData = [];
+
+  // push actual data to the 
+  //console.log(this.calculatedDataKeys);
+  for (let i in this.calculatedData[variableName])
+  {
+    graphData.push(this.calculatedData[variableName][i]);
+  }
+
+  this.createCharts(variableName, graphData, this.calculatedDataKeys);
+  
+  this.showCreate = true;
+}
 
 createCharts(variableName, graphData, graphLabels) 
 {
@@ -738,68 +418,19 @@ createCharts(variableName, graphData, graphLabels)
       datasets: 
       [
         {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         label: variableName,
         data: graphData,
         backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
         borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
         borderWidth: 1
         }/*,
-=======
-=======
->>>>>>> Stashed changes
-        label: this.AValues[0],
-        data: this.AValues[1],
-        backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
-        borderWidth: 1
-        },
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
-        label: this.AValues[0],
-        data: this.AValues[1],
-        backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
-        borderWidth: 1
-        },
->>>>>>> Stashed changes
-=======
-        label: this.AValues[0],
-        data: this.AValues[1],
-        backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
-        borderWidth: 1
-        },
->>>>>>> Stashed changes
         {
           label: this.BValues[0],
           data: this.BValues[1],
           backgroundColor: 'rgb(52, 195, 235)', // array should have same number of elements as number of dataset
           borderColor: 'rgb(52, 195, 235)',// array should have same number of elements as number of dataset
           borderWidth: 1
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         }*/
-=======
-        }
->>>>>>> Stashed changes
-=======
-        }
->>>>>>> Stashed changes
-=======
-        }
->>>>>>> Stashed changes
-=======
-        }
->>>>>>> Stashed changes
       ]
     },
     options: 
@@ -811,7 +442,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
+            labelString: this.bodyData[1][this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -819,23 +450,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
             labelString: "EBV Units"
-=======
-            labelString: "X Units of X Measurement"
->>>>>>> Stashed changes
-=======
-            labelString: "X Units of X Measurement"
->>>>>>> Stashed changes
-=======
-            labelString: "X Units of X Measurement"
->>>>>>> Stashed changes
-=======
-            labelString: "X Units of X Measurement"
->>>>>>> Stashed changes
           },
           ticks: 
           {
@@ -873,7 +488,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
+            labelString: this.bodyData[1][this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -891,7 +506,7 @@ createCharts(variableName, graphData, graphLabels)
       }
     }
   });
-  this.showCreate = true;
+
   this.chartsCreated = true;
 }
 
@@ -921,23 +536,7 @@ createCharts(variableName, graphData, graphLabels)
     const docDefinition = 
     {
       // image logoData is 64Base string
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
       content: ['Bar Graph', {image: barGraph, width: 500}, 'Line Graph', {image: lineGraph, width: 500}]
-=======
-      content: ['Bar Graph of', this.AValues[0] , "and ", this.BValues[0] , {image: image, width: 500}]
->>>>>>> Stashed changes
-=======
-      content: ['Bar Graph of', this.AValues[0] , "and ", this.BValues[0] , {image: image, width: 500}]
->>>>>>> Stashed changes
-=======
-      content: ['Bar Graph of', this.AValues[0] , "and ", this.BValues[0] , {image: image, width: 500}]
->>>>>>> Stashed changes
-=======
-      content: ['Bar Graph of', this.AValues[0] , "and ", this.BValues[0] , {image: image, width: 500}]
->>>>>>> Stashed changes
     }
 
     this.pdfObj = pdfMake.createPdf(docDefinition);
