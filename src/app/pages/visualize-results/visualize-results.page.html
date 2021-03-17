@@ -10,6 +10,7 @@
     {{ 'visualpage.headbutton1' | translate }}  
 </ion-button>
 
+ <!-- <ion-loading></ion-loading> -->
 <div id="floating-panel">
   <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">{{ 'visualpage.button1' | translate }}</ion-button>
   <ion-button #data2 id='databutton' size="small" (click)="toggleData2()" color="primary">{{ 'visualpage.button2' | translate }}</ion-button>
@@ -22,8 +23,16 @@
 
 <br>
 
-<div #map id='map'></div>
+<div id="sliderDiv" *ngIf="showCreate">
+  <span id="minSlide" class="slider">1900</span>
+  <input type="range" min="0" max="20" value="0" class="slider" id="myRange" (change)="updateValues($event)" (oninput)="updateValues($event)">
+  <span id="maxSlide" class="slider">2000</span>
+  <h1>Current Year:</h1>
+  <h1 id="currentYear">1900</h1>
+</div>
+<br>
 
+<br>
 <ion-button #createPDFButton *ngIf="showCreate" class="button" (click)="createPDF()" color="secondary">
   {{ 'visualpage.createbutton' | translate }}
 </ion-button>
@@ -31,6 +40,23 @@
 <ion-button #downloadButton *ngIf="showDownload" class="button" (click)="downloadPDF()" color="tertiary">
   {{ 'visualpage.downbutton' | translate }}
 </ion-button>
+
+<div id="legend">
+  <span style="float:left;"><h4 id="minimum">0</h4></span>
+  <span style="float:right;"><h4 id="maximum">0</h4></span>
+  <span style="text-align: center;"><h4 style="margin-top:60px">0</h4></span>
+</div>
+
+<br>
+
+<br>
+
+<div #map id='map'></div>
+
+<br>
+<br>
+
+
 <ion-card-content>
   <h1>{{ 'visualpage.graph1' | translate }}</h1>
   <canvas #barChart></canvas>
@@ -38,6 +64,7 @@
   <h1>{{ 'visualpage.graph2' | translate }}</h1>
   <canvas #lineChart></canvas>
 </ion-card-content>
+
 
 <!--
 <table class = "data-table" border="5" text-center>
