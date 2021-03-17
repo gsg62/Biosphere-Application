@@ -39,6 +39,7 @@ export class VisualizeResultsPage implements OnInit {
   @ViewChild('data2') data2Button: ElementRef;
   @ViewChild('data3') data3Button: ElementRef;
   @ViewChild('data4') data4Button: ElementRef;
+  @ViewChild('myRange') slider: ElementRef;
 
   bodyKeys = [];
   bodyData = [];
@@ -48,7 +49,7 @@ export class VisualizeResultsPage implements OnInit {
   timeValues = [];
   EBV1Values = [];
   coordinateArray = [];
-  heatMapData = [];
+  heatMapKeys = [];
   timeSeries = [];
   rawKeys = [];
   calculatedData = [];
@@ -73,8 +74,11 @@ export class VisualizeResultsPage implements OnInit {
   showCreate: boolean;
   showDownload: boolean;
   chartsCreated: boolean;
+  legendMade: boolean;
   statusCode: number;
-  nextJSON: any;
+  EBVindex: number;
+  sliderValue: any;
+
 
   scenarioData: any;
   madingleyData = [];
@@ -120,7 +124,8 @@ export class VisualizeResultsPage implements OnInit {
     this.showCreate = false;
     this.showDownload = false;
     this.chartsCreated = false;
-    //this.getData(http);
+    this.sliderValue = "0.0";
+    this.legendMade = false;
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;        
@@ -239,51 +244,72 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData1()
   {
-    this.getValues(3);
+    this.getValues(3, this.sliderValue);
   }
 
   toggleData2()
   {
-    this.getValues(4);
+    this.getValues(4, this.sliderValue);
   }
 
   toggleData3()
   {
-    this.getValues(5);
+    this.getValues(5, this.sliderValue);
   }
 
   toggleData4()
   {
-    this.getValues(6);
+    this.getValues(6, this.sliderValue);
   }
 
-  getValues(buttonNumber)
+  updateValues(event)
   {
-    this.bodyData = [];
-    this.bodyData.push("body");
+    var heatIndex;
+    heatIndex = event.target.value;
+
+    this.sliderValue = this.heatMapKeys[heatIndex];
+    
+    let currentYear = document.getElementById('currentYear');
+    currentYear.textContent = (1900+(heatIndex*5)).toString();
+
+    this.getValues(this.EBVindex, this.sliderValue);
+  }
+
+  getValues(buttonNumber, timePeriod)
+  {
+    this.EBVindex = buttonNumber;
+
+    this.bodyData = this.madingleyData[0];
+    this.bodyKeys = Object.keys(this.bodyData);
+
     this.latitudeValues = [];
     this.longitudeValues = [];
-    this.heatMapData = [];
-    this.bodyData[1] = this.madingleyData[0];
-    this.bodyKeys = Object.keys(this.bodyData[1]); 
-    this.rawKeys = Object.keys(this.bodyData[1][this.bodyKeys[1]]);
-    for(let i = 0; i < this.madingleyData.length; i++)
+    this.heatMapKeys = [];
+
+    // this.bodyKeys[0] is = "Keys"
+    var EBVKeys = this.bodyData[this.bodyKeys[0]];
+    var latitudeString = EBVKeys[0];
+    var longitudeString = EBVKeys[1];
+    var dataString = EBVKeys[buttonNumber];
+
+    var heatData = [];
+    this.heatMapKeys = Object.keys(this.bodyData[this.bodyKeys[3]]);
+    
+    // this.bodyKeys[3] is = Heat Map
+    // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
+
+    for(let outerindex=0; outerindex < this.madingleyData.length; outerindex++)
     {
-      this.bodyData[1] = this.madingleyData[i];
-      for(let j = 0; j < this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]].length; j++)
+      this.bodyData = this.madingleyData[outerindex];
+
+      for(let index=0; index < this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString].length; index++)
       {
-        this.latitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[0]][j]);
-        this.longitudeValues.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[1]][j]);
-        this.heatMapData.push(this.bodyData[1][this.bodyKeys[1]][this.rawKeys[buttonNumber]][j]);
+        this.latitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString][index]);
+        this.longitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][longitudeString][index]);
+        heatData.push(this.bodyData[this.bodyKeys[3]][timePeriod][dataString][index]);
       }
     }
 
-    this.timeValues = this.bodyData[1][this.bodyKeys[1]][this.rawKeys[2]];
-
-    var EBVName = Object.keys(this.bodyData[1][this.bodyKeys[2]]);
-    this.calculatedDataKeys = Object.keys(this.bodyData[1][this.bodyKeys[2]][EBVName[0]]);
-    this.calculatedData = this.bodyData[1][this.bodyKeys[2]];
-    this.timeSeries = Object.keys(this.heatMapData);
 
     if(this.chartsCreated)
     {
@@ -291,11 +317,41 @@ export class VisualizeResultsPage implements OnInit {
       this.line.destroy();
     }
 
-    this.map = new google.maps.Map(this.mapRef.nativeElement);
-    this.initMap(this.heatMapData);
-    console.log(this.bodyData)
-    console.log(this.calculatedData)
-    this.envokeCharts(this.rawKeys[buttonNumber]);
+    this.initMap(heatData);
+
+    ///////////////// GRAPH SETUP /////////////
+    // bodyData -> timeSeries -> the dataString
+    this.bodyData = this.madingleyData[0];
+    var indexStrings = Object.keys(this.bodyData[this.bodyKeys[2]][dataString]);
+    var graphData = [];
+
+    // loop through each of the madingleyData items from each JSON file
+    for(let index = 0; index < this.madingleyData.length; index++)
+    {
+      // set the bodyData to this madingley index
+      this.bodyData = this.madingleyData[index];
+      for(let index2 = 0; index2 < indexStrings.length; index2++)
+      {
+        if(graphData[index2] === null || graphData[index2] === undefined) 
+        {
+          graphData[index2] = 0; 
+        }
+
+        graphData[index2] += this.bodyData[this.bodyKeys[2]][dataString][indexStrings[index2]];
+      }
+      console.log(graphData);
+    }
+
+    // loop to now divide to average each item by the madingley data
+    for(let index = 0; index < indexStrings.length; index++)
+    {
+      graphData[index] = graphData[index]/this.madingleyData.length;
+    }
+    console.log(graphData);
+    // dataString = the EBV string name
+    // graphData = [Averaged EBV Values]
+    // indexStrings = ["0.0" to "20.0"]
+    this.createCharts(dataString, graphData, indexStrings);
   }
   
 
@@ -306,7 +362,6 @@ export class VisualizeResultsPage implements OnInit {
     var heatMapValues = data;
     this.negativeHeatMapInput = [];
     this.heatMapInput = [];
-    
 
     // calculate the medians of latitudes and latitudes to center the map around it
     var latitudeMedian = 0, longitudeMedian = 0;
@@ -314,27 +369,43 @@ export class VisualizeResultsPage implements OnInit {
     // getting median, is more accurate than average
     latitudeMedian = heatMapLats[Math.round((heatMapLats.length-1)/2)];
     longitudeMedian = heatMapLongs[Math.round((heatMapLongs.length-1)/2)];
-    var totalneg = 0;
-    var totalpos = 0;
+    var maxNeg = 0;
+    var maxPos = 0;
+
     // push each piece of heatmap data to their respective lists (negative or positive)
+    var allpoints = [];
     for(let i = 0; i < heatMapLats.length; i++)
     {
+      allpoints.push([heatMapLats[i], heatMapLongs[i]]);
       // the negative list is values under 0 and are colored red/purple/dark blue/blue
       if( heatMapValues[i] < 0)
       {
         this.negativeHeatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]*-1});
-        totalneg -= heatMapValues[i];
+        if( heatMapValues[i] < maxNeg)
+        {
+          maxNeg = heatMapValues[i];
+        }
       }
 
       // the positive list is values under 0 and are colored red/yellow/green
       if( heatMapValues[i] >= 0)
       {
         this.heatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]});
-        totalpos += heatMapValues[i];
+        if( heatMapValues[i] > maxPos)
+        {
+          maxPos = heatMapValues[i];
+        }
       }
     }
-    console.log("POSITIVE", totalpos);
-    console.log("NEGATIVE", totalneg);
+
+    let legend = document.getElementById('legend');
+    legend.style.display = "block";
+
+    let htmlNeg = document.getElementById('minimum');
+    htmlNeg.textContent = Math.round(maxNeg).toString();
+    
+    let htmlPos = document.getElementById('maximum');
+    htmlPos.textContent = Math.round(maxPos).toString();
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -349,7 +420,7 @@ export class VisualizeResultsPage implements OnInit {
     
     // create the actual map object
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-
+    
     // normal heat map layer (red/green)
     var heatmap = new google.maps.visualization.HeatmapLayer
     ({
@@ -365,18 +436,33 @@ export class VisualizeResultsPage implements OnInit {
     // options for the normal heatmap
     heatmap.setOptions
     ({
-      gradient: this.warmGradient
+      gradient: this.warmGradient/*,
+      maxintensity: 100,
+      dissipating: true*/
     });
 
     // options for the cool/negative heatmap
     negativeHeatMap.setOptions
     ({
-      gradient: this.coolGradient
+      gradient: this.coolGradient/*,
+      maxintensity: 100,
+      dissipating: true*/
     });
 
     // initializing the two heatmaps
     negativeHeatMap.setMap(this.map);
     heatmap.setMap(this.map);
+    
+    //var poslegend = document.getElementById("poslegend") as HTMLElement;
+    //var neglegend = document.getElementById("neglegend") as HTMLElement;
+  
+    //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(poslegend);
+    //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(neglegend);
+  
+
+    //const div = document.createElement("div");
+    //div.innerHTML = '<div id="negativegrad"> t</div>';
+    //legend.appendChild(div);
 
     /*
     const infowindow = new google.maps.InfoWindow({
@@ -389,22 +475,6 @@ export class VisualizeResultsPage implements OnInit {
   }
 
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
-
-envokeCharts(variableName)
-{
-  var graphData = [];
-
-  // push actual data to the 
-  //console.log(this.calculatedDataKeys);
-  for (let i in this.calculatedData[variableName])
-  {
-    graphData.push(this.calculatedData[variableName][i]);
-  }
-
-  this.createCharts(variableName, graphData, this.calculatedDataKeys);
-  
-  this.showCreate = true;
-}
 
 createCharts(variableName, graphData, graphLabels) 
 {
@@ -442,7 +512,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[1][this.bodyKeys[0]][2]
+            labelString: this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -488,7 +558,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[1][this.bodyKeys[0]][2]
+            labelString: this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -506,7 +576,7 @@ createCharts(variableName, graphData, graphLabels)
       }
     }
   });
-
+  this.showCreate = true;
   this.chartsCreated = true;
 }
 

@@ -8,10 +8,8 @@
 </ion-header>
 
 <ion-content>
-
 <div class="ion-margin">
   <h3>{{ 'GSPage.trans' | translate }}</h3>
-
   <select id="lang" #langselect (change)="translate.use(langselect.value)">
     <option value = ""></option>
     <option value = "en" >English{{lang}}</option>
@@ -26,7 +24,6 @@
   <p>
     {{'GSPage.paragraph0' | translate }}
   </p>
-
   <br>
 
   <div id="block1" style="padding-bottom: 2%; display: flex;">
