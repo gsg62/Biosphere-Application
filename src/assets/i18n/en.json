@@ -91,7 +91,7 @@
         "title": "Manually Input Coordinates and Radius",
         "label1": "Enter Latitude:",
         "label2": "Enter Longitude:",
-        "label3": "Enter Radius of Circle:",
+        "label3": "Enter Radius of Circle (meters):",
         "paragraph1": "To get the best results, we recommend a radius between 300,000 and 800,000 meters",
         "button1": "Submit Coordinates"
     }
