@@ -5,11 +5,31 @@
 </ion-header>
 
 <ion-content>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-G3v1pi990j6adMholYmV1ZQPr8E1Ug" async defer></script>
+>>>>>>> Stashed changes
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-G3v1pi990j6adMholYmV1ZQPr8E1Ug" async defer></script>
+>>>>>>> Stashed changes
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-G3v1pi990j6adMholYmV1ZQPr8E1Ug" async defer></script>
+>>>>>>> Stashed changes
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-G3v1pi990j6adMholYmV1ZQPr8E1Ug" async defer></script>
+>>>>>>> Stashed changes
   <ion-button size="medium" fill="outline" (click)="backToOptions()">
     <ion-icon name="arrow-back"></ion-icon>
     {{ 'visualpage.headbutton1' | translate }}  
 </ion-button>
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
  <!-- <ion-loading></ion-loading> -->
 <div id="floating-panel">
   <ion-button #data1 id='databutton' size="small" (click)="toggleData1()" color="primary">{{ 'visualpage.button1' | translate }}</ion-button>
@@ -17,12 +37,33 @@
   <br>
   <ion-button #data3 id='databutton' size="small" (click)="toggleData3()" color="primary">{{ 'visualpage.button3' | translate }}</ion-button>
   <ion-button #data4 id='databutton' size="small" (click)="toggleData4()" color="primary">{{ 'visualpage.button4' | translate }}</ion-button>
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+<div #map id='map' style="width:100%;height:400px"></div>
+
+<div *ngFor="let latitude of latitudes"> 
+  {{latitude}}
+>>>>>>> Stashed changes
 </div>
 
 <br>
 
-<div #map id='map'></div>
+<div id="sliderDiv" *ngIf="showCreate">
+  <span id="minSlide" class="slider">1900</span>
+  <input type="range" min="0" max="20" value="0" class="slider" id="myRange" (change)="updateValues($event)" (oninput)="updateValues($event)">
+  <span id="maxSlide" class="slider">2000</span>
+  <h1>Current Year:</h1>
+  <h1 id="currentYear">1900</h1>
+</div>
+<br>
 
+<br>
+<<<<<<< Updated upstream
 <ion-button #createPDFButton *ngIf="showCreate" class="button" (click)="createPDF()" color="secondary">
   {{ 'visualpage.createbutton' | translate }}
 </ion-button>
@@ -30,6 +71,72 @@
 <ion-button #downloadButton *ngIf="showDownload" class="button" (click)="downloadPDF()" color="tertiary">
   {{ 'visualpage.downbutton' | translate }}
 </ion-button>
+
+<<<<<<< Updated upstream
+<div id="legend">
+  <span style="float:left;"><h4 id="minimum">0</h4></span>
+  <span style="float:right;"><h4 id="maximum">0</h4></span>
+  <span style="text-align: center;"><h4 style="margin-top:60px">0</h4></span>
+=======
+<br>
+
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<div *ngFor="let AValues of AValues"> 
+  {{AValues}}
+=======
+=======
+>>>>>>> Stashed changes
+<br>
+
+<div *ngFor="let AValues of AValues"> 
+  {{AValues}}
+<<<<<<< Updated upstream
+=======
+
+<div *ngFor="let AValues of AValues"> 
+  {{AValues}}
+=======
+</div>
+
+<br>
+
+<div *ngFor="let BValues of BValues"> 
+  {{BValues}}
+>>>>>>> Stashed changes
+</div>
+
+<br>
+
+<div *ngFor="let BValues of BValues"> 
+  {{BValues}}
+>>>>>>> Stashed changes
+</div>
+
+<br>
+
+<div *ngFor="let BValues of BValues"> 
+  {{BValues}}
+>>>>>>> Stashed changes
+</div>
+
+<br>
+
+<div *ngFor="let BValues of BValues"> 
+  {{BValues}}
+>>>>>>> Stashed changes
+</div>
+
+<br>
+
+<br>
+
+<div #map id='map'></div>
+
+<br>
+<br>
+
+
 <ion-card-content>
   <h1>{{ 'visualpage.graph1' | translate }}</h1>
   <canvas #barChart></canvas>
@@ -37,6 +144,7 @@
   <h1>{{ 'visualpage.graph2' | translate }}</h1>
   <canvas #lineChart></canvas>
 </ion-card-content>
+
 
 <!--
 <table class = "data-table" border="5" text-center>
