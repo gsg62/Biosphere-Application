@@ -173,16 +173,18 @@ export class VisualizeResultsPage implements OnInit {
     {
       requestArray.push(requestData);
     }    
-    //console.log("requestArray: ", requestArray);
-    
+
     // make requests and save data
     const makeRequests = new Promise<string>((resolve, reject) => {
     requestArray.forEach(element => {
       this.inputService.getMadingleyData(element).subscribe(
         (res) => {
           this.madingleyData.push(JSON.parse(res.body));
-          loading.dismiss();
-          console.log("response(s): ", JSON.parse(res.body));
+          resolve(res);
+        }, 
+        (err) => {
+          console.log("error: ", err);
+          reject(err);
         }
       );
     });

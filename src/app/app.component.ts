@@ -10,13 +10,18 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public selectedIndex = 0;
+  public selectedIndex = 1;
   public appPages = [
+    {
+      title: 'Simulation',
+      url: 'user-options',
+      icon: 'globe'
+    },
     {
       title: 'Getting Started',
       url: 'getting-started',
-      icon: 'mail'
-    },
+      icon: 'rocket'
+    },    
     {
       title: 'Contact Us',
       url: 'contact-us',
@@ -27,11 +32,6 @@ export class AppComponent implements OnInit {
       url: 'about',
       icon: 'help'
     },
-    {
-      title: 'Simulation',
-      url: 'user-options',
-      icon: 'globe'
-    }
   ];
 
   constructor(
