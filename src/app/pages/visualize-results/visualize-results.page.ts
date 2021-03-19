@@ -73,7 +73,6 @@ export class VisualizeResultsPage implements OnInit {
   showDownload: boolean;
   chartsCreated: boolean;
   legendMade: boolean;
-
   statusCode: number;
   EBVindex: number;
   sliderValue: any;
@@ -262,7 +261,7 @@ export class VisualizeResultsPage implements OnInit {
     this.sliderValue = this.heatMapKeys[heatIndex];
     
     let currentYear = document.getElementById('currentYear');
-    currentYear.textContent = (1900+(heatIndex*5)).toString().concat("Units");
+    currentYear.textContent = (1900+(heatIndex*5)).toString();
 
     this.getValues(this.EBVindex, this.sliderValue);
   }
@@ -399,10 +398,10 @@ export class VisualizeResultsPage implements OnInit {
     legend.style.display = "block";
 
     let htmlNeg = document.getElementById('minimum');
-    htmlNeg.textContent = Math.round(maxNeg).toString();
+    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" Units");
     
     let htmlPos = document.getElementById('maximum');
-    htmlPos.textContent = Math.round(maxPos).toString();
+    htmlPos.textContent = Math.round(maxPos).toString().concat(" Units");
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
