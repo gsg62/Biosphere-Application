@@ -36,9 +36,6 @@ export class VisualizeResultsPage implements OnInit {
   @ViewChild('downloadButton') downloadButton: ElementRef;
   @ViewChild('map', {read: ElementRef, static: false}) mapRef: ElementRef;
   @ViewChild('data1') data1Button: ElementRef;
-  @ViewChild('data2') data2Button: ElementRef;
-  @ViewChild('data3') data3Button: ElementRef;
-  @ViewChild('data4') data4Button: ElementRef;
   @ViewChild('myRange') slider: ElementRef;
 
   bodyKeys = [];
@@ -54,6 +51,7 @@ export class VisualizeResultsPage implements OnInit {
   rawKeys = [];
   calculatedData = [];
   calculatedDataKeys = [];
+  EBVList = [];
 
   heatMapInput = 
   [ 
@@ -75,9 +73,14 @@ export class VisualizeResultsPage implements OnInit {
   showDownload: boolean;
   chartsCreated: boolean;
   legendMade: boolean;
+
   statusCode: number;
   EBVindex: number;
   sliderValue: any;
+
+  positiveHeatMap: any;
+  negativeHeatMap: any;
+  map: any;
 
 
   scenarioData: any;
@@ -106,8 +109,6 @@ export class VisualizeResultsPage implements OnInit {
     "rgba(255, 125, 0, 1)",
     "rgba(255, 0, 0, 1)"
   ];
-
-  map: any;
 
   resultsFetched = false;
 
@@ -191,10 +192,16 @@ export class VisualizeResultsPage implements OnInit {
     });
     makeRequests.then(value => {
       loading.dismiss();
-      this.toggleData1();      
+      //this.toggleData(0);
       this.resultsFetched = true;
       console.log("data from API: ", this.madingleyData);
-
+      for(let index = 0; index < this.madingleyData.length; index++)
+      {
+        for(let EBVIndex = 3; EBVIndex < this.madingleyData[0]["Keys"].length; EBVIndex++)
+        {
+          this.EBVList.push({name: this.madingleyData[0]["Keys"][EBVIndex], index: EBVIndex});
+        }
+      }
     })
   }
 
@@ -242,24 +249,9 @@ export class VisualizeResultsPage implements OnInit {
     return request;
   }
 
-  toggleData1()
+  toggleData(EBVIndex)
   {
-    this.getValues(3, this.sliderValue);
-  }
-
-  toggleData2()
-  {
-    this.getValues(4, this.sliderValue);
-  }
-
-  toggleData3()
-  {
-    this.getValues(5, this.sliderValue);
-  }
-
-  toggleData4()
-  {
-    this.getValues(6, this.sliderValue);
+    this.getValues(EBVIndex, this.sliderValue);
   }
 
   updateValues(event)
@@ -270,7 +262,7 @@ export class VisualizeResultsPage implements OnInit {
     this.sliderValue = this.heatMapKeys[heatIndex];
     
     let currentYear = document.getElementById('currentYear');
-    currentYear.textContent = (1900+(heatIndex*5)).toString();
+    currentYear.textContent = (1900+(heatIndex*5)).toString().concat("Units");
 
     this.getValues(this.EBVindex, this.sliderValue);
   }
@@ -324,6 +316,11 @@ export class VisualizeResultsPage implements OnInit {
     this.bodyData = this.madingleyData[0];
     var indexStrings = Object.keys(this.bodyData[this.bodyKeys[2]][dataString]);
     var graphData = [];
+    
+    // CREATING THE BUTTONS ON THE PAGE
+    //var newButton = document.createElement("ion-button");
+    //div.innerHTML = '<div id="negativegrad"> t</div>';
+    //legend.appendChild(div);
 
     // loop through each of the madingleyData items from each JSON file
     for(let index = 0; index < this.madingleyData.length; index++)
@@ -422,19 +419,19 @@ export class VisualizeResultsPage implements OnInit {
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
     
     // normal heat map layer (red/green)
-    var heatmap = new google.maps.visualization.HeatmapLayer
+    this.positiveHeatMap = new google.maps.visualization.HeatmapLayer
     ({
       data: this.heatMapInput
     });
 
     // negative value heatmap layer (blue/purple)
-    var negativeHeatMap = new google.maps.visualization.HeatmapLayer
+    this.negativeHeatMap = new google.maps.visualization.HeatmapLayer
     ({
       data: this.negativeHeatMapInput
     });
     
     // options for the normal heatmap
-    heatmap.setOptions
+    this.positiveHeatMap.setOptions
     ({
       gradient: this.warmGradient/*,
       maxintensity: 100,
@@ -442,7 +439,7 @@ export class VisualizeResultsPage implements OnInit {
     });
 
     // options for the cool/negative heatmap
-    negativeHeatMap.setOptions
+    this.negativeHeatMap.setOptions
     ({
       gradient: this.coolGradient/*,
       maxintensity: 100,
@@ -450,34 +447,91 @@ export class VisualizeResultsPage implements OnInit {
     });
 
     // initializing the two heatmaps
-    negativeHeatMap.setMap(this.map);
-    heatmap.setMap(this.map);
-    
+    this.negativeHeatMap.setMap(this.map);
+    this.positiveHeatMap.setMap(this.map);
+
     //var poslegend = document.getElementById("poslegend") as HTMLElement;
     //var neglegend = document.getElementById("neglegend") as HTMLElement;
   
     //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(poslegend);
     //this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(neglegend);
+
+    this.map.addListener("zoom_changed", () => 
+    {
+      var zoomLevel = this.map.getZoom();
+      // some weird formula I found online
+      //var heatmapradius = this.getHeatMapRadius(this.latitudeValues[0], this.map.getZoom());
+      var heatmapradius = zoomLevel;
+      console.log("Radius is now:", heatmapradius);
+      console.log("Zoom is now:", this.map.getZoom());
+      
+      if(zoomLevel < 4)
+      {
+        heatmapradius = zoomLevel*3;
+        this.positiveHeatMap.set("radius", heatmapradius);
+        this.negativeHeatMap.set("radius", heatmapradius);
+      }
+
+      else if(zoomLevel == 4)
+      {
+        heatmapradius = zoomLevel*5;
+        this.positiveHeatMap.set("radius", heatmapradius);
+        this.negativeHeatMap.set("radius", heatmapradius);
+      }
+
+      else if(zoomLevel == 5)
+      {
+        heatmapradius = zoomLevel*7;
+        this.positiveHeatMap.set("radius", heatmapradius);
+        this.negativeHeatMap.set("radius", heatmapradius);
+      }
+
+      else if(zoomLevel == 6)
+      {
+        heatmapradius = zoomLevel*10;
+        this.positiveHeatMap.set("radius", heatmapradius);
+        this.negativeHeatMap.set("radius", heatmapradius);
+      }
+
+      else if(zoomLevel == 7)
+      {
+        heatmapradius = zoomLevel*15;
+        this.positiveHeatMap.set("radius", heatmapradius);
+        this.negativeHeatMap.set("radius", heatmapradius);
+      }
+      console.log(this.positiveHeatMap.get("radius"));
+      console.log(this.negativeHeatMap.get("radius"));
+    });
+
+  }
+
+  // sets the opacity of both the negative and positive heatmaps to either 0.2 or 0
+  changeOpacity() 
+  {
+    this.positiveHeatMap.set("opacity", this.positiveHeatMap.get("opacity") ? null : 0.2);
+    this.negativeHeatMap.set("opacity", this.negativeHeatMap.get("opacity") ? null : 0.2);
+  }
+
+  // some random radius calculation method I found online, doesn't really work
+  getHeatMapRadius(latitudeCoordinate, zoom) 
+  {
+    var distanceInMeter = 3; /* meter distance in real world */    
+    
+    var meterPerPixel = 156543.03392 * Math.cos(latitudeCoordinate * Math.PI / 180) / Math.pow(2, zoom);
+    var radius = distanceInMeter / meterPerPixel;
   
-
-    //const div = document.createElement("div");
-    //div.innerHTML = '<div id="negativegrad"> t</div>';
-    //legend.appendChild(div);
-
-    /*
-    const infowindow = new google.maps.InfoWindow({
-      content: "Change the zoom level",
-    });
-    this.map.addListener("zoom_changed", () => {
-      infowindow.setContent("Zoom: " + this.map.getZoom()!);
-    });
-    */
+    return radius;
   }
 
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
 
 createCharts(variableName, graphData, graphLabels) 
 {
+
+  for(let index = 0; index < graphLabels.length; index++)
+  {
+    graphLabels[index] = (parseFloat(graphLabels[index])*5).toString();
+  }
   /////////////////BAR CHART//////////////////////////
   this.bars = new Chart(this.barChart.nativeElement, 
     {
@@ -512,7 +566,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
+            labelString: "Years from 1900"//this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -558,7 +612,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
+            labelString: "Years from 1900"//this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 

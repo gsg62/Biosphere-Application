@@ -66,7 +66,7 @@
         "button2": "Species Diversity",
         "button3": "Co-Ancestry",
         "button4": "Genetic Differentiation",
-        "createbutton": "Create PDF",
+        "createbutton": "Export as PDF",
         "downbutton": "Download PDF",
         "graph1": "Bar Graph",
         "graph2": "Line Plot"
