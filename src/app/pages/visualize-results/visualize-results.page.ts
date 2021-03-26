@@ -17,6 +17,10 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
+import html2canvas from 'html2canvas';
+import * as jsPDF from 'jspdf';
+import domtoimage from 'dom-to-image';
+
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 
@@ -73,9 +77,12 @@ export class VisualizeResultsPage implements OnInit {
   showDownload: boolean;
   chartsCreated: boolean;
   legendMade: boolean;
+  transparentOn: boolean;
   statusCode: number;
   EBVindex: number;
   sliderValue: any;
+  img: any;
+
 
   positiveHeatMap: any;
   negativeHeatMap: any;
@@ -126,6 +133,7 @@ export class VisualizeResultsPage implements OnInit {
     this.chartsCreated = false;
     this.sliderValue = "0.0";
     this.legendMade = false;
+    this.transparentOn = false;
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;        
@@ -139,19 +147,10 @@ export class VisualizeResultsPage implements OnInit {
     // console.log("MadingleyData: ", this.madingleyData);
   }
 
-  private async setData() 
-  {
-  }
-
-  private logScenario() {
-    console.log("madingleyData from API: ", this.madingleyData);
-  }
-
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
     let allData = [];
-
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
@@ -163,7 +162,7 @@ export class VisualizeResultsPage implements OnInit {
     const requestData = this.generateRequest(0, this.scenarioData.radius);
 
     // checks if necessary to split up request
-    if(this.scenarioData.radius >= 800000)
+    if(this.scenarioData.radius >= 500000)
     {
       requestArray = this.makeOnionRings(requestData);
     }
@@ -191,9 +190,9 @@ export class VisualizeResultsPage implements OnInit {
     });
     makeRequests.then(value => {
       loading.dismiss();
-      //this.toggleData(0);
       this.resultsFetched = true;
       console.log("data from API: ", this.madingleyData);
+
       for(let index = 0; index < this.madingleyData.length; index++)
       {
         for(let EBVIndex = 3; EBVIndex < this.madingleyData[0]["Keys"].length; EBVIndex++)
@@ -211,7 +210,7 @@ export class VisualizeResultsPage implements OnInit {
     let requestArray = [];
     let currentMax = 0;
     let requestCopy = {};
-    const increment = 800000;
+    const increment = 500000;
 
     // loop until newMax
     while (currentMax <= originalRequest.max_distance)
@@ -250,6 +249,15 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData(EBVIndex)
   {
+    for(let index = 0; index < this.EBVList.length; index++)
+    {
+      var otherElement = document.getElementById('EBV' + (index+3));
+      otherElement.setAttribute('color', 'primary');
+    }
+
+    var EBVElement = document.getElementById('EBV' + EBVIndex);
+    EBVElement.setAttribute('color', 'tertiary');
+
     this.getValues(EBVIndex, this.sliderValue);
   }
 
@@ -271,7 +279,7 @@ export class VisualizeResultsPage implements OnInit {
     this.EBVindex = buttonNumber;
 
     this.bodyData = this.madingleyData[0];
-    this.bodyKeys = Object.keys(this.bodyData);
+    this.bodyKeys = Object.keys(this.bodyData); 
 
     this.latitudeValues = [];
     this.longitudeValues = [];
@@ -284,7 +292,9 @@ export class VisualizeResultsPage implements OnInit {
     var dataString = EBVKeys[buttonNumber];
 
     var heatData = [];
-    this.heatMapKeys = Object.keys(this.bodyData[this.bodyKeys[3]]);
+
+    // bodyKeys[4] is heatmap
+    this.heatMapKeys = Object.keys(this.bodyData[this.bodyKeys[4]]);
     
     // this.bodyKeys[3] is = Heat Map
     // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
@@ -292,12 +302,11 @@ export class VisualizeResultsPage implements OnInit {
     for(let outerindex=0; outerindex < this.madingleyData.length; outerindex++)
     {
       this.bodyData = this.madingleyData[outerindex];
-
-      for(let index=0; index < this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString].length; index++)
+      for(let index=0; index < this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString].length; index++)
       {
-        this.latitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][latitudeString][index]);
-        this.longitudeValues.push(this.bodyData[this.bodyKeys[3]][timePeriod][longitudeString][index]);
-        heatData.push(this.bodyData[this.bodyKeys[3]][timePeriod][dataString][index]);
+        this.latitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString][index]);
+        this.longitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][longitudeString][index]);
+        heatData.push(this.bodyData[this.bodyKeys[4]][timePeriod][dataString][index]);
       }
     }
 
@@ -313,7 +322,7 @@ export class VisualizeResultsPage implements OnInit {
     ///////////////// GRAPH SETUP /////////////
     // bodyData -> timeSeries -> the dataString
     this.bodyData = this.madingleyData[0];
-    var indexStrings = Object.keys(this.bodyData[this.bodyKeys[2]][dataString]);
+    var indexStrings = Object.keys(this.bodyData[this.bodyKeys[3]][dataString]);
     var graphData = [];
     
     // CREATING THE BUTTONS ON THE PAGE
@@ -333,9 +342,8 @@ export class VisualizeResultsPage implements OnInit {
           graphData[index2] = 0; 
         }
 
-        graphData[index2] += this.bodyData[this.bodyKeys[2]][dataString][indexStrings[index2]];
+        graphData[index2] += this.bodyData[this.bodyKeys[3]][dataString][indexStrings[index2]];
       }
-      console.log(graphData);
     }
 
     // loop to now divide to average each item by the madingley data
@@ -343,7 +351,7 @@ export class VisualizeResultsPage implements OnInit {
     {
       graphData[index] = graphData[index]/this.madingleyData.length;
     }
-    console.log(graphData);
+
     // dataString = the EBV string name
     // graphData = [Averaged EBV Values]
     // indexStrings = ["0.0" to "20.0"]
@@ -398,10 +406,10 @@ export class VisualizeResultsPage implements OnInit {
     legend.style.display = "block";
 
     let htmlNeg = document.getElementById('minimum');
-    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" Units");
+    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" ", this.bodyData["Units"][this.EBVindex]);
     
     let htmlPos = document.getElementById('maximum');
-    htmlPos.textContent = Math.round(maxPos).toString().concat(" Units");
+    htmlPos.textContent = Math.round(maxPos).toString().concat(" ", this.bodyData["Units"][this.EBVindex]);
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -458,11 +466,9 @@ export class VisualizeResultsPage implements OnInit {
     this.map.addListener("zoom_changed", () => 
     {
       var zoomLevel = this.map.getZoom();
-      // some weird formula I found online
-      //var heatmapradius = this.getHeatMapRadius(this.latitudeValues[0], this.map.getZoom());
       var heatmapradius = zoomLevel;
-      console.log("Radius is now:", heatmapradius);
-      console.log("Zoom is now:", this.map.getZoom());
+      //console.log("Radius is now:", heatmapradius);
+      //console.log("Zoom is now:", this.map.getZoom());
       
       if(zoomLevel < 4)
       {
@@ -498,8 +504,8 @@ export class VisualizeResultsPage implements OnInit {
         this.positiveHeatMap.set("radius", heatmapradius);
         this.negativeHeatMap.set("radius", heatmapradius);
       }
-      console.log(this.positiveHeatMap.get("radius"));
-      console.log(this.negativeHeatMap.get("radius"));
+      //console.log(this.positiveHeatMap.get("radius"));
+      //console.log(this.negativeHeatMap.get("radius"));
     });
 
   }
@@ -507,22 +513,36 @@ export class VisualizeResultsPage implements OnInit {
   // sets the opacity of both the negative and positive heatmaps to either 0.2 or 0
   changeOpacity() 
   {
+    var button = document.getElementById('opacityButton');
+
+    if(this.transparentOn == true)
+    {
+      button.setAttribute('color', 'primary');
+      button.textContent = "CHANGE OPACITY: TRANSPARENCY CURRENTLY OFF";
+      this.transparentOn = false;
+    }
+
+    else if(this.transparentOn == false)
+    {
+      button.setAttribute('color', 'tertiary');
+      button.textContent = "CHANGE OPACITY: TRANSPARENCY CURRENTLY ON";
+      this.transparentOn = true;
+    }
+
     this.positiveHeatMap.set("opacity", this.positiveHeatMap.get("opacity") ? null : 0.2);
     this.negativeHeatMap.set("opacity", this.negativeHeatMap.get("opacity") ? null : 0.2);
   }
 
-  // some random radius calculation method I found online, doesn't really work
-  getHeatMapRadius(latitudeCoordinate, zoom) 
-  {
-    var distanceInMeter = 3; /* meter distance in real world */    
-    
-    var meterPerPixel = 156543.03392 * Math.cos(latitudeCoordinate * Math.PI / 180) / Math.pow(2, zoom);
-    var radius = distanceInMeter / meterPerPixel;
-  
-    return radius;
-  }
-
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
+
+saveMapToDataUrl() 
+{
+  /*
+  html2canvas(document.querySelector("#legend")).then(canvas => {
+    console.log(canvas);
+    console.log(canvas.toDataURL);
+  */
+}
 
 createCharts(variableName, graphData, graphLabels) 
 {
@@ -565,7 +585,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: "Years from 1900"//this.bodyData[this.bodyKeys[0]][2]
+            labelString: this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -573,7 +593,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: "EBV Units"
+            labelString: this.bodyData["Units"][this.EBVindex]
           },
           ticks: 
           {
@@ -611,7 +631,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: "Years from 1900"//this.bodyData[this.bodyKeys[0]][2]
+            labelString: this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -619,7 +639,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: "EBV Units"
+            labelString: this.bodyData["Units"][this.EBVindex]
           },
           ticks: 
           {
