@@ -92,7 +92,7 @@
         "title": "Entrer manuellement les coordonnées et le rayon",
         "label1": "Entrez Latitude:",
         "label2": "Entrez la longitude:",
-        "label3": "Entrez le rayon du cercle (mètres):",
+        "label3": "Entrez le rayon du cercle (Kilomètres):",
         "paragraph1": "Pour obtenir les meilleurs résultats, nous recommandons un rayon compris entre 300 000 et 800 000 mètres",
         "button1": "Soumettre les coordonnées"
     }

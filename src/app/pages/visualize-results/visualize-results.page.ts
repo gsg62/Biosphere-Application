@@ -17,9 +17,9 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import html2canvas from 'html2canvas';
-import * as jsPDF from 'jspdf';
-import domtoimage from 'dom-to-image';
+//import html2canvas from 'html2canvas';
+//import * as jsPDF from 'jspdf';
+//import domtoimage from 'dom-to-image';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -258,6 +258,14 @@ export class VisualizeResultsPage implements OnInit {
     var EBVElement = document.getElementById('EBV' + EBVIndex);
     EBVElement.setAttribute('color', 'tertiary');
 
+    if(this.transparentOn == true)
+    {
+      var opacityButton = document.getElementById('opacityButton');
+      opacityButton.setAttribute('color', 'primary');
+      opacityButton.textContent = "CHANGE OPACITY: TRANSPARENCY CURRENTLY OFF";
+      this.transparentOn = false;
+    }
+
     this.getValues(EBVIndex, this.sliderValue);
   }
 
@@ -313,7 +321,7 @@ export class VisualizeResultsPage implements OnInit {
 
     if(this.chartsCreated)
     {
-      this.bars.destroy();
+      //this.bars.destroy();
       this.line.destroy();
     }
 
@@ -552,6 +560,7 @@ createCharts(variableName, graphData, graphLabels)
     graphLabels[index] = (parseFloat(graphLabels[index])*5).toString();
   }
   /////////////////BAR CHART//////////////////////////
+  /*
   this.bars = new Chart(this.barChart.nativeElement, 
     {
     type: 'bar',
@@ -573,7 +582,7 @@ createCharts(variableName, graphData, graphLabels)
           backgroundColor: 'rgb(52, 195, 235)', // array should have same number of elements as number of dataset
           borderColor: 'rgb(52, 195, 235)',// array should have same number of elements as number of dataset
           borderWidth: 1
-        }*/
+        }
       ]
     },
     options: 
@@ -603,7 +612,7 @@ createCharts(variableName, graphData, graphLabels)
       }
     }
   });
-
+  */
   /////////////////LINE CHART//////////////////////////
   this.line = new Chart(this.lineChart.nativeElement, 
   {
