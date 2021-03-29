@@ -39,29 +39,31 @@ export class MapPage implements OnInit {
   }
   submitLocation(controlDiv, map) {
     // Set CSS for the control border.
-    const controlUI = document.createElement('div');
-    controlUI.style.backgroundColor = '#FFE047';
-    controlUI.style.border = '2px solid #000000';
-    controlUI.style.borderRadius = '3px';
-    controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.marginBottom = '22px';
-    controlUI.style.textAlign = 'center';
-    controlUI.title = 'Click to submit your current location';
-    controlDiv.appendChild(controlUI);
+    const submitUI = document.createElement('div');
+    submitUI.style.backgroundColor = '#FFE047';
+    submitUI.style.border = '2px solid #000000';
+    submitUI.style.borderRadius = '3px';
+    submitUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    submitUI.style.cursor = 'pointer';
+    submitUI.style.marginBottom = '22px';
+    submitUI.style.textAlign = 'center';
+    submitUI.title = 'Click to submit your current location';
+    controlDiv.appendChild(submitUI);
     // Set CSS for the control interior.
-    const controlText = document.createElement('div');
-    controlText.style.color = '#000000';
-    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-    controlText.style.fontSize = '16px';
-    controlText.style.lineHeight = '38px';
-    controlText.style.paddingLeft = '5px';
-    controlText.style.paddingRight = '5px';
-    controlText.innerHTML = 'Submit Location';
-    controlUI.appendChild(controlText);
+    const submitText = document.createElement('div');
+    submitText.style.color = '#000000';
+    submitText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    submitText.style.fontSize = '16px';
+    submitText.style.lineHeight = '38px';
+    submitText.style.paddingLeft = '5px';
+    submitText.style.paddingRight = '5px';
+    submitText.innerHTML = 'Submit Location';
+    submitUI.appendChild(submitText);
+
+
 
     // Setup the click event listeners: user submits location.
-    controlUI.addEventListener('click', () => {
+    submitUI.addEventListener('click', () => {
       console.log("lat: ", this.areaOfInterest.getCenter().lat());
       console.log("long: ", this.areaOfInterest.getCenter().lng());
       console.log("radius: ", this.areaOfInterest.radius);
@@ -77,9 +79,22 @@ export class MapPage implements OnInit {
           }
         }
       };
-      this.router.navigate(['scenario-options'], navigationExtras);
+      // alert the user it might take longer than normal if the radius is larger than approximately 1/2 Earth's radius
+      if (this.areaOfInterest.radius > 3180000)
+      {
+        alert('The radius you selected is really large, so getting results could take up to 5 minutes. ' +
+            'If you do NOT want to wait that long, please restart the simulation and try again with a smaller radius.');
+      }
+      // The Madingley model doesn't generate data for the absolute value of latitude greater than 65 degrees
+      if ( Math.abs(this.areaOfInterest.getCenter().lat()) < 65)
+      {
+        this.router.navigate(['scenario-options'], navigationExtras);
+      }
+      else
+        {
+        alert('Please select a region that is between 65 degrees N and 65 degrees S (move closer to the equator). ');
+      }
 
-      // this.router.navigate(['/scenario-options']);
     });
 
   }
@@ -101,12 +116,9 @@ export class MapPage implements OnInit {
 
         // CHANGE DEFAULT ZOOM HERE
         zoom: 6,
-
         mapTypeId: 'terrain',
-
-        // Default will not allow the user to move around the map
-        // This is implemented mainly for the current location part
-        gestureHandling: 'none',
+        // Default will allow the user to move around the map
+        gestureHandling: 'greedy',
 
         // Disable certain parts of the UI so user can't switch to street mode,
         // select the map type, or enter fullscreen mode
@@ -119,21 +131,25 @@ export class MapPage implements OnInit {
       };
 
       // enters if the user wants to use their current location
-      // the only differences from select location are the map is NOT movable and the circle will NOT be draggable
+      // there is no difference currently in map controls for current location vs select location.
+      // if you want to change the map controls only for current location, do it here
       if (locationSetting === 'currentLoc') {
         this.areaOfInterest = new google.maps.Circle({
           center: location,
           // default radius, but the user can adjust in the app
           radius: 300000,
           editable: true,
-          // current location does NOT allow for user to move circle
-          draggable: false,
+          // current location DOES allow for user to move circle
+          draggable: true,
           geodesic: true,
         });
+        // uncomment the next line if select location should NOT allow the user to move around the map
+        // options.gestureHandling = 'none';
       }
 
       // enters if the current wants to select their location on the map
-      // the only differences from current location are the map IS movable and the circle WILL be draggable
+      // there is no difference currently in map controls for current location vs select location.
+      // if you want to change the map controls only for select location, do it here
       else if (locationSetting === 'selectLoc') {
         this.areaOfInterest = new google.maps.Circle({
           center: location,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateDefaultParser, TranslateService } from '@ngx-translate/core'
+import { TranslateDefaultParser, TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-getting-started',
@@ -8,7 +9,8 @@ import { TranslateDefaultParser, TranslateService } from '@ngx-translate/core'
 })
 export class GettingStartedPage implements OnInit {
 
-  constructor(public translate: TranslateService) 
+  constructor(public translate: TranslateService, private route: ActivatedRoute,
+              private router: Router)
   { 
     translate.addLangs(['en', 'es', 'fr', 'de', 'pt']);
     translate.setDefaultLang(('en'));
@@ -21,6 +23,13 @@ export class GettingStartedPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  startSimulation()
+  {
+    this.router.navigate(['user-options']);
+
+    // Change the tab to highlight simulation rather than getting started
   }
 
 }
