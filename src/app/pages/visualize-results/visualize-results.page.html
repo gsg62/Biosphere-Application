@@ -1,6 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Results:</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -9,6 +13,11 @@
     <ion-icon name="arrow-back"></ion-icon>
     {{ 'visualpage.headbutton1' | translate }}
   </ion-button>
+
+  <!-- keep for testing purposes
+    <ion-button id="scenarioOptions" size="medium" fill="outline" (click)="logData()">
+    Log Madingley Data
+  </ion-button> -->
 
 <div id="floating-panel">
   <ion-note *ngIf="resultsFetched">*Automatically shows Allelic Diversity until another EBV is selected</ion-note>
@@ -72,7 +81,6 @@
   <span style="float:right;"><h4 id="maximum">0</h4></span>
   <span style="text-align: center;"><h4 style="margin-top:60px">0</h4></span>
 </div>
-
 <br>
 
 <br>

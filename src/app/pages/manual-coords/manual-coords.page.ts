@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationExtras } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
@@ -15,7 +14,6 @@ export class ManualCoordsPage implements OnInit {
   location: FormGroup;
 
   constructor(
-    private navCtrl: NavController,
     private router: Router,
     private route: ActivatedRoute,
     public formBuilder: FormBuilder) {
@@ -30,11 +28,11 @@ export class ManualCoordsPage implements OnInit {
       lng: new FormControl(),
       radius: new FormControl()
     });
-
   }
 
   ngOnInit() {
   }
+
   submitCoords() {
     console.log(this.location.value);
     let navigationExtras: NavigationExtras = {
@@ -45,7 +43,7 @@ export class ManualCoordsPage implements OnInit {
             lat: this.location.value.lat,
             lng: this.location.value.lng,
           },
-          radius: this.location.value.radius
+          radius: this.location.value.radius * 1000 // convert to meters for backend
         }
       }
     };

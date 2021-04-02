@@ -56,6 +56,8 @@ export class VisualizeResultsPage implements OnInit {
   calculatedData = [];
   calculatedDataKeys = [];
   EBVList = [];
+  requestArray = [];
+  madingleyData = [];
 
   heatMapInput = 
   [ 
@@ -82,22 +84,17 @@ export class VisualizeResultsPage implements OnInit {
   EBVindex: number;
   sliderValue: any;
   img: any;
-
-
   positiveHeatMap: any;
   negativeHeatMap: any;
   map: any;
-
-
   scenarioData: any;
-  madingleyData = [];
-
-  height = 0;
 
   pdfObj = null;
   banner = null;
   base64Image = null;
   logoData = null;
+  height = 0;
+
   coolGradient = 
   [
     "rgba(255, 255, 255, 0)",
@@ -118,6 +115,12 @@ export class VisualizeResultsPage implements OnInit {
 
   resultsFetched = false;
 
+    ////////////////// constants for double onion algo /////////////////////
+    radiusIncrement = 300000; 
+    numberOfFiles = 22;
+    fileIncrement = 5;
+
+  
   constructor(
     private navCtrl: NavController, 
     private http: HttpClient, 
@@ -141,110 +144,168 @@ export class VisualizeResultsPage implements OnInit {
     });
   }
 
+  // keep for testing purposes
+  logData(){console.log("data from API: ", this.madingleyData);}
+
   ngOnInit()
   {
     this.getMadingleyData();
-    // console.log("MadingleyData: ", this.madingleyData);
   }
 
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
-    let allData = [];
-    // start loading indicator
+    let waitTime = (this.getFileSearchTotal()) / this.fileIncrement * 
+      (this.scenarioData.radius / this.radiusIncrement ) * this.numberOfFiles;
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
-      message: 'Loading Madingley Data...',
+      message: 'Loading Madingley Data...\nApproximate wait time: ' 
+                + waitTime.toString() + ' seconds',
     });
     await loading.present();
 
-    let requestArray = [];
-    const requestData = this.generateRequest(0, this.scenarioData.radius);
-
+    const requestData = this.generateRequest(0, this.scenarioData.radius, 0);
+    
     // checks if necessary to split up request
-    if(this.scenarioData.radius >= 500000)
+    if(this.scenarioData.radius >= this.radiusIncrement)
     {
-      requestArray = this.makeOnionRings(requestData);
+      this.makeOnionRings(requestData);
     }
-
-    // assume radius smaller than 800,000 and make API call
+    // assume radius smaller than 800,000 and go straight to form inner onion
     else 
     {
-      requestArray.push(requestData);
+      // send to file increment
+      this.generateInnerOnion(requestData.min_distance, requestData.max_distance);
     }    
 
-    // make requests and save data
+    // for testing purposes
+    const startTime = Date.now();
+    console.log("requestArray: ", this.requestArray);
+
+    let counter = 1;
+    let requestFailed = false;
     const makeRequests = new Promise<string>((resolve, reject) => {
-    requestArray.forEach(element => {
-      this.inputService.getMadingleyData(element).subscribe(
-        (res) => {
-          this.madingleyData.push(JSON.parse(res.body));
-          resolve(res);
-        }, 
-        (err) => {
-          console.log("error: ", err);
-          reject(err);
-        }
-      );
-    });
-    });
+      this.requestArray.forEach(element => {
+        this.inputService.getMadingleyData(element).subscribe(
+          (res) => {
+            this.madingleyData.push(JSON.parse(res.body));        
+            // check if at last response to resolve
+            if(counter == this.requestArray.length) {
+              resolve(res);
+            }
+            counter++;            
+          }, 
+          (err) => {
+            requestFailed = true;
+            console.log("error: ", err);
+            // check if at last response to reject b'c we just need to know of one bad response, not actual err message 
+            if(counter == this.requestArray.length) {
+              reject(err);
+            }
+            counter++;            
+          }
+        );
+      });
+      }
+    );
     makeRequests.then(value => {
       loading.dismiss();
-      this.resultsFetched = true;
-      console.log("data from API: ", this.madingleyData);
-
-      for(let index = 0; index < this.madingleyData.length; index++)
-      {
-        for(let EBVIndex = 3; EBVIndex < this.madingleyData[0]["Keys"].length; EBVIndex++)
-        {
-          this.EBVList.push({name: this.madingleyData[0]["Keys"][EBVIndex], index: EBVIndex});
-        }
+      console.log("request time (s): ", (Date.now() - startTime) / 1000);
+      console.log("responses from API: ", this.madingleyData);
+      // check if any requests failed
+      if(requestFailed) {
+        alert("One or more of the API requests has timed out");
       }
-    })
+      // otherwise save results to proper format
+      else {        
+        this.resultsFetched = true;
+
+        for(let index = 0; index < this.madingleyData.length; index++)
+        {
+          for(let EBVIndex = 3; EBVIndex < this.madingleyData[0]["Keys"].length; EBVIndex++)
+          {
+            this.EBVList.push({name: this.madingleyData[0]["Keys"][EBVIndex], index: EBVIndex});
+          }
+        }  
+      }
+    });
   }
 
-  // splits requests into onion rings
+  /**
+   * pushed all requests to array using double onion algorithm 
+   * (splits by request up into layers by radius and then file increment)
+   */ 
   private makeOnionRings(originalRequest: any)
   {
-    //console.log("scenarioData from parseR: ", originalRequest);
     let requestArray = [];
     let currentMax = 0;
-    let requestCopy = {};
-    const increment = 500000;
+    let currentRadius = this.radiusIncrement;
 
     // loop until newMax
     while (currentMax <= originalRequest.max_distance)
     {
       // check to not exceed max distance
-      if ((currentMax + increment) <= originalRequest.max_distance)
+      if ((currentMax + currentRadius) <= originalRequest.max_distance)
       {
-        requestCopy = this.generateRequest(currentMax, currentMax + increment);
-        requestArray.push(requestCopy);  
-        currentMax += increment;
+        this.generateInnerOnion(currentMax, currentMax + currentRadius);
       }
       // assume larger and subtract max_distance from max for min and keep max the same
       else {
-        requestCopy = this.generateRequest(currentMax, originalRequest.max_distance)
-        requestArray.push(requestCopy);
-        currentMax += increment;
+        this.generateInnerOnion(currentMax, originalRequest.max_distance);
       }
+      currentMax += currentRadius;
     }
     return requestArray;
   }
 
-  // helper function used to generate a request for specified min and max
-  private generateRequest( min:number, max: number)
+  /**
+   *  helper funciton that pushes designated extra requests to requests array based on userType
+   *  for whatever min and max distances is specified 
+   */
+  private generateInnerOnion(minDistance: number, maxDistance: number) {
+    let fileStart = 0;
+    switch (this.scenarioData.userType) {
+      case 'public':  
+        this.requestArray.push(this.generateRequest(minDistance, maxDistance, 0));
+        break;
+      case 'policy_maker':  
+        while (fileStart < 10) {
+          this.requestArray.push(this.generateRequest(minDistance, maxDistance, fileStart));
+          fileStart += 5;
+        }
+        break;
+      case 'scientist':  
+        while (fileStart < 20) {
+          this.requestArray.push(this.generateRequest(minDistance, maxDistance, fileStart));
+          fileStart += 5;
+        }
+        break;
+    }
+  }
+
+  // helper function used to generate a request for specified min and max distances
+  private generateRequest( min:number, max: number, fileStart: number)
   {
     let request = {
       lat: this.scenarioData.center.lat,
       lng: this.scenarioData.center.lng,
       min_distance: min,      
       max_distance: max,
+      file_start: fileStart,
       scenario: this.scenarioData.scenario1stVal,
       scenario_option: this.scenarioData.scenario2ndVal,
       user_type: this.scenarioData.userType    
     }
     return request;
+  }
+
+  // helper function for calculating wait time
+  private getFileSearchTotal() {
+    switch (this.scenarioData.userType) {
+      case 'public': return 4        
+      case 'policy_maker': return 10
+      case 'scientist':  return 20
+    }
   }
 
   toggleData(EBVIndex)

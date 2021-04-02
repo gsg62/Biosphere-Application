@@ -52,24 +52,27 @@ export class ScenarioOptionsPage {
         });
         break;
       case 'DEFORESTATION':
-        modal = await this.modalCtrl.create({
-          component: IntensityModalComponent,
-          componentProps: {
-            scenarioType: 'DEFORESTATION',
-            scenarioOptions: ['Selective Logging', 'Normal', null], 
-            scenarioData: this.scenarioData
-          }
-        });
+        // old code for opening intensity modal
+        // modal = await this.modalCtrl.create({
+        //   component: IntensityModalComponent,
+        //   componentProps: {
+        //     scenarioType: 'DEFORESTATION',
+        //     scenarioOptions: ['Selective Logging', 'Normal', null], 
+        //     scenarioData: this.scenarioData
+        //   }
+        // });
+        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
         break;
       case 'TROPIC':
-        modal = await this.modalCtrl.create({
-          component: IntensityModalComponent,
-          componentProps: {
-            scenarioType: 'TROPHIC',
-            scenarioOptions: ['Remove most predators', 'Remove most herbivores', 'Rewilding'],
-            scenarioData: this.scenarioData
-          }
-        });
+        // modal = await this.modalCtrl.create({
+        //   component: IntensityModalComponent,
+        //   componentProps: {
+        //     scenarioType: 'TROPHIC',
+        //     scenarioOptions: ['Remove most predators', 'Remove most herbivores', 'Rewilding'],
+        //     scenarioData: this.scenarioData
+        //   }
+        // });
+        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
         break;
       case 'EXTINCTIONS':
         modal = await this.modalCtrl.create({
