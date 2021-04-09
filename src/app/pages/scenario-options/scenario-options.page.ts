@@ -61,7 +61,7 @@ export class ScenarioOptionsPage {
         //     scenarioData: this.scenarioData
         //   }
         // });
-        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
+        alert("We are currently still working on obtaining the data required for this scenario. Please select a different Scenario to run");
         break;
       case 'TROPIC':
         // modal = await this.modalCtrl.create({
@@ -72,7 +72,7 @@ export class ScenarioOptionsPage {
         //     scenarioData: this.scenarioData
         //   }
         // });
-        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
+        alert("We are currently still working on obtaining the data required for this scenario. Please select a different Scenario to run");
         break;
       case 'EXTINCTIONS':
         modal = await this.modalCtrl.create({

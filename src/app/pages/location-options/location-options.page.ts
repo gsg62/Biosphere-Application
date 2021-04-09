@@ -37,6 +37,10 @@ export class LocationOptionsPage implements OnInit {
 
   openMap() {
       if (this.locationSetting === "currentLoc") {
+          // warn the user that they might need to turn on location services
+          alert("If it takes more than 30 seconds to load, please make sure your location services are turned on for " +
+              "BOTH your browser (Chrome, Safari, Firefox, etc.) AND your device settings.\n\n"+
+          "If you need assistance please Google \n'Location services for (your device here)'");
           this.geolocation.getCurrentPosition().then(
               (location) => {
                   this.lat = location.coords.latitude;
