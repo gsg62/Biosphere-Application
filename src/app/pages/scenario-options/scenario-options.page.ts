@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { disabled } from "./disabledScenarios";
 import { IntensityModalComponent } from "../../modals/intensity-modal/intensity-modal.component";
 
 @Component({
@@ -25,70 +25,74 @@ export class ScenarioOptionsPage {
         console.log("scenarioData from scenario-options: ", this.scenarioData);
       }
     });
-
    }
 
   private async setScenario(scenarioType: string) {
     let modal;
-    switch (scenarioType) {
-      case 'CLIMATE':
-        modal = await this.modalCtrl.create({
-          component: IntensityModalComponent,
-          componentProps: {
-            scenarioType: 'CLIMATE',
-            scenarioOptions: ['Low', 'Med', 'High'],
-            scenarioData: this.scenarioData
-          }
-        });
-        break;
-      case 'LANDUSE':
-        modal = await this.modalCtrl.create({
-          component: IntensityModalComponent,
-          componentProps: {
-            scenarioType: 'LANDUSE',
-            scenarioOptions: ['Low', 'Med', 'High'],
-            scenarioData: this.scenarioData
-          }
-        });
-        break;
-      case 'DEFORESTATION':
-        // old code for opening intensity modal
-        // modal = await this.modalCtrl.create({
-        //   component: IntensityModalComponent,
-        //   componentProps: {
-        //     scenarioType: 'DEFORESTATION',
-        //     scenarioOptions: ['Selective Logging', 'Normal', null], 
-        //     scenarioData: this.scenarioData
-        //   }
-        // });
-        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
-        break;
-      case 'TROPIC':
-        // modal = await this.modalCtrl.create({
-        //   component: IntensityModalComponent,
-        //   componentProps: {
-        //     scenarioType: 'TROPHIC',
-        //     scenarioOptions: ['Remove most predators', 'Remove most herbivores', 'Rewilding'],
-        //     scenarioData: this.scenarioData
-        //   }
-        // });
-        alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
-        break;
-      case 'EXTINCTIONS':
-        modal = await this.modalCtrl.create({
-          component: IntensityModalComponent,
-          componentProps: {
-            scenarioType: 'EXTINCTIONS',
-            scenarioOptions: ['Pleistocene', 'Holocene', 'Anthropocene'],
-            scenarioData: this.scenarioData
-          }
-        });
-        break;
-      default:
-        console.error(scenarioType + 'is not a valid scenario');
-        break;
+    // check if scenariotype is disabled
+    console.log('disabled: ', disabled);
+    if(!disabled.includes(scenarioType)) {
+      switch (scenarioType) {
+        case 'CLIMATE':
+          modal = await this.modalCtrl.create({
+            component: IntensityModalComponent,
+            componentProps: {
+              scenarioType: 'CLIMATE',
+              scenarioOptions: ['Low', 'Med', 'High'],
+              scenarioData: this.scenarioData
+            }
+          });
+          break;
+        case 'LANDUSE':
+          modal = await this.modalCtrl.create({
+            component: IntensityModalComponent,
+            componentProps: {
+              scenarioType: 'LANDUSE',
+              scenarioOptions: ['Low', 'Med', 'High'],
+              scenarioData: this.scenarioData
+            }
+          });
+          break;
+        case 'DEFORESTATION':
+          modal = await this.modalCtrl.create({
+            component: IntensityModalComponent,
+            componentProps: {
+              scenarioType: 'DEFORESTATION',
+              scenarioOptions: ['Selective Logging', 'Normal', null], 
+              scenarioData: this.scenarioData
+            }
+          });
+          // alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
+          break;
+        case 'TROPIC':
+          modal = await this.modalCtrl.create({
+            component: IntensityModalComponent,
+            componentProps: {
+              scenarioType: 'TROPHIC',
+              scenarioOptions: ['Remove most predators', 'Remove most herbivores', 'Rewilding'],
+              scenarioData: this.scenarioData
+            }
+          });
+          break;
+        case 'EXTINCTIONS':
+          modal = await this.modalCtrl.create({
+            component: IntensityModalComponent,
+            componentProps: {
+              scenarioType: 'EXTINCTIONS',
+              scenarioOptions: ['Pleistocene', 'Holocene', 'Anthropocene'],
+              scenarioData: this.scenarioData
+            }
+          });
+          break;
+        default:
+          console.error(scenarioType + 'is not a valid scenario');
+          break;
+      }
+      return await modal.present();  
     }
-    return await modal.present();
+    else {
+      alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
+    }
   }
 }
 

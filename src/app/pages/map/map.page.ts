@@ -91,7 +91,7 @@ export class MapPage implements OnInit {
         this.router.navigate(['scenario-options'], navigationExtras);
       }
       else
-        {
+      {
         alert('Please select a region that is between 65 degrees N and 65 degrees S (move closer to the equator). ');
       }
 

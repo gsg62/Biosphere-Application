@@ -116,9 +116,9 @@ export class VisualizeResultsPage implements OnInit {
   resultsFetched = false;
 
     ////////////////// constants for double onion algo /////////////////////
-    radiusIncrement = 300000; 
+    radiusIncrement = 400000; 
     numberOfFiles = 22;
-    fileIncrement = 5;
+    fileIncrement = 3;
 
   
   constructor(
@@ -155,19 +155,10 @@ export class VisualizeResultsPage implements OnInit {
   // makes call to api to get madingley data
   private async getMadingleyData()
   {
-    let waitTime = (this.getFileSearchTotal()) / this.fileIncrement * 
-      (this.scenarioData.radius / this.radiusIncrement ) * this.numberOfFiles;
-    const loading = await this.loadingController.create({
-      cssClass: 'my-custom-class',
-      message: 'Loading Madingley Data...\nApproximate wait time: ' 
-                + waitTime.toString() + ' seconds',
-    });
-    await loading.present();
-
-    const requestData = this.generateRequest(0, this.scenarioData.radius, 0);
-    
-    // checks if necessary to split up request
-    if(this.scenarioData.radius >= this.radiusIncrement)
+    const requestData = this.generateRequest(0, this.scenarioData.radius, 0, 0);
+    // checks if necessary to split up request into double onion
+    if(this.scenarioData.radius >= this.radiusIncrement 
+      || this.getMaxFiles() <= this.fileIncrement)
     {
       this.makeOnionRings(requestData);
     }
@@ -181,6 +172,19 @@ export class VisualizeResultsPage implements OnInit {
     // for testing purposes
     const startTime = Date.now();
     console.log("requestArray: ", this.requestArray);
+
+    // calculate wait time 
+    const waitTime = 20 + (this.getMaxFiles() / this.fileIncrement) * 
+      (this.scenarioData.radius / this.radiusIncrement ) + this.requestArray.length;
+    
+    // start loading indicator
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Loading Madingley Data...\nApproximate loading time: ' 
+                + waitTime.toString() + ' seconds',
+    });
+    await loading.present();
+
 
     let counter = 1;
     let requestFailed = false;
@@ -210,8 +214,12 @@ export class VisualizeResultsPage implements OnInit {
     );
     makeRequests.then(value => {
       loading.dismiss();
-      console.log("request time (s): ", (Date.now() - startTime) / 1000);
+
+      // testing purposes
+      console.log("actual request time: ", (Date.now() - startTime) / 1000);
+      console.log("calculated wait time: ", waitTime);      
       console.log("responses from API: ", this.madingleyData);
+      
       // check if any requests failed
       if(requestFailed) {
         alert("One or more of the API requests has timed out");
@@ -237,25 +245,22 @@ export class VisualizeResultsPage implements OnInit {
    */ 
   private makeOnionRings(originalRequest: any)
   {
-    let requestArray = [];
     let currentMax = 0;
-    let currentRadius = this.radiusIncrement;
 
     // loop until newMax
-    while (currentMax <= originalRequest.max_distance)
+    while (currentMax < originalRequest.max_distance)
     {
       // check to not exceed max distance
-      if ((currentMax + currentRadius) <= originalRequest.max_distance)
+      if ((currentMax + this.radiusIncrement) <= originalRequest.max_distance)
       {
-        this.generateInnerOnion(currentMax, currentMax + currentRadius);
+        this.generateInnerOnion(currentMax, currentMax + this.radiusIncrement);
       }
       // assume larger and subtract max_distance from max for min and keep max the same
       else {
         this.generateInnerOnion(currentMax, originalRequest.max_distance);
       }
-      currentMax += currentRadius;
+      currentMax += this.radiusIncrement;
     }
-    return requestArray;
   }
 
   /**
@@ -263,28 +268,49 @@ export class VisualizeResultsPage implements OnInit {
    *  for whatever min and max distances is specified 
    */
   private generateInnerOnion(minDistance: number, maxDistance: number) {
-    let fileStart = 0;
+    let currentFileStart = 0;
+    const MAX_FILES = this.getMaxFiles();
+    if(this.scenarioData.userType == 'public' && this.fileIncrement > MAX_FILES){
+      this.requestArray.push(this.generateRequest(minDistance, maxDistance, 0, MAX_FILES + 1));
+    }
+    else {
+      while (currentFileStart <= MAX_FILES) {
+        currentFileStart++;
+        // check to not exceed max files
+        if ((currentFileStart + this.fileIncrement) < MAX_FILES)
+        {
+          this.requestArray.push(this.generateRequest(
+            minDistance, maxDistance, currentFileStart - 1, currentFileStart + this.fileIncrement));
+        }
+        // check if equal
+        else if(currentFileStart - 1 == MAX_FILES) {
+          this.requestArray.push(this.generateRequest(
+            minDistance, maxDistance, currentFileStart - 2, currentFileStart - 1));
+        }
+        // assume larger and subtract max files from max for min and keep max the same
+        else {
+          this.requestArray.push(
+            this.generateRequest(
+              minDistance, maxDistance, currentFileStart - 1, currentFileStart + this.fileIncrement - 1));
+          }  
+        currentFileStart += this.fileIncrement;
+      }
+    }
+    
+  }
+
+  private getMaxFiles() {
     switch (this.scenarioData.userType) {
-      case 'public':  
-        this.requestArray.push(this.generateRequest(minDistance, maxDistance, 0));
-        break;
-      case 'policy_maker':  
-        while (fileStart < 10) {
-          this.requestArray.push(this.generateRequest(minDistance, maxDistance, fileStart));
-          fileStart += 5;
-        }
-        break;
-      case 'scientist':  
-        while (fileStart < 20) {
-          this.requestArray.push(this.generateRequest(minDistance, maxDistance, fileStart));
-          fileStart += 5;
-        }
-        break;
+      case 'public': return 4;        
+      case 'policy_maker': return 10;
+      case 'scientist': return 20;
     }
   }
 
+
+
   // helper function used to generate a request for specified min and max distances
-  private generateRequest( min:number, max: number, fileStart: number)
+  private generateRequest( min:number, max: number, fileStart: number, fileEnd: number)
   {
     let request = {
       lat: this.scenarioData.center.lat,
@@ -292,6 +318,7 @@ export class VisualizeResultsPage implements OnInit {
       min_distance: min,      
       max_distance: max,
       file_start: fileStart,
+      file_end: fileEnd,
       scenario: this.scenarioData.scenario1stVal,
       scenario_option: this.scenarioData.scenario2ndVal,
       user_type: this.scenarioData.userType    
@@ -299,14 +326,6 @@ export class VisualizeResultsPage implements OnInit {
     return request;
   }
 
-  // helper function for calculating wait time
-  private getFileSearchTotal() {
-    switch (this.scenarioData.userType) {
-      case 'public': return 4        
-      case 'policy_maker': return 10
-      case 'scientist':  return 20
-    }
-  }
 
   toggleData(EBVIndex)
   {
