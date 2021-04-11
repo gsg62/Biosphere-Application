@@ -4,21 +4,20 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ContactUsPageRoutingModule } from './contact-us-routing.module';
+import { AboutTeamPageRoutingModule } from './about-team-routing.module';
 
-import { ContactUsPage } from './contact-us.page';
+import { AboutTeamPage } from './about-team.page';
 
 import { TranslateModule } from '@ngx-translate/core';
-
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ContactUsPageRoutingModule,
+    AboutTeamPageRoutingModule,
     TranslateModule
   ],
-  declarations: [ContactUsPage]
+  declarations: [AboutTeamPage]
 })
-export class ContactUsPageModule {}
+export class AboutTeamPageModule {}
