@@ -8,33 +8,49 @@
 </ion-header>
 
 <ion-content>
-  <div class = "ion-margin">
+  <div class="ion-margin">
     <img id="logo" src='/assets/icon/TeamBanner.jpg'/>
     <br>
-    <form (ngSubmit)="sendForm()">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-float-left">
+          <div>
+      <form (ngSubmit)="sendForm()">
 
 
-      <div class="field">
-        <input type="text" name="name" class="input" placeholder="Your Name " >
+        <ion-item class="field">
+          <ion-input type="text" name="name" [(ngModel)]="name" placeholder="Your Name " required></ion-input>
+        </ion-item>
 
-      </div>
-      <br>
-      <div class="field">
-        <input type="email" name="email" class="input" placeholder="Your Email" >
+        <ion-item class="field">
+          <ion-input type="email" name="email" [(ngModel)]="email" class="input" placeholder="Your Email" required email></ion-input>
+        </ion-item>
 
-      </div>
-
-      <br>
-      <div class="field">
-        <textarea class="textarea" name="message" placeholder="Your Message" ></textarea>
-
-      </div>
-      <br>
-      <button type="submit" class="button ">Submit</button>
-
-    </form>
-    
-  </div>
+        <ion-item class="field">
+          <ion-textarea class="textarea" name="message" [(ngModel)]="message" placeholder="Your Message" required></ion-textarea>
+        </ion-item>
+        <br>
+        <br>
+        <button type="submit" class="submit">Submit</button>
+      </form>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <img id="flagstaff" src="/assets/icon/FlagstaffMap.png">
+        </ion-col>
+        <ion-col id="information">
+          <p id="title">Biosphere</p>
+          <br>
+          <h4 id="location">Location</h4>
+          <br>
+          <div>Northern Arizona University</div>
+          <div>Flagstaff, Arizona</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </div>
   
 </ion-content>
 

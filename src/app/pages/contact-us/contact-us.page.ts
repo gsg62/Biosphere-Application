@@ -15,6 +15,7 @@ public message: string;
   }
 
   sendForm() {
+    alert("Thanks for submitting your form. This section is still being worked on.")
      // This will be where we add code that takes the information entered by the user and sends an automated email
   }
 
