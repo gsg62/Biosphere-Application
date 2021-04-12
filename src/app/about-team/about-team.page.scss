@@ -1,4 +1,46 @@
 ion-card
 {
-  width: 50%;
+  display:inline-block;
 }
+ion-card.fund
+{
+  text-align: center;
+}
+.header
+{
+  font-size: 300%;
+  color: #3a7be0;
+  text-align: center;
+}
+#image1, #image2, #image3,#image4,#image5,#image7
+{
+  text-align: center;
+  min-width: 216px;
+  background-color: #000000;
+}
+#image6
+{
+  text-align: center;
+  max-width: 216px;
+  background-color: #000000;
+}
+#image8
+{
+  max-width: 350px;
+}
+
+#image9, #image10
+{
+  max-width:500px;
+}
+#background, #misson
+{
+  text-align: center;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+ion-card-content
+{
+  max-width: 216px;
+}
+
