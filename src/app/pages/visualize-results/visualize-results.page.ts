@@ -16,6 +16,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { index } from 'd3-array';
 
 //import html2canvas from 'html2canvas';
 //import * as jsPDF from 'jspdf';
@@ -58,6 +59,10 @@ export class VisualizeResultsPage implements OnInit {
   EBVList = [];
   requestArray = [];
   madingleyData = [];
+  totalData = [];
+  EBVUnits = [];
+  requestIndexDict = {};
+  buttonIndexDict = {};
 
   heatMapInput = 
   [ 
@@ -88,6 +93,7 @@ export class VisualizeResultsPage implements OnInit {
   negativeHeatMap: any;
   map: any;
   scenarioData: any;
+  requestNumber: any;
 
   pdfObj = null;
   banner = null;
@@ -227,14 +233,30 @@ export class VisualizeResultsPage implements OnInit {
       // otherwise save results to proper format
       else {        
         this.resultsFetched = true;
-
+        var indexCounter = 0;
         for(let index = 0; index < this.madingleyData.length; index++)
         {
-          for(let EBVIndex = 3; EBVIndex < this.madingleyData[0]["Keys"].length; EBVIndex++)
+          for(let EBVIndex = 3; EBVIndex < this.madingleyData[index]["Keys"].length; EBVIndex++)
           {
-            this.EBVList.push({name: this.madingleyData[0]["Keys"][EBVIndex], index: EBVIndex});
+            this.EBVList.push({name: this.madingleyData[index]["Keys"][EBVIndex], index: indexCounter});
+            this.requestIndexDict[indexCounter] = index;
+            this.buttonIndexDict[indexCounter] = this.madingleyData[index]["Keys"][EBVIndex];
+            indexCounter++;
           }
-        }  
+
+          for(let EBVKey in this.madingleyData[index]["Raw"])
+          {
+            if(EBVKey != "Longitude" && EBVKey != "Latitude" && EBVKey != "Years since 1900")
+            {
+              this.totalData.push(this.madingleyData[index]["Raw"][EBVKey]);
+            }
+          }
+
+          for(let unitindex = 3; unitindex < this.madingleyData[index]["Units"].length; unitindex++)
+          {
+            this.EBVUnits.push(this.madingleyData[index]["Units"][unitindex]);
+          }
+        }
       }
     });
   }
@@ -329,9 +351,11 @@ export class VisualizeResultsPage implements OnInit {
 
   toggleData(EBVIndex)
   {
+    //console.log(EBVIndex)
+    //console.log(this.totalData)
     for(let index = 0; index < this.EBVList.length; index++)
     {
-      var otherElement = document.getElementById('EBV' + (index+3));
+      var otherElement = document.getElementById('EBV' + index);
       otherElement.setAttribute('color', 'primary');
     }
 
@@ -366,8 +390,9 @@ export class VisualizeResultsPage implements OnInit {
   {
     this.EBVindex = buttonNumber;
 
-    this.bodyData = this.madingleyData[0];
+    this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
     this.bodyKeys = Object.keys(this.bodyData); 
+    console.log("bodyKeys", this.bodyKeys)
 
     this.latitudeValues = [];
     this.longitudeValues = [];
@@ -377,7 +402,9 @@ export class VisualizeResultsPage implements OnInit {
     var EBVKeys = this.bodyData[this.bodyKeys[0]];
     var latitudeString = EBVKeys[0];
     var longitudeString = EBVKeys[1];
-    var dataString = EBVKeys[buttonNumber];
+    var dataString = this.buttonIndexDict[buttonNumber]//EBVKeys[buttonNumber+3];
+    console.log("Button Number", buttonNumber);
+    console.log("DataString", dataString);
 
     var heatData = [];
 
@@ -387,21 +414,18 @@ export class VisualizeResultsPage implements OnInit {
     // this.bodyKeys[3] is = Heat Map
     // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
 
-    for(let outerindex=0; outerindex < this.madingleyData.length; outerindex++)
-    {
-      this.bodyData = this.madingleyData[outerindex];
-      for(let index=0; index < this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString].length; index++)
-      {
-        this.latitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString][index]);
-        this.longitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][longitudeString][index]);
-        heatData.push(this.bodyData[this.bodyKeys[4]][timePeriod][dataString][index]);
-      }
-    }
+    this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
+    console.log("the bodydata", this.bodyData)
 
+    for(let index=0; index < this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString].length; index++)
+    {
+      this.latitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString][index]);
+      this.longitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][longitudeString][index]);
+      heatData.push(this.bodyData[this.bodyKeys[4]][timePeriod][dataString][index]);
+    }
 
     if(this.chartsCreated)
     {
-      //this.bars.destroy();
       this.line.destroy();
     }
 
@@ -409,30 +433,22 @@ export class VisualizeResultsPage implements OnInit {
 
     ///////////////// GRAPH SETUP /////////////
     // bodyData -> timeSeries -> the dataString
-    this.bodyData = this.madingleyData[0];
+    this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
     var indexStrings = Object.keys(this.bodyData[this.bodyKeys[3]][dataString]);
+    console.log(indexStrings)
     var graphData = [];
-    
-    // CREATING THE BUTTONS ON THE PAGE
-    //var newButton = document.createElement("ion-button");
-    //div.innerHTML = '<div id="negativegrad"> t</div>';
-    //legend.appendChild(div);
 
     // loop through each of the madingleyData items from each JSON file
-    for(let index = 0; index < this.madingleyData.length; index++)
-    {
-      // set the bodyData to this madingley index
-      this.bodyData = this.madingleyData[index];
-      for(let index2 = 0; index2 < indexStrings.length; index2++)
-      {
-        if(graphData[index2] === null || graphData[index2] === undefined) 
-        {
-          graphData[index2] = 0; 
-        }
 
-        graphData[index2] += this.bodyData[this.bodyKeys[3]][dataString][indexStrings[index2]];
+      for(let index = 0; index < indexStrings.length; index++)
+      {
+        if(graphData[index] === null || graphData[index] === undefined) 
+        {
+          graphData[index] = 0; 
+        }
+        graphData[index] += this.bodyData[this.bodyKeys[3]][dataString][indexStrings[index]];
       }
-    }
+
 
     // loop to now divide to average each item by the madingley data
     for(let index = 0; index < indexStrings.length; index++)
@@ -446,6 +462,7 @@ export class VisualizeResultsPage implements OnInit {
     this.createCharts(dataString, graphData, indexStrings);
   }
   
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
   initMap(data)
   {
@@ -494,10 +511,10 @@ export class VisualizeResultsPage implements OnInit {
     legend.style.display = "block";
 
     let htmlNeg = document.getElementById('minimum');
-    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" ", this.bodyData["Units"][this.EBVindex]);
+    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" ", this.EBVUnits[this.EBVindex]);
     
     let htmlPos = document.getElementById('maximum');
-    htmlPos.textContent = Math.round(maxPos).toString().concat(" ", this.bodyData["Units"][this.EBVindex]);
+    htmlPos.textContent = Math.round(maxPos).toString().concat(" ", this.EBVUnits[this.EBVindex]);
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -728,7 +745,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData["Units"][this.EBVindex]
+            labelString: this.EBVUnits[this.EBVindex]
           },
           ticks: 
           {
@@ -763,12 +780,12 @@ createCharts(variableName, graphData, graphLabels)
   // creates a pdf object (docDefinition) with all of the items to put in the PDF
   createPDF()
   {
-    const barGraph = this.bars.toBase64Image();
+    //const barGraph = this.bars.toBase64Image();
     const lineGraph = this.line.toBase64Image();
     const docDefinition = 
     {
       // image logoData is 64Base string
-      content: ['Bar Graph', {image: barGraph, width: 500}, 'Line Graph', {image: lineGraph, width: 500}]
+      content: ['Line Graph', {image: lineGraph, width: 500}]
     }
 
     this.pdfObj = pdfMake.createPdf(docDefinition);

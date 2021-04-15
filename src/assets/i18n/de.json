@@ -1,8 +1,109 @@
 {
     "GSPage": 
     {
-        "trans": "Bitte wählen Sie Ihre Sprachpräferenz:",
-        "TITLE": "Wie die Anwendung funktioniert",
-        "TEXT": "..."
+        "trans": "Bitte wählen Sie Ihre bevorzugte Sprache: ",
+        "TITLE": "So funktioniert die Anwendung",
+        "header": "Erste Schritte",
+        "paragraph0": "Biosphere ist eine Anwendung zur Anzeige von Daten, die vom Madingley-Modell über verschiedene Landgebiete erzeugt wurden. Sie ermöglicht sowohl für die Auswahl eines Standorts als auch für die Arten der angezeigten Variablen mehrere Optionen.",
+        "header1": "Auswählen eines Standorts",
+        "paragraph1": "Die Nutzer  können einen Ort auf der Karte mithilfe einer interaktiven Kreisform auswählen, die um die Welt gezogen werden kann. Der Bereich dieses Kreises wird dann verwendet, um Daten für diese spezifische Region anzuzeigen. Die angezeigten Variablen hängen von der Art der Nutzer  ab sowie davon, welche Variablen speziell ausgewählt wurden.",
+        "header2": "Daten visualisieren: Wärmekarte",
+        "paragraph2": "Nach der Auswahl eines Standorts und einer bestimmten anzuzeigenden Variable wird diese Variable auf einer interaktiven Google Wärmekarte angezeigt. Die Karte kann je nach Wunsch der Nutzer  vergrößert, verkleinert oder verschoben werden.",
+        "header3": "Daten visualisieren: Graphen",
+        "paragraph3": "Bei der Visualisierung der Daten werden mehrere Graphen erzeugt, die unterhalb der Wärmekarte, auf der finalen Ergebnisseite, angezeigt werden. Diese Graphen können in eine PDF-Datei exportiert und auf das Gerät der Nutzer  heruntergeladen werden."
+    },
+
+    "aboutpage":
+    {
+        "pageheader": "Ressourcen",
+        "header1": "Über uns",
+        "paragraph1.1": "Biosphere soll einer Vielzahl von Endnutzern  (Wissenschaftlern , politischen Entscheidungsträgern  und allen anderen) modernste wissenschaftliche Erkenntnisse über wichtige Parameter des Zustands von Ökosystemen liefern. Biosphere bietet Essential Biodiversity Variables (EBV, für weitere Informationen, siehe:",
+        "paragraph1.2": "wie sie vom Madingley-Modell in verschiedenen Szenarien simuliert werden. Madingley ist ein globales mechanistisches Modell für Ökosysteme und Biodiversität. Es simuliert Faunenpopulationen entsprechend ihrer treibenden Merkmale, wie beispielsweise der Stoffwechselrate. Um mehr über Madingley zu erfahren, siehe:",
+        "paragraph2": "Die von Biosphere bereitgestellten simulierten Szenarien sind: ",
+        "header2": "Klima:",
+        "paragraph3": "Die simulierten Szenarien folgen den repräsentativen Konzentrationspfaden (RCPs – Representative Concentration Pathway) des Weltklimarats (IPCC – Intergovernmental Panel on Climate Change). Sie repräsentieren unterschiedliche Zunahmen von Treibhausgasen (Green House Gases) in der Atmosphäre als Folge menschlicher Aktivität sowie den damit verbundenen Temperaturanstieg und allgemeinen Klimawandel. Um mehr zu erfahren, siehe: ",
+        "header3": "Landnutzung",
+        "paragraph4": "Die simulierten Szenarien folgen den mehrfach genutzten sozioökonomischen Pfaden (SSPs – Shared Socio-Economic Pathways), die für die Berichte des Weltklimarats (IPCC) entwickelt wurden. Sie stellen dar, wie sich die Landnutzung in Abhängigkeit von menschlicher Aktivität und regulierenden Maßnahmen verändert. Um mehr zu erfahren, siehe:",
+        "header4": "Entwaldung:",
+        "paragraph5": "Die simulierten Szenarien zeigen entweder historische „natürliche“ Wälder oder Wälder, die von der Forstindustrie zur Holzernte bewirtschaftet werden.",
+        "header5": "Trophische Ebenen:",
+        "paragraph6": "Die simulierten Szenarien stellen potenzielle Managementpläne dar. Entweder werden die meisten Spitzenräuber entfernt, um Arten auf Beuteebene zu begünstigen, oder die meisten großen Pflanzenfresser, um die Grasproduktion zu steigern (und damit potenziell die Feuerintensität und -häufigkeit); oder es wird Rewilding angestrebt, d. h. eine Maximierung der Gesamtbiomasse und Vielfalt der Fauna.",
+        "header6": "Aussterben",
+        "paragraph7": "Die simulierten Szenarien repräsentieren Ereignisse des Massenaussterbens in Pleistozän, Holozän und Anthropozän."    
+    },
+
+    "userpage":
+    {
+        "IAM": "Ich bin...",
+        "button1": "Allgemeiner Nutzer",
+        "button2": "Entscheidungsträger",
+        "button3": "Wissenschaftler"
+    },
+
+    "locationpage":
+    {
+        "header1": "Standort:",
+        "button1": "Standort auf einer Karte auswählen",
+        "button2": "Koordinaten manuell eingeben",
+        "button3": "Aktuellen Standort verwenden",
+        "loading": "Laden..."
+    },
+
+    "scenariopage":
+    {
+        "title": "Szenariooptionen",
+        "label1": "Ein Szenario wählen:",
+        "button1": "Klima",
+        "button2": "Landnutzung",
+        "button3": "Entwaldung",
+        "button4": "Trophik",
+        "button5": "Aussterben"
+    },
+
+    "visualpage":
+    {
+        "headbutton1": "Zurück zu Szenariooptionen",
+        "button1": "Alleldiversität (Allelic Diversity)",
+        "button2": "Artendiversität",
+        "button3": "Gemeinsame Abstammungswerte (Co-Ancestry)",
+        "button4": "Genetische Differenzierung",
+        "createbutton": "Als PDF exportieren",
+        "downbutton": "PDF Download",
+        "graph1": "Säulendiagramm",
+        "graph2": "Liniendiagramm",
+        "instruction1": "Beginnen Sie mit der Auswahl eines unserer verfügbaren EBVs",
+        "instruction2": "Sie können dann ein anderes EBV auswählen oder den Schieberegler verwenden, um das EBV im zeitlichen Verlauf anzuzeigen",
+        "instruction3": "Eine grüne Schaltfläche zeigt an, dass die Schaltfläche ausgewählt/gedrückt wurde",
+        "instruction4": "Verwenden Sie die Schaltfläche „Deckkraft ändern“, um die Transparenz auf der Wärmekarte zu aktivieren/deaktivieren",
+        "instruction5": "Verwenden Sie die Schaltfläche „PDF generieren“, um eine PDF der unten angezeigten Diagramme zu erstellen",
+        "instruction6": "Verwenden Sie die Schaltfläche „PDF Download, um ein PDF herunterzuladen der unten angezeigten Diagramme zu erstellen",
+        "opacityButton": "Deckkraft ändern",
+        "note1": "Zeigt automatisch Alleldiversität (Allelic Diversity) an, bis ein anderes EBV ausgewählt wird",
+        "note2": "Die hier gezeigten Ergebnisse stellen keine realistischen Daten dar, die vom Madingley-Modell erzeugt wurden"
+    },
+
+    "contactpage":
+    {
+        "paragraph1": "Biosphere wurde an der NAU (Northern Arizona University) entwickelt von:",
+        "developer": "Entwicklung: ",
+        "sponsor": "Projektleitung:",
+        "assistant": "Projektassistenz",
+        "supervisor": "Betreuung:",
+        "paragraph2": "Förderung:"
+    },
+
+    "mappage":
+    {
+        "map": "Karte"
+    },
+
+    "manualpage":
+    {
+        "title": "Manuelle Eingabe von Koordinaten und Radius",
+        "label1": "Breitengrad eingeben:",
+        "label2": "Längengrad eingeben:",
+        "label3": "Radius des Kreises eingeben (in Kilometern):",
+        "paragraph1": "Um die besten Ergebnisse zu erzielen, empfehlen wir einen Radius zwischen 300.000 und 800.000 Metern",
+        "button1": "Koordinaten senden"
     }
 }
