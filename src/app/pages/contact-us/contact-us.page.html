@@ -3,54 +3,56 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Contacts</ion-title>
+    <ion-title>Contact Us</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class = "ion-margin">
-    <h2>{{ 'contactpage.paragraph1' | translate }}</h2>
+  <div class="ion-margin">
+    <img id="logo" src='/assets/icon/TeamBanner.jpg'/>
     <br>
-    <img id="logo" src='/assets/icon/LOGO.png'/>
-    <br>
-    
-    <p>{{ 'contactpage.developer' | translate }}</p>
-    <ul>
-      <li>Kainoa Boyce</li>
-      <li>McKenna Chun</li>
-      <li>Gregory Geary</li>
-      <li>Wesley Smythe</li>
-    </ul>
-    
-    <br>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-float-left">
+          <div>
+      <form (ngSubmit)="sendForm()">
 
-    <p>{{ 'contactpage.sponsor' | translate }}</p>
-    <ul>
-      <li>Christopher Doughty</li>
-    </ul>
 
-    <br>
+        <ion-item class="field">
+          <ion-input type="text" name="name" [(ngModel)]="name" placeholder="Your Name " required></ion-input>
+        </ion-item>
 
-    <p>{{ 'contactpage.assistant' | translate }}</p>
-    <ul>
-      <li>Camille Gaillard</li>
-    </ul>
+        <ion-item class="field">
+          <ion-input type="email" name="email" [(ngModel)]="email" class="input" placeholder="Your Email" required email></ion-input>
+        </ion-item>
 
-    <br>
-    
-    <p>{{ 'contactpage.supervisor' | translate }}</p>
-    <ul>
-      <li>Andrew John Abraham</li>
-    </ul>
-
-    <br>
-    
-    <p>{{ 'contactpage.paragraph2' | translate }}</p>
-    <ul>
-      <li>Capstone</li>
-      <li>Megabiota Lab</li>
-      <li>Northern Arizona University</li>
-    </ul>
-  </div>
+        <ion-item class="field">
+          <ion-textarea class="textarea" name="message" [(ngModel)]="message" placeholder="Your Message" required></ion-textarea>
+        </ion-item>
+        <br>
+        <br>
+        <button type="submit" class="submit">Submit</button>
+      </form>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <img id="flagstaff" src="/assets/icon/FlagstaffMap.png">
+        </ion-col>
+        <ion-col id="information">
+          <p id="title">Biosphere</p>
+          <br>
+          <h4 id="location">Location</h4>
+          <br>
+          <div>Northern Arizona University</div>
+          <div>Flagstaff, Arizona</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </div>
   
 </ion-content>
+
+
+

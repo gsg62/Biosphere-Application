@@ -10,27 +10,32 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public selectedIndex = 1;
+  public selectedIndex = 0;
   public appPages = [
-    {
-      title: 'Simulation',
-      url: 'user-options',
-      icon: 'globe'
-    },
     {
       title: 'Getting Started',
       url: 'getting-started',
       icon: 'rocket'
-    },    
+    },
+    {
+      title: '*SIMULATION*',
+      url: 'user-options',
+      icon: 'globe'
+    },
     {
       title: 'Contact Us',
       url: 'contact-us',
       icon: 'mail'
     },
     {
-      title: 'About',
+      title: 'Resources',
       url: 'about',
       icon: 'help'
+    },
+    {
+      title: 'About Biopshere',
+      url: 'about-team',
+      icon: 'people'
     },
   ];
 

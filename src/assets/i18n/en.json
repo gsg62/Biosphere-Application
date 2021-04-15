@@ -15,7 +15,8 @@
 
     "aboutpage":
     {
-        "header1": "About",
+        "pageheader": "Resources",
+        "header1": "About App Components",
         "paragraph1.1": "Biosphere is intended to provide a diversity of end users (scientists, policy makers and anyone else) with cutting edge scientific insights about key ecosystems state parameters. Biosphere  provides Essential Biodiversity Variables (EBV, for more information, see:",
         "paragraph1.2": "As simulated by the Madingley model according to different scenarios. Madingley is a global mechanistic model of ecosystems and biodiversity. It simulates fauna populations according to their driving traits, such as metabolic rate. To learn more about madingley, see:",
         "paragraph2": "The simulated scenarios provided by Biosphere are: ",
@@ -75,10 +76,10 @@
     "contactpage":
     {
         "paragraph1": "Biosphere was developed at NAU (Northern Arizona University) by:",
-        "developer": "Developers: ",
-        "sponsor": "Project Leader:",
+        "developer": "Developer ",
+        "sponsor": "Project Leader",
         "assistant": "Project Assistant",
-        "supervisor": "Supervisor:",
+        "supervisor": "Supervisor",
         "paragraph2": "Funded by:"
     },
 

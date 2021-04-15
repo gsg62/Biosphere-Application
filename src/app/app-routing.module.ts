@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'manual-coords',
     loadChildren: () => import('./pages/manual-coords/manual-coords.module').then(m => m.ManualCoordsPageModule)
-  }
+  },
+  {
+    path: 'about-team',
+    loadChildren: () => import('./about-team/about-team.module').then( m => m.AboutTeamPageModule)
+  },
 ];
 
 @NgModule({
