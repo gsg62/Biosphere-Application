@@ -1,20 +1,21 @@
 {
     "GSPage": 
     {
-        "trans": "Veuillez sélectionner votre préférence de langue:",
+        "trans": "Choisissez votre langue:",
         "TITLE": "Comment fonctionne l'application",
         "header": "Commencer",
-        "paragraph0": "Biosphere est une application utilisée pour afficher les données générées par le modèle Madingley sur différentes zones de terrain. Il permet plusieurs options pour sélectionner un emplacement, ainsi que les types de variables affichés.",
+        "paragraph0": "Biosphere est une application utilisée pour afficher les données générées par le modèle Madingley sur différentes zones. Il permet plusieurs options pour sélectionner un emplacement, ainsi que les types de variables affichés.",
         "header1": "Sélection d'un emplacement",
         "paragraph1": "L'utilisateur peut sélectionner un emplacement sur la carte à l'aide d'une forme de cercle interactif qui peut être déplacée dans le monde entier. La zone de ce cercle est ensuite utilisée pour afficher les données de cette région spécifique. Les variables affichées dépendent du type d'utilisateur, ainsi que des variables spécifiquement choisies.",
-        "header2": "Visualisation des données: Carte de la chaleur",
-        "paragraph2": "Après avoir sélectionné un emplacement et une variable spécifique à afficher, l'utilisateur est capable de voir cette variable sur une carte de chaleur Google interactive. Cette carte peut également être zoomée sur la préférence des utilisateurs.",
+        "header2": "Visualisation des données: Carte de valeurs ",
+        "paragraph2": "Après avoir sélectionné un emplacement et une variable spécifique à afficher, l'utilisateur est capable de voir cette variable sur une carte de valeurs Google interactive. Cette carte peut également être zoomée selon la préférence des utilisateurs.",
         "header3": "Visualisation des données: graphiques",
-        "paragraph3": "Plusieurs graphiques sont également générés dans le processus de visualisation des données et sont affichés sous la feuille de chaleur de la page de résultats finale. Ces graphiques sont capables d'être exportés vers un fichier PDF et de télécharger sur l'appareil de l'utilisateur."
+        "paragraph3": "Plusieurs graphiques sont également générés dans le processus de visualisation des données et sont affichés sous la carte de valeurs de la page finale de résultats. Ces graphiques sont capables d'être exportés vers un fichier PDF et téléchargés sur l'appareil de l'utilisateur."
     },
 
     "aboutpage":
     {
+        "pageheader": "Ressources",
         "header1": "A propos",
         "paragraph1.1": "Biosphere est une application fournissant à ses divers utilisateurs (chercheurs, législateurs et autres) des informations scientifiques de haut niveau relatives a des paramètres clés des états des ecosystèmes. Biosphere renseigne les “Essential Biodiversity Variables” (EBV, “Variables Essentielles de la Biodiversité”, Pour en savoir plus, voir:",
         "paragraph1.2": "Tels que simulés par le modèle Madingley selon différents scénarios. Madingley est un modèle mécanistique global simulant les écosystèmes et la biodiversité. Il simule le spopulations de faune selon leurs traits représentatifs majeurs, tel que le métabolisme de base. Pour en savoir plus sur Madingley, voir: ",
@@ -69,7 +70,16 @@
         "createbutton": "Exporter au format PDF",
         "downbutton": "Télécharger un PDF",
         "graph1": "Diagramme à barres",
-        "graph2": "Courbe de relation"
+        "graph2": "Courbe de relation",
+        "instruction1": "Choisissez une EBV disponible",
+        "instruction2": "Vous pouvez ensuite choisir une EBV différente ou utiliser le curseur pour visualiser l’EBV à travers le temps",
+        "instruction3": "Un boutton vert indique que ce bouton a été sélectionné",
+        "instruction4": "Utilisez le bouton “Changer l’opacité” pour activer/désactiver la transparence de la carte de valeurs",
+        "instruction5": "Utilisez le bouton “Générer un PDF” pour créer un PDF des graphiques ci dessous.",
+        "instruction6": "Utilisez le bouton “Télécharger un PDF” pour télécharger un PDF des graphiques ci dessous.",
+        "opacityButton": "Changer l’opacité",
+        "note1": "Présente automatiquement la “diversité allélique” jusqu’à ce qu’une autre EBV soit sélectionnée",
+        "note2": "Les résultats présentés ici ne sont pas indicatifs de données réalistes telles que générées par le modèle Madingley"
     },
 
     "contactpage":
