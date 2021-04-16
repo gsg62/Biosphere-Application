@@ -117,8 +117,8 @@ export class VisualizeResultsPage implements OnInit {
 
     ////////////////// constants for double onion algo /////////////////////
     radiusIncrement = 400000; 
-    numberOfFiles = 22;
     fileIncrement = 3;
+    numberOfFiles = 22;
 
   
   constructor(
@@ -143,9 +143,6 @@ export class VisualizeResultsPage implements OnInit {
       }
     });
   }
-
-  // keep for testing purposes
-  logData(){console.log("data from API: ", this.madingleyData);}
 
   ngOnInit()
   {
@@ -173,9 +170,9 @@ export class VisualizeResultsPage implements OnInit {
     const startTime = Date.now();
     console.log("requestArray: ", this.requestArray);
 
-    // calculate wait time 
+    // calculate wait time - estimate based off of what was closest to actual wait times
     const waitTime = 20 + (this.getMaxFiles() / this.fileIncrement) * 
-      (this.scenarioData.radius / this.radiusIncrement ) + this.requestArray.length;
+      (this.scenarioData.radius / this.radiusIncrement ) + this.requestArray.length * 1.7;
     
     // start loading indicator
     const loading = await this.loadingController.create({

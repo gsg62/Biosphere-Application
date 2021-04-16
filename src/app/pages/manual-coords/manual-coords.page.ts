@@ -20,7 +20,6 @@ export class ManualCoordsPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
-        console.log("scenrioData from manual-coords: ", this.scenarioData);
       }
     });
     this.location = new FormGroup({

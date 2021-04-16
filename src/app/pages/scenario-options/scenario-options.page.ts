@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { disabled } from "./disabledScenarios";
@@ -10,28 +9,37 @@ import { IntensityModalComponent } from "../../modals/intensity-modal/intensity-
   templateUrl: './scenario-options.page.html',
   styleUrls: ['./scenario-options.page.scss'],
 })
-export class ScenarioOptionsPage {
+export class ScenarioOptionsPage implements OnInit {
 
   scenarioData: any;
 
+  disableClimate = false;
+  disableLanduse = false;
+  disableDeforestation = false;
+  disableTropic = false;
+  disableExtinctions = false;
+  
+
+
   constructor(
-    private navCtrl: NavController,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
     private router: Router) {
       this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.scenarioData = this.router.getCurrentNavigation().extras.state.scenarioData;
-        console.log("scenarioData from scenario-options: ", this.scenarioData);
       }
     });
    }
 
+   ngOnInit() {
+    this.disableButtons();
+  }
+
   private async setScenario(scenarioType: string) {
     let modal;
     // check if scenariotype is disabled
-    console.log('disabled: ', disabled);
-    if(!disabled.includes(scenarioType)) {
+    // if(!disabled.includes(scenarioType)) {
       switch (scenarioType) {
         case 'CLIMATE':
           modal = await this.modalCtrl.create({
@@ -87,12 +95,25 @@ export class ScenarioOptionsPage {
         default:
           console.error(scenarioType + 'is not a valid scenario');
           break;
+    }
+    return await modal.present();  
+
+    // else {
+    //   alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
+    // }
+  }
+
+
+  private disableButtons() {
+    disabled.forEach(element => {
+      switch (element) {
+        case 'CLIMATE': this.disableClimate = true; break;
+        case 'LANDUSE': this.disableLanduse = true; break;
+        case 'DEFORESTATION': this.disableDeforestation = true; break;
+        case 'TROPIC': this.disableTropic = true; break;
+        case 'EXTINCTIONS': this.disableExtinctions = true; break;
       }
-      return await modal.present();  
-    }
-    else {
-      alert("We are currently still working on obatining the data required for this scenario. Please select a different Scenario to run");
-    }
+    });
   }
 }
 

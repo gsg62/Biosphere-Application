@@ -9,16 +9,19 @@
 
 <ion-content padding display="block">
   <br>
+  <br>
+  <ion-note padding>Some buttons may be disabled due to lack of data.</ion-note>
+  <br>
   <ion-label color="dark">{{ 'scenariopage.label1' | translate }}</ion-label>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('CLIMATE')">{{ 'scenariopage.button1' | translate }}</ion-button>
+  <ion-button [disabled]="disableClimate" size="medium" fill="outline" (click)="setScenario('CLIMATE')">{{ 'scenariopage.button1' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('LANDUSE')">{{ 'scenariopage.button2' | translate }}</ion-button>
+  <ion-button [disabled]="disableLanduse" size="medium" fill="outline" (click)="setScenario('LANDUSE')">{{ 'scenariopage.button2' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('DEFORESTATION')">{{ 'scenariopage.button3' | translate }}</ion-button>
+  <ion-button [disabled]="disableDeforestation" size="medium" fill="outline" (click)="setScenario('DEFORESTATION')">{{ 'scenariopage.button3' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('TROPIC')">{{ 'scenariopage.button4' | translate }}</ion-button>
+  <ion-button [disabled]="disableTropic" size="medium" fill="outline" (click)="setScenario('TROPIC')">{{ 'scenariopage.button4' | translate }}</ion-button>
   <br>
-  <ion-button size="medium" fill="outline" (click)="setScenario('EXTINCTIONS')">{{ 'scenariopage.button5' | translate }}</ion-button>
+  <ion-button [disabled]="disableExtinctions" size="medium" fill="outline" (click)="setScenario('EXTINCTIONS')">{{ 'scenariopage.button5' | translate }}</ion-button>
   <br>
 </ion-content>

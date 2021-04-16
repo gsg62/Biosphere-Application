@@ -8,13 +8,16 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button size="large" fill="outline" class="button" (click)="setUser('public')">
+  <br>
+  <ion-note padding>Some buttons may be disabled due to lack of data.</ion-note>
+  <br>
+  <ion-button [disabled]="disableGeneral" size="large" fill="outline" class="button" (click)="setUser('public')">
     {{ 'userpage.button1' | translate }}
   </ion-button>
-  <ion-button size="large" fill="outline" class="button" (click)="setUser('policy_maker')">
+  <ion-button [disabled]="disablePolicy" size="large" fill="outline" class="button" (click)="setUser('policy_maker')">
     {{ 'userpage.button2' | translate }}
   </ion-button>
-  <ion-button size="large" fill="outline" class="button" (click)="setUser('scientist')">
+  <ion-button [disabled]="disableScientist" size="large" fill="outline" class="button" (click)="setUser('scientist')">
     {{ 'userpage.button3' | translate }}
   </ion-button>
 </ion-content>

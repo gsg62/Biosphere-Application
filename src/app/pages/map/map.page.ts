@@ -64,9 +64,6 @@ export class MapPage implements OnInit {
 
     // Setup the click event listeners: user submits location.
     submitUI.addEventListener('click', () => {
-      console.log("lat: ", this.areaOfInterest.getCenter().lat());
-      console.log("long: ", this.areaOfInterest.getCenter().lng());
-      console.log("radius: ", this.areaOfInterest.radius);
       let navigationExtras: NavigationExtras = {
         state: {
           scenarioData: {

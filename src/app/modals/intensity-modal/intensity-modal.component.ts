@@ -44,8 +44,6 @@ export class IntensityModalComponent implements OnInit {
       this.deforestation = true;
     }
     else {
-      console.log("scenarioData from modal: ", this.scenarioData);
-
       // pass scenario values and navigate to visualize results page
       let navigationExtras: NavigationExtras = {
         state: {
@@ -62,8 +60,6 @@ export class IntensityModalComponent implements OnInit {
           }
         }
       };
-
-      console.log("data to visualize results: ", navigationExtras);
 
       // pass scenario data to visualize results page via neavigation extras
       await this.router.navigate(['visualize-results'], navigationExtras);
