@@ -184,7 +184,7 @@ export class VisualizeResultsPage implements OnInit {
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
       message: 'Loading Madingley Data...\nApproximate loading time: ' 
-                + waitTime.toString() + ' seconds',
+                + Math.round(waitTime).toString() + ' seconds',
     });
     await loading.present();
 
@@ -228,30 +228,87 @@ export class VisualizeResultsPage implements OnInit {
         alert("One or more of the API requests has timed out");
       }
       // otherwise save results to proper format
-      else {        
+      else 
+      {
         this.resultsFetched = true;
         var indexCounter = 0;
-        for(let index = 0; index < this.madingleyData.length; index++)
+
+        var coordsCopied = false;
+        // GO THROUGH EACH REQUEST
+        for(let madingleyIndex = 0; madingleyIndex < this.madingleyData.length; madingleyIndex++)
         {
-          for(let EBVIndex = 3; EBVIndex < this.madingleyData[index]["Keys"].length; EBVIndex++)
-          {
-            this.EBVList.push({name: this.madingleyData[index]["Keys"][EBVIndex], index: indexCounter});
-            this.requestIndexDict[indexCounter] = index;
-            this.buttonIndexDict[indexCounter] = this.madingleyData[index]["Keys"][EBVIndex];
-            indexCounter++;
-          }
+          var isDuplicate = false;
+          coordsCopied = false;
+          // check each request's keys for any non-latitude/longitude (EBV)keys
 
-          for(let EBVKey in this.madingleyData[index]["Raw"])
+          // GO THROUGH EACH KEY OF EACH REQUEST
+          for(let EBVIndex = 3; EBVIndex < this.madingleyData[madingleyIndex]["Keys"].length; EBVIndex++)
           {
-            if(EBVKey != "Longitude" && EBVKey != "Latitude" && EBVKey != "Years since 1900")
+            // searches EBV list for any duplicates
+            // LOOPS THROUGH EBVList
+            for (let EBVListIndex = 0; EBVListIndex < this.EBVList.length; EBVListIndex++)
             {
-              this.totalData.push(this.madingleyData[index]["Raw"][EBVKey]);
+              // NOT DUPLICATE OF ITS OWN INDEX AND DUPLICATE OF ONE EBV DETECTED
+              if(this.EBVList[EBVListIndex]["name"] == this.madingleyData[madingleyIndex]["Keys"][EBVIndex])
+              {
+
+                isDuplicate = true;/*
+                console.log("EBV compared:", this.EBVList[EBVListIndex]["name"], this.madingleyData[madingleyIndex]["Keys"][EBVIndex]);
+                console.log("BUTTON INDEX", this.requestIndexDict[EBVListIndex]);
+                console.log("DUPE INDEX", madingleyIndex);
+                console.log("button one", this.madingleyData[EBVListIndex]["Heat Map"]);
+                console.log("dupe one", this.madingleyData[madingleyIndex]["Heat Map"]);
+                console.log("------------------------------");*/
+
+                var EBVName = this.EBVList[EBVListIndex]["name"];
+                var heatMapKeys = Object.keys(this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"]);
+
+                // FOR 0.0 --> 20.0 HEATMAP VALUES
+                for(let heatMapIndex = 0; heatMapIndex < heatMapKeys.length; heatMapIndex++)
+                {
+                  // FOR EACH EBV VALUE IN HEATMAP
+                  for(let innerIndex = 0; innerIndex < this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].length; innerIndex++)
+                  {
+                    this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].push
+                    (
+                      this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName][innerIndex]
+                    );
+
+                    if(coordsCopied == false)
+                    {
+                      this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"].push
+                      (
+                        this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"][innerIndex]
+                      );
+        
+                      this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"].push
+                      (
+                        this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"][innerIndex]
+                      );
+                    }
+                  }
+                }
+
+                //console.log("total", this.madingleyData[this.requestIndexDict[EBVListIndex]]);
+                //console.log("added", this.madingleyData[madingleyIndex]);
+              } 
             }
+
+            if(isDuplicate == false)
+            {
+              this.EBVList.push({name: this.madingleyData[madingleyIndex]["Keys"][EBVIndex], index: indexCounter});
+              this.requestIndexDict[indexCounter] = madingleyIndex;
+              this.buttonIndexDict[indexCounter] = this.madingleyData[madingleyIndex]["Keys"][EBVIndex];
+              indexCounter++;
+              //console.log("The List", this.EBVList);
+            }
+            coordsCopied = true;
           }
 
-          for(let unitindex = 3; unitindex < this.madingleyData[index]["Units"].length; unitindex++)
+          // sets the Units into the list, does not touch the raw data
+          for(let unitindex = 3; unitindex < this.madingleyData[madingleyIndex]["Units"].length; unitindex++)
           {
-            this.EBVUnits.push(this.madingleyData[index]["Units"][unitindex]);
+            this.EBVUnits.push(this.madingleyData[madingleyIndex]["Units"][unitindex]);
           }
         }
       }
@@ -388,8 +445,9 @@ export class VisualizeResultsPage implements OnInit {
     this.EBVindex = buttonNumber;
 
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
-    this.bodyKeys = Object.keys(this.bodyData); 
-    console.log("bodyKeys", this.bodyKeys)
+    this.bodyKeys = Object.keys(this.bodyData);
+    console.log(this.bodyData);
+    //console.log("bodyKeys", this.bodyKeys)
 
     this.latitudeValues = [];
     this.longitudeValues = [];
@@ -412,7 +470,7 @@ export class VisualizeResultsPage implements OnInit {
     // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
 
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
-    console.log("the bodydata", this.bodyData)
+    //console.log("the bodydata", this.bodyData)
 
     for(let index=0; index < this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString].length; index++)
     {
@@ -432,7 +490,7 @@ export class VisualizeResultsPage implements OnInit {
     // bodyData -> timeSeries -> the dataString
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
     var indexStrings = Object.keys(this.bodyData[this.bodyKeys[3]][dataString]);
-    console.log(indexStrings)
+    //console.log(indexStrings)
     var graphData = [];
 
     // loop through each of the madingleyData items from each JSON file
