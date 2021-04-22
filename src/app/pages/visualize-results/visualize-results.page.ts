@@ -63,6 +63,8 @@ export class VisualizeResultsPage implements OnInit {
   EBVUnits = [];
   requestIndexDict = {};
   buttonIndexDict = {};
+  globalGraphData = [];
+  timeFrame = [];
 
   heatMapInput = 
   [ 
@@ -94,6 +96,8 @@ export class VisualizeResultsPage implements OnInit {
   map: any;
   scenarioData: any;
   requestNumber: any;
+  globalCurrentUnit: any;
+  totalYears: any;
 
   pdfObj = null;
   banner = null;
@@ -183,8 +187,10 @@ export class VisualizeResultsPage implements OnInit {
     // start loading indicator
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
-      message: 'Loading Madingley Data...\nApproximate loading time: ' 
-                + Math.round(waitTime).toString() + ' seconds',
+      message: 'Loading Madingley Data...\nApproximate loading time:\n' 
+                //+ Math.round(waitTime).toString() 
+                + "20 - 30"
+                + ' seconds',
     });
     await loading.present();
 
@@ -231,78 +237,111 @@ export class VisualizeResultsPage implements OnInit {
       else 
       {
         this.resultsFetched = true;
-        var indexCounter = 0;
+        let indexCounter = 0;
 
-        var coordsCopied = false;
+        let coordsCopied = false;
         // GO THROUGH EACH REQUEST
         for(let madingleyIndex = 0; madingleyIndex < this.madingleyData.length; madingleyIndex++)
         {
-          var isDuplicate = false;
+          let isDuplicate = false;
           coordsCopied = false;
           // check each request's keys for any non-latitude/longitude (EBV)keys
 
           // GO THROUGH EACH KEY OF EACH REQUEST
           for(let EBVIndex = 3; EBVIndex < this.madingleyData[madingleyIndex]["Keys"].length; EBVIndex++)
           {
-            // searches EBV list for any duplicates
-            // LOOPS THROUGH EBVList
+            isDuplicate = false;
+            let duplicateIndex = 0;
+            // Loop through the currently established EBV List to check for duplicates
             for (let EBVListIndex = 0; EBVListIndex < this.EBVList.length; EBVListIndex++)
             {
-              // NOT DUPLICATE OF ITS OWN INDEX AND DUPLICATE OF ONE EBV DETECTED
+              // Check if the current EBV is a duplicate
               if(this.EBVList[EBVListIndex]["name"] == this.madingleyData[madingleyIndex]["Keys"][EBVIndex])
               {
-
-                isDuplicate = true;/*
-                console.log("EBV compared:", this.EBVList[EBVListIndex]["name"], this.madingleyData[madingleyIndex]["Keys"][EBVIndex]);
-                console.log("BUTTON INDEX", this.requestIndexDict[EBVListIndex]);
-                console.log("DUPE INDEX", madingleyIndex);
-                console.log("button one", this.madingleyData[EBVListIndex]["Heat Map"]);
-                console.log("dupe one", this.madingleyData[madingleyIndex]["Heat Map"]);
-                console.log("------------------------------");*/
-
-                var EBVName = this.EBVList[EBVListIndex]["name"];
-                var heatMapKeys = Object.keys(this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"]);
-
-                // FOR 0.0 --> 20.0 HEATMAP VALUES
-                for(let heatMapIndex = 0; heatMapIndex < heatMapKeys.length; heatMapIndex++)
-                {
-                  // FOR EACH EBV VALUE IN HEATMAP
-                  for(let innerIndex = 0; innerIndex < this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].length; innerIndex++)
-                  {
-                    this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].push
-                    (
-                      this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName][innerIndex]
-                    );
-
-                    if(coordsCopied == false)
-                    {
-                      this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"].push
-                      (
-                        this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"][innerIndex]
-                      );
-        
-                      this.madingleyData[this.requestIndexDict[EBVListIndex]]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"].push
-                      (
-                        this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"][innerIndex]
-                      );
-                    }
-                  }
-                }
-
-                //console.log("total", this.madingleyData[this.requestIndexDict[EBVListIndex]]);
-                //console.log("added", this.madingleyData[madingleyIndex]);
-              } 
+                //console.log(this.EBVList[EBVListIndex]["name"], " vs ", this.madingleyData[madingleyIndex]["Keys"][EBVIndex])
+                isDuplicate = true;
+                duplicateIndex = EBVListIndex;
+              }
             }
 
+            // is not a duplicate EBV, original one found in requests array
             if(isDuplicate == false)
             {
-              this.EBVList.push({name: this.madingleyData[madingleyIndex]["Keys"][EBVIndex], index: indexCounter});
+              let EBVName = this.madingleyData[madingleyIndex]["Keys"][EBVIndex];
+              let heatMapKeys = Object.keys(this.madingleyData[madingleyIndex]["Heat Map"]);
+
+              let heatData = [];
+
+              // create heatmap for the EBV List element
+              for(let heatMapIndex = 0; heatMapIndex < heatMapKeys.length; heatMapIndex++)
+              {
+                let latitude = [];
+                let longitude = [];
+                let values = [];
+                for(let tempIndex = 0; tempIndex < this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].length; tempIndex++)
+                {
+                  latitude.push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"][tempIndex]);
+                  longitude.push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"][tempIndex]);
+                  values.push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName][tempIndex]);
+                }
+                let heatYear = [latitude, longitude, values];
+                heatData.push(heatYear);
+              }
+
+              // create timeSeries for the EBV List element
+              let timeSeriesKeys = Object.keys(this.madingleyData[madingleyIndex]["Time Series"][EBVName]);
+              let timeSeriesList = [];
+              for(let timeSeriesIndex = 0; timeSeriesIndex < timeSeriesKeys.length; timeSeriesIndex++)
+              {
+                timeSeriesList.push(this.madingleyData[madingleyIndex]["Time Series"][EBVName][timeSeriesKeys[timeSeriesIndex]]);
+              }
+              
+              // create the new item in the EBVList
+              this.EBVList.push({name: this.madingleyData[madingleyIndex]["Keys"][EBVIndex],
+                                 index: indexCounter,
+                                 heatmap: heatData,
+                                 units: this.madingleyData[madingleyIndex]["Units"][EBVIndex],
+                                 series: timeSeriesList,
+                                 requestsFound: 1
+                                });
               this.requestIndexDict[indexCounter] = madingleyIndex;
               this.buttonIndexDict[indexCounter] = this.madingleyData[madingleyIndex]["Keys"][EBVIndex];
-              indexCounter++;
-              //console.log("The List", this.EBVList);
+              indexCounter++; 
             }
-            coordsCopied = true;
+
+            // does not exist in the ebv list yet
+            else if(isDuplicate == true)
+            {
+              let heatMapKeys = Object.keys(this.madingleyData[madingleyIndex]["Heat Map"]);
+              let EBVName = this.madingleyData[madingleyIndex]["Keys"][EBVIndex];
+
+              // go through each heatmap time period (0 -> 12? 20?)
+              for(let heatMapIndex = 0; heatMapIndex < heatMapKeys.length; heatMapIndex++)
+              {
+                // manually push each item from the madingley structure to the list format, for some reason I had it equal to the arrays themselves
+                // and it registered the variable as a pointer to the madingley structure, so no more of that
+                for(let innerIndex = 0; innerIndex < this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName].length; innerIndex++)
+                {
+                  this.EBVList[duplicateIndex]["heatmap"][heatMapIndex][0].push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Latitude"][innerIndex]);
+                  this.EBVList[duplicateIndex]["heatmap"][heatMapIndex][1].push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]]["Longitude"][innerIndex]);
+                  this.EBVList[duplicateIndex]["heatmap"][heatMapIndex][2].push(this.madingleyData[madingleyIndex]["Heat Map"][heatMapKeys[heatMapIndex]][EBVName][innerIndex]);
+                }
+              }
+
+              // sum up all of the timeseries values of this new duplicate found in the requests
+              let timeSeriesKeys = Object.keys(this.madingleyData[madingleyIndex]["Time Series"][EBVName]);
+              let timeSeriesList = [];
+
+              this.totalYears = timeSeriesKeys.length-1;
+              
+              // increment the requestsFound since this is one additional request found with that specific EBV
+              this.EBVList[duplicateIndex]["requestsFound"] += 1;
+
+              for(let timeSeriesIndex = 0; timeSeriesIndex < timeSeriesKeys.length; timeSeriesIndex++)
+              {
+                this.EBVList[duplicateIndex]["series"][timeSeriesIndex] += this.madingleyData[madingleyIndex]["Time Series"][EBVName][timeSeriesKeys[timeSeriesIndex]];
+              }
+            }
           }
 
           // sets the Units into the list, does not touch the raw data
@@ -312,6 +351,7 @@ export class VisualizeResultsPage implements OnInit {
           }
         }
       }
+      
     });
   }
 
@@ -379,7 +419,7 @@ export class VisualizeResultsPage implements OnInit {
     switch (this.scenarioData.userType) {
       case 'public': return 4;        
       case 'policy_maker': return 10;
-      case 'scientist': return 20;
+      case 'scientist': return 19;
     }
   }
 
@@ -442,11 +482,13 @@ export class VisualizeResultsPage implements OnInit {
 
   getValues(buttonNumber, timePeriod)
   {
+    //console.log(this.EBVList);
     this.EBVindex = buttonNumber;
-
+    var InttimePeriod: number = +timePeriod;
+    
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
     this.bodyKeys = Object.keys(this.bodyData);
-    console.log(this.bodyData);
+    //console.log(this.bodyData);
     //console.log("bodyKeys", this.bodyKeys)
 
     this.latitudeValues = [];
@@ -455,8 +497,8 @@ export class VisualizeResultsPage implements OnInit {
 
     // this.bodyKeys[0] is = "Keys"
     var EBVKeys = this.bodyData[this.bodyKeys[0]];
-    var latitudeString = EBVKeys[0];
-    var longitudeString = EBVKeys[1];
+    //var latitudeString = EBVKeys[0];
+    //var longitudeString = EBVKeys[1];
     var dataString = this.buttonIndexDict[buttonNumber]//EBVKeys[buttonNumber+3];
     console.log("Button Number", buttonNumber);
     console.log("DataString", dataString);
@@ -470,14 +512,12 @@ export class VisualizeResultsPage implements OnInit {
     // timePeriod is = One Heat Map Value, ranges from ["0.0" -> "20.0"]
 
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
-    //console.log("the bodydata", this.bodyData)
+    //console.log(this.EBVList);
+    //console.log(InttimePeriod);
 
-    for(let index=0; index < this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString].length; index++)
-    {
-      this.latitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][latitudeString][index]);
-      this.longitudeValues.push(this.bodyData[this.bodyKeys[4]][timePeriod][longitudeString][index]);
-      heatData.push(this.bodyData[this.bodyKeys[4]][timePeriod][dataString][index]);
-    }
+    this.latitudeValues = this.EBVList[this.EBVindex]["heatmap"][InttimePeriod][0];
+    this.longitudeValues = this.EBVList[this.EBVindex]["heatmap"][InttimePeriod][1];
+    heatData = this.EBVList[this.EBVindex]["heatmap"][InttimePeriod][2];
 
     if(this.chartsCreated)
     {
@@ -491,25 +531,34 @@ export class VisualizeResultsPage implements OnInit {
     this.bodyData = this.madingleyData[this.requestIndexDict[buttonNumber]];
     var indexStrings = Object.keys(this.bodyData[this.bodyKeys[3]][dataString]);
     //console.log(indexStrings)
-    var graphData = [];
+    let graphData = this.EBVList[this.EBVindex]["series"];
+    let requests = this.EBVList[this.EBVindex]["requestsFound"];
+    //console.log("GRAPH DATA", graphData);
+    //console.log("REQUESTS FOUND", this.EBVList[this.EBVindex]["requestsFound"]);
 
-    // loop through each of the madingleyData items from each JSON file
-
-      for(let index = 0; index < indexStrings.length; index++)
-      {
-        if(graphData[index] === null || graphData[index] === undefined) 
-        {
-          graphData[index] = 0; 
-        }
-        graphData[index] += this.bodyData[this.bodyKeys[3]][dataString][indexStrings[index]];
-      }
-
-
-    // loop to now divide to average each item by the madingley data
-    for(let index = 0; index < indexStrings.length; index++)
+    console.log(this.EBVList);
+    // averaging the graph data using the amount of requests stored in each EBVList value
+    for(let index = 0; index < graphData.length; index++)
     {
-      graphData[index] = graphData[index]/this.madingleyData.length;
+      graphData[index] = graphData[index]/requests;
     }
+
+    this.globalGraphData = [];
+
+    // setting up the table
+    this.timeFrame = Object.keys(graphData);
+    for(let index = 0; index < this.timeFrame.length; index++)
+    {
+      let timeNum: number = +this.timeFrame[index];
+      timeNum = timeNum*5;
+      this.timeFrame[index] = timeNum;
+      this.globalGraphData.push({time: timeNum, value: graphData[index]});
+    }
+
+    this.globalCurrentUnit = this.EBVList[this.EBVindex]["units"];
+    
+
+    //console.log("NEW GRAPH DATA", graphData);
 
     // dataString = the EBV string name
     // graphData = [Averaged EBV Values]
@@ -533,43 +582,86 @@ export class VisualizeResultsPage implements OnInit {
     // getting median, is more accurate than average
     latitudeMedian = heatMapLats[Math.round((heatMapLats.length-1)/2)];
     longitudeMedian = heatMapLongs[Math.round((heatMapLongs.length-1)/2)];
-    var maxNeg = 0;
-    var maxPos = 0;
+    var maxNeg = heatMapValues[0];
+    var maxPos = heatMapValues[0];
+
+    // start average at 0 then total up all the values
+    var sum = 0;
+    
+    for(let i = 0; i < heatMapValues.length; i++)
+    {
+      if(heatMapValues[i] > maxPos)
+      {
+        maxPos = heatMapValues[i];
+      }
+
+      if(heatMapValues[i] < maxNeg)
+      {
+        maxNeg = heatMapValues[i];
+      }
+
+      sum += heatMapValues[i];
+    }
 
     // push each piece of heatmap data to their respective lists (negative or positive)
-    var allpoints = [];
-    for(let i = 0; i < heatMapLats.length; i++)
+    let average = sum/heatMapValues.length;
+    let difSum = 0;
+    // calculate average difference
+    for(let i = 0; i < heatMapValues.length; i++)
     {
-      allpoints.push([heatMapLats[i], heatMapLongs[i]]);
-      // the negative list is values under 0 and are colored red/purple/dark blue/blue
-      if( heatMapValues[i] < 0)
+      let difference = heatMapValues[i]-average;
+      difSum += difference;
+    }
+
+    let difAverage = difSum/heatMapValues.length;
+
+
+    let allPoints = [];
+    //console.log("AVERAGE DIF: ", difAverage);
+    for(let i = 0; i < heatMapValues.length; i++)
+    {
+      // calculate the difference between the current value and the average
+      let calculatedweight = heatMapValues[i]-average;
+      allPoints.push([heatMapLats[i], heatMapLongs[i]]);
+      
+      
+      // the negative list is values under 0 and are colored blue/purple/green
+      if( calculatedweight < 0)
       {
-        this.negativeHeatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]*-1});
-        if( heatMapValues[i] < maxNeg)
+        // for cases where the heat map is so faint
+        if(difAverage < 1)
         {
-          maxNeg = heatMapValues[i];
+          calculatedweight -= 1;
         }
+        calculatedweight *= -1
+        this.negativeHeatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: calculatedweight});
       }
 
       // the positive list is values under 0 and are colored red/yellow/green
-      if( heatMapValues[i] >= 0)
+      else if( calculatedweight >= 0)
       {
-        this.heatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: heatMapValues[i]});
-        if( heatMapValues[i] > maxPos)
+        // for cases where the heat map is so faint
+        if(difAverage < 1)
         {
-          maxPos = heatMapValues[i];
+          calculatedweight += 1;
         }
+        this.heatMapInput.push({location: new google.maps.LatLng(heatMapLats[i], heatMapLongs[i]), weight: calculatedweight});
       }
     }
+
+    //console.log("ALL POINTS", allPoints);
 
     let legend = document.getElementById('legend');
     legend.style.display = "block";
 
     let htmlNeg = document.getElementById('minimum');
-    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" ", this.EBVUnits[this.EBVindex]);
+    htmlNeg.textContent = Math.round(maxNeg).toString().concat(" ", this.EBVList[this.EBVindex]["units"]);
     
     let htmlPos = document.getElementById('maximum');
-    htmlPos.textContent = Math.round(maxPos).toString().concat(" ", this.EBVUnits[this.EBVindex]);
+    htmlPos.textContent = Math.round(maxPos).toString().concat(" ", this.EBVList[this.EBVindex]["units"]);
+
+    let htmlAvg = document.getElementById('average');
+    htmlAvg.textContent = Math.round(average).toString().concat(" ", this.EBVList[this.EBVindex]["units"]);
 
     // create the center of the map based on the average calculated data
     const location = new google.maps.LatLng(latitudeMedian, longitudeMedian);
@@ -600,7 +692,8 @@ export class VisualizeResultsPage implements OnInit {
     // options for the normal heatmap
     this.positiveHeatMap.setOptions
     ({
-      gradient: this.warmGradient/*,
+      gradient: this.warmGradient
+      /*,
       maxintensity: 100,
       dissipating: true*/
     });
@@ -608,7 +701,8 @@ export class VisualizeResultsPage implements OnInit {
     // options for the cool/negative heatmap
     this.negativeHeatMap.setOptions
     ({
-      gradient: this.coolGradient/*,
+      gradient: this.coolGradient
+      /*,
       maxintensity: 100,
       dissipating: true*/
     });
@@ -627,8 +721,8 @@ export class VisualizeResultsPage implements OnInit {
     {
       var zoomLevel = this.map.getZoom();
       var heatmapradius = zoomLevel;
-      //console.log("Radius is now:", heatmapradius);
-      //console.log("Zoom is now:", this.map.getZoom());
+      console.log("Radius is now:", heatmapradius);
+      console.log("Zoom is now:", this.map.getZoom());
       
       if(zoomLevel < 4)
       {
@@ -693,6 +787,26 @@ export class VisualizeResultsPage implements OnInit {
     this.negativeHeatMap.set("opacity", this.negativeHeatMap.get("opacity") ? null : 0.2);
   }
 
+  togglePos()
+  {
+    this.positiveHeatMap.set("opacity", 0.5);
+  }
+
+  toggleNeg()
+  {
+    this.negativeHeatMap.set("opacity", 0.5);
+  }
+
+  togglePosOff()
+  {
+    this.positiveHeatMap.set("opacity", 0);
+  }
+
+  toggleNegOff()
+  {
+    this.negativeHeatMap.set("opacity", 0);
+  }
+
 ///////////////VISUALIZATION SECTION//////////////////////////////////////////////////////////
 
 saveMapToDataUrl() 
@@ -711,60 +825,7 @@ createCharts(variableName, graphData, graphLabels)
   {
     graphLabels[index] = (parseFloat(graphLabels[index])*5).toString();
   }
-  /////////////////BAR CHART//////////////////////////
-  /*
-  this.bars = new Chart(this.barChart.nativeElement, 
-    {
-    type: 'bar',
-    data: 
-    {
-      labels: graphLabels,
-      datasets: 
-      [
-        {
-        label: variableName,
-        data: graphData,
-        backgroundColor: 'rgb(52, 235, 103)', // array should have same number of elements as number of dataset
-        borderColor: 'rgb(52, 235, 103)',// array should have same number of elements as number of dataset
-        borderWidth: 1
-        }/*,
-        {
-          label: this.BValues[0],
-          data: this.BValues[1],
-          backgroundColor: 'rgb(52, 195, 235)', // array should have same number of elements as number of dataset
-          borderColor: 'rgb(52, 195, 235)',// array should have same number of elements as number of dataset
-          borderWidth: 1
-        }
-      ]
-    },
-    options: 
-    {
-      scales: 
-      {
-        xAxes:
-        [{
-          scaleLabel: 
-          {
-            display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
-          }
-        }],
-        yAxes: 
-        [{
-          scaleLabel: 
-          {
-            display: true,
-            labelString: this.bodyData["Units"][this.EBVindex]
-          },
-          ticks: 
-          {
-            beginAtZero: true
-          }
-        }],
-      }
-    }
-  });
-  */
+
   /////////////////LINE CHART//////////////////////////
   this.line = new Chart(this.lineChart.nativeElement, 
   {
@@ -792,7 +853,7 @@ createCharts(variableName, graphData, graphLabels)
           scaleLabel: 
           {
             display: true,
-            labelString: this.bodyData[this.bodyKeys[0]][2]
+            labelString: "Years from Start"//this.bodyData[this.bodyKeys[0]][2]
           }
         }],
         yAxes: 
@@ -804,7 +865,7 @@ createCharts(variableName, graphData, graphLabels)
           },
           ticks: 
           {
-            beginAtZero: true
+            beginAtZero: false
           }
         }]
       }

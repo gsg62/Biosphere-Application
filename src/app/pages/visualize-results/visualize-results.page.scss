@@ -10,6 +10,30 @@ ion-button
   --ion-color-secondary: #FF0000;
 }
 
+table
+{
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th 
+{
+  border: 1px solid #474747;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) 
+{
+  background-color: #da2424;
+}
+
+th
+{
+  background-color: #888686;
+}
+
 #map
 {
     height:750px;
