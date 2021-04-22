@@ -1,5 +1,5 @@
 /**
- * If the scenario's on lines 5-9 have an '//' mark in front of them,
+ * If the scenario's on lines 11-16 have an '//' mark in front of them,
  * user's will be able run them.
  * 
  * If they do not have this mark '//', then an alert will appear informing the user that they need 
@@ -11,7 +11,7 @@
 export const disabled = [
     // 'CLIMATE',
     'LANDUSE',
-    // 'DEFORESTATION',
-    // 'TROPIC',
+    'DEFORESTATION',
+    'TROPIC',
     // 'EXTINCTIONS',
 ];
