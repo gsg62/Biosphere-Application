@@ -11,7 +11,7 @@
 export const disabled = [
     // 'CLIMATE',
     'LANDUSE',
-    // 'DEFORESTATION',
-    // 'TROPIC',
+    'DEFORESTATION',
+    'TROPIC',
     // 'EXTINCTIONS',
 ];
