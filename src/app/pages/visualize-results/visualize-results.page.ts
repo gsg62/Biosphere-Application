@@ -1,29 +1,20 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
-//import { StatsBarChart } from '../../assets/data/data';
 import { Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { Chart, ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { Chart } from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-
 import { InputScenarioService } from "../../input-scenario.service";
-//import { Label } from 'ng2-charts';
 
 // For Data Exportation
 import { Filesystem, FilesystemDirectory } from '@capacitor/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import * as pdfMake from "pdfmake/build/pdfmake";
-import { variable } from '@angular/compiler/src/output/output_ast';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { index } from 'd3-array';
 
-//import html2canvas from 'html2canvas';
-//import * as jsPDF from 'jspdf';
-//import domtoimage from 'dom-to-image';
 
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
 
 declare var google: any;
 
